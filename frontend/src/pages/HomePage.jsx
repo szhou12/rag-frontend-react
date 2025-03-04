@@ -10,9 +10,11 @@ import {
     Show,
     Stack,
     Text,
-} from '@chakra-ui/react';
-import { useNavigate } from '@tanstack/react-router';
-import { LuRocket } from 'react-icons/lu'
+} from '@chakra-ui/react'
+import { useNavigate } from '@tanstack/react-router'
+import { LuRocket, LuLockKeyhole, LuChevronRight } from 'react-icons/lu'
+import Logo from "/rmi_logo_horitzontal_no_tagline.svg"
+import { HeroRevealAnimation } from '@/components/ui/hero-reveal-animation'
 
 export const HeroHeader = (props) => {
     const { tagline, headline, description, ...rootProps } = props
@@ -21,19 +23,33 @@ export const HeroHeader = (props) => {
             <Stack gap={{ base: '5', md: '6' }}>
                 <Stack gap={{ base: '3', md: '4' }}>
                     <Show when={tagline}>
-                        <Text textStyle={{ base: 'sm', md: 'md' }} fontWeight="medium" color="ui.main">
+                        {/* <Text textStyle={{ base: 'sm', md: 'md' }} fontWeight="medium" color="ui.main">
                             {tagline}
-                        </Text>
+                        </Text> */}
+                        <HeroRevealAnimation>
+                            <Image src={Logo} alt="RMI Logo" w="180px" maxW="2xs" />
+                        </HeroRevealAnimation>
                     </Show>
-                    <Heading color="ui.main" as="h1" textStyle={{ base: '4xl', md: '6xl' }} fontWeight="bold">
-                        {headline}
-                    </Heading>
+                    <HeroRevealAnimation>
+                        <Heading color="ui.main" as="h1" textStyle={{ base: '4xl', md: '6xl' }} fontWeight="bold">
+                            {headline}
+                        </Heading>
+                    </HeroRevealAnimation>
+                    
                 </Stack>
-                <Text color="ui.dim" textStyle={{ base: 'lg', md: 'xl' }} maxW="3xl">
-                    {description}
-                </Text>  
+                <HeroRevealAnimation>
+                    <Text color="ui.dim" textStyle={{ base: 'lg', md: 'xl' }} maxW="3xl">
+                        {description}
+                    </Text> 
+                </HeroRevealAnimation>
+                 
             </Stack>
-            {props.children}
+
+            <HeroRevealAnimation width="100%">
+                {props.children}
+            </HeroRevealAnimation>
+                {/* {props.children} */}
+            
         </Stack>
     )
 }
@@ -87,7 +103,7 @@ export default function HomePage() {
                         description="以RMI的海量能源数据与分析作支撑, 为您创建客制化的AI咨询服务"
                     >
                         <Stack direction={{ base: 'column', md: 'row' }} gap="3">
-                            <Button
+                            {/* <Button
                                 variant='dashed' 
                                 borderColor={'ui.main'}
                                 color={'ui.main'}
@@ -108,19 +124,57 @@ export default function HomePage() {
                             </Button>
                             <Button
                                 variant='dashed'
-                                borderColor={'ui.success'}
-                                color={'ui.success'}
+                                borderColor={'ui.coral'}
+                                color={'ui.coral'}
                                 _hover={{
                                     transform: 'translate(-4px, -4px)',
                                     rounded: 'md',
-                                    shadow: `4px 4px 0px var(--chakra-colors-ui-success)`,
+                                    shadow: `4px 4px 0px var(--chakra-colors-ui-coral)`,
                                 }}
                                 onClick={() => navigate({ to: '/login-staff' })}
                             >
                                 <Icon size="sm">
-                                    <LuRocket />
+                                    <LuLockKeyhole />
                                 </Icon>
                                 Login As Staff
+                            </Button> */}
+                            <Button 
+                                variant='outline'
+                                colorPalette="teal"
+                                borderColor={'ui.main'}
+                                fontWeight={'bold'}
+                                color={'ui.main'}
+                                size={{ base: 'lg', md: '2xl' }}
+                                onClick={() => navigate({ to: '/login' })}
+                            >
+                                Log In
+                            </Button>
+                            <Button 
+                                variant='solid'
+                                bg={'ui.main'} 
+                                color={'ui.light'}
+                                fontWeight={'bold'}
+                                _hover={{
+                                    bg: '#00766C',
+                                }}
+                                size={{ base: 'lg', md: '2xl' }}
+                                onClick={() => navigate({ to: '/register' })}
+                            >
+                                Sign Up
+                            </Button>
+                            <Button
+                                variant='surface' 
+                                colorPalette="teal"
+                                // borderColor={'ui.main'}
+                                // fontWeight={'bold'}
+                                // color={'ui.main'}
+                                size={{ base: 'lg', md: '2xl' }}
+                                onClick={() => navigate({ to: '/login-staff' })}
+                            >
+                                <Icon size="lg">
+                                    <LuLockKeyhole />
+                                </Icon>
+                                Staff Log In
                             </Button>
                         </Stack>
                     </HeroHeader>

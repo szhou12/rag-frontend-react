@@ -62,12 +62,6 @@ export const buttonRecipe = defineRecipe({
                     color: "colors.ui.dark",
                 },
             },
-            ghost: {
-                bg: "transparent",
-                _hover: {
-                    bg: "gray.100",
-                },
-            },
         },
     },
     defaultVariants: {

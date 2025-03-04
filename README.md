@@ -11,6 +11,7 @@ npm install axios
 npm install react-hook-form
 npm install react-icons
 npm install react-error-boundary
+npm install framer-motion
 ```
 
 ## React Folder Naming & Structure

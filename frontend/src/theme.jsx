@@ -21,6 +21,8 @@ export const system = createSystem(defaultConfig, {
                     dark: { value: "#1A202C" },
                     darkSlate: { value: "#252D3D" },
                     dim: { value: "#A0AEC0" },
+                    navy: { value: "#1565C0" },
+                    coral: { value: "#FF7043"}
                 },
             },
         },
