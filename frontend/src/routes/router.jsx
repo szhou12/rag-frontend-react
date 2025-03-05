@@ -1,5 +1,6 @@
 import { createRouter, createRoute, createRootRoute } from '@tanstack/react-router'
 import HomePage from '@/pages/HomePage'
+import LoginPage from '@/pages/Auth/LoginPage'
 
 // Create a root route
 const rootRoute = createRootRoute()
@@ -11,10 +12,21 @@ const indexRoute = createRoute({
     component: HomePage,
 })
 
+/*
+ Login and Register routes
+*/
+const loginRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/login',
+    component: LoginPage,
+})
+
+
 
 // Finally, create the router for all routes
 const routeTree = rootRoute.addChildren([
     indexRoute,
+    loginRoute,
 ])
   
 
