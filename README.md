@@ -50,3 +50,6 @@ src/
 ├── main.jsx              # Entry point
 └── theme.jsx             # design theme
 ```
+
+## TODO After Backend Setup
+- `hooks/useAuth.js`

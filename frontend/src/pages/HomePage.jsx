@@ -12,7 +12,7 @@ import {
     Text,
 } from '@chakra-ui/react'
 import { useNavigate } from '@tanstack/react-router'
-import { LuRocket, LuLockKeyhole, LuChevronRight } from 'react-icons/lu'
+import { LuRocket, LuLockKeyhole } from 'react-icons/lu'
 import Logo from "/rmi_logo_horitzontal_no_tagline.svg"
 import { HeroRevealAnimation } from '@/components/ui/hero-reveal-animation'
 
@@ -48,7 +48,6 @@ export const HeroHeader = (props) => {
             <HeroRevealAnimation width="100%">
                 {props.children}
             </HeroRevealAnimation>
-                {/* {props.children} */}
             
         </Stack>
     )
@@ -103,41 +102,6 @@ export default function HomePage() {
                         description="以RMI的海量能源数据与分析作支撑, 为您创建客制化的AI咨询服务"
                     >
                         <Stack direction={{ base: 'column', md: 'row' }} gap="3">
-                            {/* <Button
-                                variant='dashed' 
-                                borderColor={'ui.main'}
-                                color={'ui.main'}
-                                _hover={{
-                                    transform: 'translate(-4px, -4px)',
-                                    rounded: 'md',
-                                    shadow: `4px 4px 0px var(--chakra-colors-ui-main)`,
-                                }}
-                                onClick={() => navigate({ to: '/login' })}
-                            >
-                                Log In
-                            </Button>
-                            <Button
-                                variant='dashed'
-                                onClick={() => navigate({ to: '/register' })}
-                            >
-                                Sign Up
-                            </Button>
-                            <Button
-                                variant='dashed'
-                                borderColor={'ui.coral'}
-                                color={'ui.coral'}
-                                _hover={{
-                                    transform: 'translate(-4px, -4px)',
-                                    rounded: 'md',
-                                    shadow: `4px 4px 0px var(--chakra-colors-ui-coral)`,
-                                }}
-                                onClick={() => navigate({ to: '/login-staff' })}
-                            >
-                                <Icon size="sm">
-                                    <LuLockKeyhole />
-                                </Icon>
-                                Login As Staff
-                            </Button> */}
                             <Button 
                                 variant='outline'
                                 colorPalette="teal"
@@ -165,9 +129,6 @@ export default function HomePage() {
                             <Button
                                 variant='surface' 
                                 colorPalette="teal"
-                                // borderColor={'ui.main'}
-                                // fontWeight={'bold'}
-                                // color={'ui.main'}
                                 size={{ base: 'lg', md: '2xl' }}
                                 onClick={() => navigate({ to: '/login-staff' })}
                             >
