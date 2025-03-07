@@ -7,6 +7,18 @@ import { handleError } from "@/utils"
 
 // TODO: openapi auto-generate: UsersService, LoginService
 
+// TODO: DELETE when backend is ready!!!
+const UsersService = {
+    readUserMe: async () => {
+        // return the user from localStorage if it exists
+        const user = localStorage.getItem("user")
+        if (user) {
+            return JSON.parse(user)
+        }
+        return null
+    }
+};
+
 /**
  * Check if the user is logged in. Used to decide whether to fetch the current user's data (readUserMe)
  * @returns {boolean}
@@ -65,17 +77,64 @@ const isLoggedIn = () => {
     })
 
     /**
+     * TODO: Comment off when backend is ready!!!
      * Calls loginAccessToken to get a token.
      * Saves token to localStorage.
      * @param {Body_login_login_access_token} data 
      */
+    // const login = async (data) => {
+    //     const response = await LoginService.loginAccessToken({
+    //         formData: data,
+    //     })
+    //     // TODO: replace localStorage
+    //     localStorage.setItem("access_token", response.access_token)
+    // }
+
+    /**
+     * TODO: DELETE when backend is ready!!!
+     * Simulates a successful login API call for frontend testing
+     */
     const login = async (data) => {
-        const response = await LoginService.loginAccessToken({
-            formData: data,
-        })
-        // TODO: replace localStorage
-        localStorage.setItem("access_token", response.access_token)
+        console.log('login attempt:', data);
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 800));
+        if (data.email === "abc@gmail.com" && data.password === "11111111") {
+            const mockResponse = {
+                access_token: 'mock-jwt-token-for-testing-purposes',
+                user: {
+                    id: '001',
+                    email: data.email,
+                    name: 'Test client',
+                    role: 'client'
+                }
+            };
+            // Store token in localStorage
+            localStorage.setItem("access_token", mockResponse.access_token);
+            // Optionally store user data
+            localStorage.setItem("user", JSON.stringify(mockResponse.user));
+            return mockResponse;
+        } else {
+            // For testing different credentials, still return success
+            // In a real implementation, you might want to throw an error for invalid credentials
+            const mockResponse = {
+                access_token: `mock-token-for-${data.email}`,
+                user: {
+                    id: Math.random().toString(36).substring(2, 15),
+                    email: data.email,
+                    name: 'Generic User',
+                    role: 'client'
+                }
+            };
+            localStorage.setItem("access_token", mockResponse.access_token);
+            localStorage.setItem("user", JSON.stringify(mockResponse.user));
+
+            return mockResponse;
+        }
+
+        // Uncomment to simulate login failure for testing error handling
+        // throw new Error('Invalid credentials');
     }
+
 
     /**
      * Wraps the login function in a mutation.
@@ -87,7 +146,7 @@ const isLoggedIn = () => {
 
         onSuccess: () => {
             // TODO: redirect to role-based home page - client->chat, staff->dashboard
-            navigate({ to: "/" })
+            navigate({ to: "/chat" })
         },
 
         // err: <ApiError>
@@ -109,7 +168,7 @@ const isLoggedIn = () => {
         signUpMutation,
         loginMutation,
         logout,
-        user,
+        user, // currently logged-in user from useQuery()
         error,
         resetError: () => setError(null),
     }

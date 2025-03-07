@@ -65,6 +65,6 @@ export const buttonRecipe = defineRecipe({
         },
     },
     defaultVariants: {
-        variant: "primary",
+        variant: "solid",
     },
 })

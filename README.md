@@ -53,3 +53,10 @@ src/
 
 ## TODO After Backend Setup
 - `hooks/useAuth.js`
+    1. implement `UsersService`
+    2. implement `LoginService`
+    3. replace localStorage with HTTP-only cookies
+- `LoginForm.jsx`
+    1. After backend setup, implement actual API call (in `useAuth.js`) to backend.
+    2. implement `Remember me` checkbox.
+    3. implement `forgot password` link.
