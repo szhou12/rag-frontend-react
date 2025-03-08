@@ -177,7 +177,7 @@ const isLoggedIn = () => {
         mutationFn: login,
 
         onSuccess: () => {
-            // TODO: redirect to role-based home page - client->chat, staff->dashboard
+            // TODO: redirect to role-based home page - client->chat, staff->dashboard-home
             navigate({ to: "/chat" })
         },
 

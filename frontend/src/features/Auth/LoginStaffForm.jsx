@@ -28,6 +28,7 @@ const LoginStaffForm = () => {
         defaultValues: {
             email: "",
             password: "",
+            isAdmin: false,
         }
     })
 
@@ -49,16 +50,20 @@ const LoginStaffForm = () => {
             <Stack gap="6">
                 <Stack gap="5">
                     <Field.Root>
-                        <Field.Label>Email</Field.Label>
-                        <Input 
+                        <Field.Label >Email</Field.Label>    
+                        <Input   
                             id="email"
                             {...register("email", { 
                                 required: "Email is required",
                                 pattern: emailPattern,
                             })}
-                            type="email" 
+                            type="email"
+                            _focusVisible={{
+                                borderColor: "ui.main",
+                                boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                            }}
                         />
-                        
+                                      
                     </Field.Root>
 
                     <Field.Root>
@@ -67,19 +72,30 @@ const LoginStaffForm = () => {
                             type="password"
                             {...register("password", passwordRules())}
                             errors={errors}
+                            _focusVisible={{
+                                borderColor: "ui.main",
+                                boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                            }}
                         />
                     </Field.Root>
                 </Stack>
 
                 <HStack justify="space-between">
-                    <Checkbox.Root variant="subtle" colorPalette="ui.main">
-                        <Checkbox.HiddenInput />
+                    <Checkbox.Root
+                        variant="solid"
+                        colorPalette="teal"
+                        defaultChecked={false}
+                    >
+                        <Checkbox.HiddenInput 
+                            {...register("isAdmin", {
+                                onChange: (e) => console.log("Admin status changed:", e.target.checked)
+                            })}
+                        />
                         <Checkbox.Control>
                             <Checkbox.Indicator />
                         </Checkbox.Control>
                         <Checkbox.Label>is Admin?</Checkbox.Label>
                     </Checkbox.Root>
-
                 </HStack>
 
                 <Stack gap="4">

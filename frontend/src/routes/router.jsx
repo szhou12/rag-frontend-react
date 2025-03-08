@@ -2,6 +2,7 @@ import { createRouter, createRoute, createRootRoute } from '@tanstack/react-rout
 import HomePage from '@/pages/HomePage'
 import LoginPage from '@/pages/Auth/LoginPage'
 import { Route as LoginImport } from './login'
+import { Route as LoginStaffImport } from './login-staff'
 
 
 // Create a root route
@@ -23,12 +24,19 @@ const loginRoute = LoginImport.update({
     getParentRoute: () => rootRoute,
 })
 
-
+/**
+ * Login Staff Route
+ */
+const loginStaffRoute = LoginStaffImport.update({
+    path: '/login-staff',
+    getParentRoute: () => rootRoute,
+})
 
 // Finally, create the router for all routes
 const routeTree = rootRoute.addChildren([
     indexRoute,
     loginRoute,
+    loginStaffRoute,
 ])
   
 
