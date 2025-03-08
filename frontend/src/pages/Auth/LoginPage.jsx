@@ -15,6 +15,7 @@ const LoginPage = () => {
                         as={RouterLink}
                         to="/register"
                         variant="underline"
+                        color="ui.main"
                     >
                         Register here
                     </Link>

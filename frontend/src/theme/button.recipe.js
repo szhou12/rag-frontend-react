@@ -7,6 +7,7 @@ export const buttonRecipe = defineRecipe({
         alignItems: "center",
         justifyContent: "center",
         transition: "all 0.2s",
+        colorPalette: "teal",
     },
     variants: {
         variant: {
@@ -14,7 +15,8 @@ export const buttonRecipe = defineRecipe({
                 backgroundColor: "colors.ui.main",
                 color: "colors.ui.light",
                 _hover: {
-                    backgroundColor: "#00766C",
+                    bg: "colors.ui.secondary",
+                    filter: "brightness(0.9)"
                 },
                 _disabled: {
                     backgroundColor: "colors.ui.main",

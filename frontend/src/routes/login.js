@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { isLoggedIn } from "@/hooks/useAuth"
-import LoginForm from "@/features/LoginForm"
+import LoginPage from "@/pages/Auth/LoginPage"
 
 /**
  * Defines a route for `/login`.
@@ -8,14 +8,14 @@ import LoginForm from "@/features/LoginForm"
  * `beforeLoad` runs BEFORE the component renders.
  * It redirects logged-in users to `/chat` (client) or `/dashboard` (staff) to prevent accessing the login page again after logging in.
  */
-export const loginRoute = createFileRoute("/login")({
-    component: LoginForm,
+export const Route = createFileRoute("/login")({
+    component: LoginPage,
 
     beforeLoad: async () => {
         if (isLoggedIn()) {
             // TODO: redirect to role-based home page - client->chat, staff->dashboard
             throw redirect({
-                to: "/",
+                to: "/chat",
             })
         }
     },

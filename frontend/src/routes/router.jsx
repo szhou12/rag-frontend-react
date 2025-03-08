@@ -1,6 +1,8 @@
 import { createRouter, createRoute, createRootRoute } from '@tanstack/react-router'
 import HomePage from '@/pages/HomePage'
 import LoginPage from '@/pages/Auth/LoginPage'
+import { Route as LoginImport } from './login'
+
 
 // Create a root route
 const rootRoute = createRootRoute()
@@ -12,13 +14,13 @@ const indexRoute = createRoute({
     component: HomePage,
 })
 
-/*
- Login and Register routes
-*/
-const loginRoute = createRoute({
-    getParentRoute: () => rootRoute,
+/**
+ * Login Route
+ * `update()`: modifies the login route object from login.js by adding two key-value pairs (path, getParentRoute)
+ */
+const loginRoute = LoginImport.update({
     path: '/login',
-    component: LoginPage,
+    getParentRoute: () => rootRoute,
 })
 
 

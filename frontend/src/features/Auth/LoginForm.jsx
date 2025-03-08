@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     Checkbox,
     Field,
@@ -7,12 +8,13 @@ import {
     Link,
     Stack,
     Text,
+    defineStyle,
 } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate } from '@tanstack/react-router';
 import { useForm } from "react-hook-form"
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { PasswordInput } from '@/components/ui/password-input';
-import { useAuth } from '@/hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 import { emailPattern, passwordRules } from '@/utils';
 
 const LoginForm = () => {
@@ -30,7 +32,6 @@ const LoginForm = () => {
     //     }
     //   };
 
-    const { loginMutation, error, resetError } = useAuth();
 
     /**
      * `register`: configure a <Input> to accept a form data, enabling validation rules, which are defined within the `register` function, such as required and pattern.
@@ -55,6 +56,8 @@ const LoginForm = () => {
             password: "",
         }
     })
+
+    const { loginMutation, error, resetError } = useAuth()
 
     /**
      * react-hook-form's `handleSubmit` expects a function `onSubmit` to:
@@ -145,16 +148,20 @@ const LoginForm = () => {
             <Stack gap="6">
                 <Stack gap="5">
                     <Field.Root>
-                        <Field.Label>Email</Field.Label>
-                        <Input 
+                        <Field.Label >Email</Field.Label>    
+                        <Input   
                             id="email"
                             {...register("email", { 
                                 required: "Email is required",
                                 pattern: emailPattern,
                             })}
-                            type="email" 
+                            type="email"
+                            _focusVisible={{
+                                borderColor: "ui.main",
+                                boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                            }}
                         />
-                        
+                                      
                     </Field.Root>
 
                     <Field.Root>
@@ -163,12 +170,16 @@ const LoginForm = () => {
                             type="password"
                             {...register("password", passwordRules())}
                             errors={errors}
+                            _focusVisible={{
+                                borderColor: "ui.main",
+                                boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                            }}
                         />
                     </Field.Root>
                 </Stack>
 
                 <HStack justify="space-between">
-                    <Checkbox.Root defaultChecked>
+                    <Checkbox.Root variant="solid" colorPalette="teal" defaultChecked>
                         <Checkbox.HiddenInput />
                         <Checkbox.Control>
                             <Checkbox.Indicator />

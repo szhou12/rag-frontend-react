@@ -20,14 +20,40 @@ const UsersService = {
 };
 
 /**
+ * TODO: Comment off when access_token expiration is implemented!!!
  * Check if the user is logged in. Used to decide whether to fetch the current user's data (readUserMe)
  * @returns {boolean}
  * 
  * TODO: localStorage is a globally accessible object. Not a safe practice.
  *       Switch to HTTP-only cookies for tokens in production!
  */
+// const isLoggedIn = () => {
+//     return localStorage.getItem("access_token") !== null
+// }
+
+
+/**
+ * TODO: DELETE when access_token expiration is implemented!!!
+ */
 const isLoggedIn = () => {
-    return localStorage.getItem("access_token") !== null
+    const token = localStorage.getItem("access_token");
+    const expiresAt = localStorage.getItem("expires_at");
+    
+    if (!token || !expiresAt) {
+        return false;
+    }
+    
+    // Check if token has expired
+    const now = new Date().getTime();
+    if (now > parseInt(expiresAt)) {
+        // Token expired, clean up localStorage
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("expires_at");
+        localStorage.removeItem("user");
+        return false;
+    }
+    
+    return true;
 }
 
 
@@ -98,6 +124,10 @@ const isLoggedIn = () => {
         console.log('login attempt:', data);
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 800));
+
+        // Set expiration time (e.g., 30s from now)
+        const expiresAt = new Date().getTime() + (30 * 1000);
+
         if (data.email === "abc@gmail.com" && data.password === "11111111") {
             const mockResponse = {
                 access_token: 'mock-jwt-token-for-testing-purposes',
@@ -110,6 +140,7 @@ const isLoggedIn = () => {
             };
             // Store token in localStorage
             localStorage.setItem("access_token", mockResponse.access_token);
+            localStorage.setItem("expires_at", expiresAt.toString());
             // Optionally store user data
             localStorage.setItem("user", JSON.stringify(mockResponse.user));
             return mockResponse;
@@ -126,6 +157,7 @@ const isLoggedIn = () => {
                 }
             };
             localStorage.setItem("access_token", mockResponse.access_token);
+            localStorage.setItem("expires_at", expiresAt.toString());
             localStorage.setItem("user", JSON.stringify(mockResponse.user));
 
             return mockResponse;
