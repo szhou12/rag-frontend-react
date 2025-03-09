@@ -43,3 +43,33 @@ export const passwordRules = (isRequired = true) => {
 
     return rules
 }
+
+
+/**
+ * Creates validation rules for password confirmation fields
+ * 
+ * @param {Function} getValues - React Hook Form's getValues function to access form values
+ * @param {boolean} [isRequired=true] - Whether the confirmation field is required
+ * @returns {Object} Validation rules object for React Hook Form
+ * 
+ * @example
+ * // In a form component
+ * const { register, getValues } = useForm();
+ * 
+ * // Then in JSX
+ * <Input {...register("confirmPassword", confirmPasswordRules(getValues))} />
+ */
+export const confirmPasswordRules = (getValues, isRequired = true) => {
+    const rules = {
+        validate: (value) => {
+            const password = getValues().password || getValues().new_password
+            return value === password ? true : "Passwords do not match"
+        },
+    }
+
+    if (isRequired) {
+        rules.required = "Password confirmation is required"
+    }
+
+    return rules
+}

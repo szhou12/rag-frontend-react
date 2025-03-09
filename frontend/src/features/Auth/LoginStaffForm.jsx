@@ -4,15 +4,11 @@ import {
     Field,
     HStack,
     Input,
-    Link,
     Stack,
-    Text,
 } from '@chakra-ui/react';
-import { Link as RouterLink, useNavigate } from '@tanstack/react-router';
-import { useForm } from "react-hook-form"
-import { useColorModeValue } from "@/components/ui/color-mode";
+import { useForm } from "react-hook-form";
 import { PasswordInput } from '@/components/ui/password-input';
-import { useAuth } from '@/hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 import { emailPattern, passwordRules } from '@/utils';
 
 const LoginStaffForm = () => {
@@ -39,7 +35,11 @@ const LoginStaffForm = () => {
 
         try {
             // Call `loginMutation` to actually send the login request to the backend.
-            await loginMutation.mutateAsync(data)
+            await loginMutation.mutateAsync({
+                ...data,
+                isAdmin: data.isAdmin === "on",
+                loginType: 'staff'
+            })
         } catch (error) {
             // `loginMutation` inside handles error, which displays the error by a toast
         }
@@ -87,9 +87,7 @@ const LoginStaffForm = () => {
                         defaultChecked={false}
                     >
                         <Checkbox.HiddenInput 
-                            {...register("isAdmin", {
-                                onChange: (e) => console.log("Admin status changed:", e.target.checked)
-                            })}
+                            {...register("isAdmin")}
                         />
                         <Checkbox.Control>
                             <Checkbox.Indicator />

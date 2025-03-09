@@ -1,14 +1,10 @@
 import {
-    Box,
     Button,
     Checkbox,
     Field,
     HStack,
     Input,
-    Link,
     Stack,
-    Text,
-    defineStyle,
 } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate } from '@tanstack/react-router';
 import { useForm } from "react-hook-form"
@@ -73,7 +69,10 @@ const LoginForm = () => {
 
         try {
             // Call `loginMutation` to actually send the login request to the backend.
-            await loginMutation.mutateAsync(data)
+            await loginMutation.mutateAsync({
+                ...data,
+                loginType: 'client'
+            })
         } catch (error) {
             // `loginMutation` inside handles error, which displays the error by a toast
         }

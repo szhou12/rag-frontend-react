@@ -122,15 +122,21 @@ const isLoggedIn = () => {
      */
     const login = async (data) => {
         console.log('login attempt:', data);
+
+        // Login type: client, staff, admin
+
+        // Check login endpoint type (regular login vs staff login)
+        let role = data.loginType === 'staff' ? (data.isAdmin ? 'admin' : 'staff') : 'client';
+
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 800));
 
         // Set expiration time (e.g., 30s from now)
         const expiresAt = new Date().getTime() + (30 * 1000);
 
-        if (data.email === "abc@gmail.com" && data.password === "11111111") {
+        if (data.email === "abc@email.com" && data.password === "11111111") {
             const mockResponse = {
-                access_token: 'mock-jwt-token-for-testing-purposes',
+                access_token: 'mock-jwt-token-client',
                 user: {
                     id: '001',
                     email: data.email,
@@ -144,16 +150,33 @@ const isLoggedIn = () => {
             // Optionally store user data
             localStorage.setItem("user", JSON.stringify(mockResponse.user));
             return mockResponse;
-        } else {
+        } 
+        else if (data.email === "staff@email.com" && data.password === "11111111") {
+            const mockResponse = {
+                access_token: 'mock-jwt-token-staff',
+                user: {
+                    id: '002',
+                    email: data.email,
+                    name: 'Test Staff',
+                    role: role
+                }
+            };
+
+            localStorage.setItem("access_token", mockResponse.access_token);
+            localStorage.setItem("expires_at", expiresAt.toString());
+            localStorage.setItem("user", JSON.stringify(mockResponse.user));
+            return mockResponse;
+        }
+        else {
             // For testing different credentials, still return success
             // In a real implementation, you might want to throw an error for invalid credentials
             const mockResponse = {
-                access_token: `mock-token-for-${data.email}`,
+                access_token: `mock-token-for-${role}-${data.email}`,
                 user: {
                     id: Math.random().toString(36).substring(2, 15),
                     email: data.email,
-                    name: 'Generic User',
-                    role: 'client'
+                    name: `Generic ${role.charAt(0).toUpperCase() + role.slice(1)}`,
+                    role: role
                 }
             };
             localStorage.setItem("access_token", mockResponse.access_token);
@@ -176,9 +199,17 @@ const isLoggedIn = () => {
     const loginMutation = useMutation({
         mutationFn: login,
 
-        onSuccess: () => {
-            // TODO: redirect to role-based home page - client->chat, staff->dashboard-home
-            navigate({ to: "/chat" })
+        onSuccess: (data) => {
+            // Get user role from the response or from localStorage
+            const user = data.user || JSON.parse(localStorage.getItem("user"));
+            const role = user?.role || 'client';
+            
+            // Redirect based on role
+            if (role === 'client') {
+                navigate({ to: "/chat" });
+            } else {
+                navigate({ to: "/dashboard" });
+            }
         },
 
         // err: <ApiError>

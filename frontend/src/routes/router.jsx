@@ -3,7 +3,7 @@ import HomePage from '@/pages/HomePage'
 import LoginPage from '@/pages/Auth/LoginPage'
 import { Route as LoginImport } from './login'
 import { Route as LoginStaffImport } from './login-staff'
-
+import { Route as RegisterImport } from './register'
 
 // Create a root route
 const rootRoute = createRootRoute()
@@ -32,11 +32,20 @@ const loginStaffRoute = LoginStaffImport.update({
     getParentRoute: () => rootRoute,
 })
 
+/**
+ * Register Route
+ */
+const registerRoute = RegisterImport.update({
+    path: '/register',
+    getParentRoute: () => rootRoute,
+})
+
 // Finally, create the router for all routes
 const routeTree = rootRoute.addChildren([
     indexRoute,
     loginRoute,
     loginStaffRoute,
+    registerRoute,
 ])
   
 
