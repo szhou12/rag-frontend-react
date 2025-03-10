@@ -62,7 +62,7 @@ const isLoggedIn = () => {
     const navigate = useNavigate()
     const queryClient = useQueryClient()
 
-    const { showErrorToast } = useCustomToast()
+    const { showSuccessToast, showErrorToast } = useCustomToast()
 
     /**
      * Fetch the currently logged-in user's data.
@@ -78,17 +78,51 @@ const isLoggedIn = () => {
     })
 
     /**
+     * Mock implementation of user registration
+     * Simulates backend validation and response
+     */
+    const mockRegisterUser = async (data) => {
+        console.log('Registration attempt with:', data);
+        
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Mock validation checks
+        if (data.email.includes('exists')) {
+            throw new Error('Email already exists');
+        }
+        
+        if (data.password.length < 8) {
+            throw new Error('Password must be at least 8 characters');
+        }
+        
+        // Simulate successful registration
+        return {
+            id: Math.random().toString(36).substring(2, 15),
+            email: data.email,
+            password: data.password,
+            createdAt: new Date().toISOString()
+        };
+    };
+
+    /**
      * Calls registerUser to register a new user.
+     * NOTE: register NOT async.
      * On success: Redirect to /login.
      * On error: Display an error toast notification.
      * On settle (regardless of success/fail): Invalidate users cache (probably to refresh the user list).
      */
     const signUpMutation = useMutation({
+        // TODO: Comment off when backend is ready!!!
         // data: <UserRegister>
-        mutationFn: (data) => 
-            UsersService.registerUser({ requestBody: data }),
+        // mutationFn: (data) => 
+        //     UsersService.registerUser({ requestBody: data }),
+
+        mutationFn: mockRegisterUser, // TODO: DELETE when backend is ready!!!
 
         onSuccess: () => {
+            showSuccessToast('Account created! You can now log in with your credentials')
+            
             navigate({ to: "/login" })
         },
 
@@ -102,10 +136,11 @@ const isLoggedIn = () => {
         },
     })
 
+    // TODO: Comment off when backend is ready!!!
     /**
-     * TODO: Comment off when backend is ready!!!
      * Calls loginAccessToken to get a token.
      * Saves token to localStorage.
+     * NOTE: login needs async because it needs to wait for API response (token) from backend
      * @param {Body_login_login_access_token} data 
      */
     // const login = async (data) => {

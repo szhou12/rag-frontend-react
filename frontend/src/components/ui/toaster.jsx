@@ -11,7 +11,7 @@ import {
 
 // create a global toast manager with specific config
 export const toaster = createToaster({
-    placement: "top-end", // appear in the top-right corner of the screen
+    placement: "bottom-end", // appear in the bottom-right corner of the screen
     pauseOnPageIdle: true,
 })
 

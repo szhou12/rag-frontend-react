@@ -79,7 +79,9 @@ const LoginForm = () => {
     }
 
     /**
-     * Note: Wrap the whole form layout within <form> to enable form handling and onSubmit behavior. react-hook-form automatically tracks the values of all fields that call register(). When the form submits, react-hook-form compiles all registered fields into a single object `data` and passes it to onSubmit.
+     * Note: Wrap the whole form layout within <form> to enable form handling and onSubmit behavior. 
+     * react-hook-form automatically tracks the values of all fields that call register(). 
+     * When the form submits, react-hook-form compiles all registered fields into a single object `data` and passes it to onSubmit.
      */
 
     return (
