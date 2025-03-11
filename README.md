@@ -55,6 +55,7 @@ src/
 - `hooks/useAuth.js`
     1. implement `UsersService` + update `signUpMutation`
     2. implement `LoginService` + update `login`, `loginMutation`
+    3. `const { data: user } = useQuery({...})` currently NOT executing. Need to fix it!!!
     3. replace localStorage with HTTP-only cookies
 - `LoginForm.jsx`
     1. After backend setup, implement actual API call (in `useAuth.js`) to backend.

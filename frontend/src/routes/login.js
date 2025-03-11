@@ -13,7 +13,6 @@ export const Route = createFileRoute("/login")({
 
     beforeLoad: async () => {
         if (isLoggedIn()) {
-            // TODO: redirect to role-based home page - client->chat, staff->dashboard
             throw redirect({
                 to: "/chat",
             })

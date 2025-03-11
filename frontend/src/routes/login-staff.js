@@ -13,7 +13,7 @@ export const Route = createFileRoute("/login-staff")({
 
     beforeLoad: async () => {
         if (isLoggedIn()) {
-            throw redirect({ to: "/dashboard-home" })
+            throw redirect({ to: "/dashboard" })
         }
     },
 })

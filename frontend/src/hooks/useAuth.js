@@ -11,7 +11,9 @@ import { handleError } from "@/utils"
 const UsersService = {
     readUserMe: async () => {
         // return the user from localStorage if it exists
+        console.log("triggering UsersService.readUserMe...")
         const user = localStorage.getItem("user")
+        console.log('user from localStorage:', user)
         if (user) {
             return JSON.parse(user)
         }
@@ -64,18 +66,35 @@ const isLoggedIn = () => {
 
     const { showSuccessToast, showErrorToast } = useCustomToast()
 
+
     /**
      * Fetch the currently logged-in user's data.
-     *  `queryKey`: A unique key ("currentUser") used for caching and tracking this query.
+     *  `queryKey`: Tthis query has a name "currentUser". Helps React Query track and update the data under this name.
      *  `queryFn`: The actual API call (`UsersService.readUserMe`) that fetches user data.
-     *  `enabled`: The query ONLY runs if `isLoggedIn()` returns true (meaning there's an access token present).
+     *  `enabled`: This query ONLY runs if `isLoggedIn()` returns true (meaning there's an access token present).
      * Data (`user`) will be `undefined` until the query completes. On success, `user` contains the current user's profile info.
      */
-    const { data: user } = useQuery({
+
+    // TODO: Comment off when u manage to make queryFn execute!!!
+    // const { data: user } = useQuery({
+    //     queryKey: ["currentUser"],
+    //     queryFn: UsersService.readUserMe,
+    //     enabled: isLoggedIn(),
+    // })
+
+    /**
+     * TODO: DELETE when u manage to make queryFn execute!!!
+     */
+    const { data: queryUser } = useQuery({
         queryKey: ["currentUser"],
         queryFn: UsersService.readUserMe,
         enabled: isLoggedIn(),
     })
+
+    const userFromStorage = isLoggedIn() 
+        ? JSON.parse(localStorage.getItem("user") || "null") 
+        : null;
+    const user = queryUser || userFromStorage;
 
     /**
      * Mock implementation of user registration
@@ -259,7 +278,7 @@ const isLoggedIn = () => {
     const logout = () => {
         // TODO: replace localStorage
         localStorage.removeItem("access_token")
-        navigate({ to: "/login" })
+        navigate({ to: "/" })
     }
 
     return {
