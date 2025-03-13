@@ -23,7 +23,7 @@ export const UserMenu = ({ logout }) => {
                 </IconButton>
             </MenuTrigger>
 
-            <MenuContent>
+            <MenuContent zIndex={1400}>
                 <Link to="/settings">
                     <MenuItem
                         closeOnSelect

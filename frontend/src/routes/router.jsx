@@ -9,6 +9,7 @@ import { Route as DashboardIndexImport } from './_dashboard-layout/index'
 import { Route as AdminImport } from './_dashboard-layout/admin'
 import { Route as ScraperImport } from './_dashboard-layout/scraper'
 import { Route as UploaderImport } from './_dashboard-layout/uploader'
+import { Route as ChatImport } from './chat'
 
 // Create a root route
 const rootRoute = createRootRoute()
@@ -85,6 +86,14 @@ const dashboardUploaderRoute = UploaderImport.update({
     getParentRoute: () => dashboardLayoutRoute,
 })
 
+/**
+ * Chat Route
+ */
+const chatRoute = ChatImport.update({
+    path: "/chat",
+    getParentRoute: () => rootRoute,
+})
+
 
 // Finally, create the router for all routes
 const routeTree = rootRoute.addChildren([
@@ -98,6 +107,7 @@ const routeTree = rootRoute.addChildren([
         dashboardScraperRoute,
         dashboardUploaderRoute,
     ]),
+    chatRoute,
 ])
   
 

@@ -51,6 +51,11 @@ src/
 └── theme.jsx             # design theme
 ```
 
+## Chakra UI V3 Code Snippets
+```bash
+npx @chakra-ui/cli snippet add select
+```
+
 ## TODO After Backend Setup
 - `hooks/useAuth.js`
     1. implement `UsersService` + update `signUpMutation`
