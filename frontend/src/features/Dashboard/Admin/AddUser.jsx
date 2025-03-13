@@ -2,9 +2,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Controller, useForm } from "react-hook-form"
 import {
     Button,
+    createListCollection,
     Dialog,
     Flex,
     Input,
+    Portal,
+    Select,
+    Span,
+    Stack,
     Text,
     VStack,
 } from "@chakra-ui/react"
@@ -14,7 +19,27 @@ import { Field } from "@/components/ui/field"
 import { Checkbox } from "@/components/ui/checkbox"
 import useCustomToast from "@/hooks/useCustomToast"
 import DialogLayout from "../DialogLayout"
-import { emailPattern, handleError } from "@/utils"
+import { emailPattern, passwordRules, confirmPasswordRules, handleError } from "@/utils"
+
+const roles = createListCollection({
+    items: [
+        { 
+            label: "User", 
+            value: "user",
+            description: "Granted access to Chat Page",
+         },
+        { 
+            label: "Staff", 
+            value: "staff",
+            description: "Granted access to Chat Page and Dashboard",
+        },
+        { 
+            label: "Admin", 
+            value: "admin",
+            description: "Granted access to Chat Page, Dashboard, and Users Management",
+        },
+    ],
+})
 
 const AddUser = () => {
     // state whether the dialog is open or closed
@@ -29,6 +54,7 @@ const AddUser = () => {
         register,
         handleSubmit,
         reset,
+        getValues,
         formState: { errors, isValid, isSubmitting },
     } = useForm({
         mode: "onBlur",
@@ -36,9 +62,10 @@ const AddUser = () => {
         defaultValues: {
             email: "",
             password: "",
-            confirmPassword: "",
-            role: "user",
-            isActive: true,
+            confirm_password: "",
+            role: [],
+            is_active: true,
+            // is_superuser: false,
         }
     })
 
@@ -46,7 +73,7 @@ const AddUser = () => {
     const mutation = useMutation({
         mutationFn: (data) => {
             // UsersService.createUser({ requestBody: data })
-            console.log(data)
+            console.log("Admin Add User:", data)
         },
 
         onSuccess: () => {
@@ -114,14 +141,81 @@ const AddUser = () => {
                     errorText={errors.password?.message}
                     label="Set Password"
                 >
-                    <PasswordInput
-                        type="password"
+                    <Input
+                        id="password"
                         {...register("password", passwordRules())}
-                        
+                        placeholder="Password"
+                        type="password"
                     />
                 </Field>
 
+                <Field
+                    required
+                    invalid={!!errors.confirm_password}
+                    errorText={errors.confirm_password?.message}
+                    label="Confirm Password"
+                >
+                    <Input
+                        id="confirmPassword"
+                        {...register("confirm_password", confirmPasswordRules(getValues))}
+                        type="password"
+                        placeholder="Confirm Password"
+                    />
+                </Field>
             </VStack>
+
+            <Stack mt={4} gap="4" align="flex-start">
+                <Field
+                    required
+                    invalid={!!errors.role}
+                    errorText={errors.role?.message}
+                    label="Role"
+                >
+                    <Controller
+                        control={control}
+                        name="role"
+                        rules={{ required: "Role is required" }}
+                        render={({field}) => (
+                            <Select.Root
+                                name={field.name}
+                                value={field.value}
+                                onValueChange={({value}) => field.onChange(value)}
+                                onInteractOutside={() => field.onBlur()}
+                                collection={roles}
+                            >
+                                <Select.HiddenSelect />
+                                <Select.Control>
+                                    <Select.Trigger>
+                                        <Select.ValueText placeholder="Select a role" />
+                                    </Select.Trigger>
+                                    <Select.IndicatorGroup>
+                                        <Select.Indicator />
+                                    </Select.IndicatorGroup>
+                                </Select.Control>
+                                <Portal>
+                                    <Select.Positioner>
+                                        <Select.Content zIndex={1500}>
+                                            {roles.items.map((role) => (
+                                                <Select.Item item={role} key={role.value}>
+                                                    <Stack gap="0">
+                                                        <Select.ItemText>{role.label}</Select.ItemText>
+                                                        <Span color="fg.muted" textStyle="sm">
+                                                            {role.description}
+                                                        </Span>
+                                                    </Stack>
+                                                    <Select.ItemIndicator />
+                                                </Select.Item>
+                                            ))}
+                                        </Select.Content>
+                                    </Select.Positioner>
+                                </Portal>
+                            </Select.Root>
+                        )}
+                    />
+                    
+                </Field>
+            </Stack>
+
         </DialogLayout>
     )
 }

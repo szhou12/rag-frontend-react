@@ -45,23 +45,6 @@ const RegisterForm = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <Stack gap="6">
                 <Stack gap="5">
-                    {/* <Field.Root>
-                        <Field.Label >Email</Field.Label>    
-                        <Input   
-                            id="email"
-                            {...register("email", { 
-                                required: "Email is required",
-                                pattern: emailPattern,
-                            })}
-                            type="email"
-                            _focusVisible={{
-                                borderColor: "ui.main",
-                                boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
-                            }}
-                        />
-                                      
-                    </Field.Root> */}
-
                     <Field
                         label="Email"
                         invalid={!!errors.email} // Marks the field as invalid when an error exists
