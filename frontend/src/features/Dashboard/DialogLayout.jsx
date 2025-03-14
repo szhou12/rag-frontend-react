@@ -3,6 +3,7 @@ import {
     Dialog,
     Flex,
     Input,
+    Portal,
     Text,
     VStack,
 } from "@chakra-ui/react"
@@ -30,39 +31,47 @@ const DialogLayout = ({
                 {triggerButton}
             </Dialog.Trigger>
 
-            {/* Dialog Content */}
-            <Dialog.Content>
-                <form onSubmit={onSubmit}>
-                    <Dialog.Header>
-                        <Dialog.Title>{title}</Dialog.Title>
-                    </Dialog.Header>
+            <Portal>
+                {/* Adds a semi-transparent background. */}
+                <Dialog.Backdrop />
+                {/* Ensures the Dialog is positioned correctly on the screen */}
+                <Dialog.Positioner>
 
-                    {/* Form goes here */}
-                    <Dialog.Body>{children}</Dialog.Body>
+                    <Dialog.Content>
+                        <form onSubmit={onSubmit}>
+                            <Dialog.Header>
+                                <Dialog.Title>{title}</Dialog.Title>
+                            </Dialog.Header>
 
-                    <Dialog.Footer gap={2}>
-                        <Dialog.ActionTrigger asChild>
-                            <Button
-                                variant="subtle"
-                                colorPalette="gray"
-                                disabled={isSubmitting}
-                            >
-                                Cancel
-                            </Button>
-                        </Dialog.ActionTrigger>
-                        <Button
-                            variant="solid"
-                            type="submit"
-                            disabled={!isValid}
-                            isLoading={isSubmitting}
-                        >
-                            Save
-                        </Button>
-                    </Dialog.Footer>
-                </form>
+                            {/* Form data collects from here */}
+                            <Dialog.Body>{children}</Dialog.Body>
 
-                <Dialog.CloseTrigger />
-            </Dialog.Content>
+                            <Dialog.Footer gap={2}>
+                                <Dialog.ActionTrigger asChild>
+                                    <Button
+                                        variant="subtle"
+                                        colorPalette="gray"
+                                        disabled={isSubmitting}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </Dialog.ActionTrigger>
+                                <Button
+                                    variant="solid"
+                                    type="submit"
+                                    disabled={!isValid}
+                                    isLoading={isSubmitting}
+                                >
+                                    Save
+                                </Button>
+                            </Dialog.Footer>
+                        </form>
+
+                        <Dialog.CloseTrigger />
+                    </Dialog.Content>
+
+                </Dialog.Positioner>
+            </Portal>
         </Dialog.Root>
         
     )

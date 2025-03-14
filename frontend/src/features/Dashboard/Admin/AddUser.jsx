@@ -3,8 +3,6 @@ import { Controller, useForm } from "react-hook-form"
 import {
     Button,
     createListCollection,
-    Dialog,
-    Flex,
     Input,
     Portal,
     Select,
@@ -26,17 +24,17 @@ const roles = createListCollection({
         { 
             label: "User", 
             value: "user",
-            description: "Granted access to Chat Page",
+            description: "Access to Chat Page",
          },
         { 
             label: "Staff", 
             value: "staff",
-            description: "Granted access to Chat Page and Dashboard",
+            description: "Access to Chat Page and Dashboard",
         },
         { 
             label: "Admin", 
             value: "admin",
-            description: "Granted access to Chat Page, Dashboard, and Users Management",
+            description: "Access to Chat Page, Dashboard, and Users Management",
         },
     ],
 })
@@ -63,7 +61,7 @@ const AddUser = () => {
             email: "",
             password: "",
             confirm_password: "",
-            role: [],
+            role: "",
             is_active: true,
             // is_superuser: false,
         }
@@ -78,7 +76,13 @@ const AddUser = () => {
 
         onSuccess: () => {
             showSuccessToast("User created successfully")
-            reset()
+            // reset the form data to default values
+            reset({
+                email: "",
+                password: "",
+                confirm_password: "",
+                role: "",
+            })
             setIsOpen(false)
         },
 
@@ -87,6 +91,7 @@ const AddUser = () => {
         },
 
         onSettled: () => {
+            // Trigger React-Query to refetch users list that includes the newly added user from backend so that the data table will update with the new user without manually refreshing the page
             queryClient.invalidateQueries({ queryKey: ["users"] })
         },
     })
@@ -178,8 +183,11 @@ const AddUser = () => {
                         render={({field}) => (
                             <Select.Root
                                 name={field.name}
-                                value={field.value}
-                                onValueChange={({value}) => field.onChange(value)}
+                                value={field.value ? [field.value] : []}
+                                onValueChange={(selectedItem) => {
+                                    const roleValue = Array.isArray(selectedItem.value) ? selectedItem.value[0] : selectedItem.value;
+                                    field.onChange(roleValue);
+                                }}
                                 onInteractOutside={() => field.onBlur()}
                                 collection={roles}
                             >
