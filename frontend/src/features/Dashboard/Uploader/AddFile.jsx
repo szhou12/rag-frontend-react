@@ -2,20 +2,24 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Controller, useForm } from "react-hook-form"
 import {
     Button,
+    Box,
     createListCollection,
-    Dialog,
-    Flex,
-    Input,
+    FileUpload,
+    Icon,
+    Portal,
+    Select,
     Stack,
     Text,
     VStack,
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { FaPlus } from "react-icons/fa"
+import { LuUpload } from "react-icons/lu"
 
 import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
-import { Checkbox } from "@/components/ui/checkbox"
+import DialogLayout from "../DialogLayout"
+import { handleError } from "@/utils"
 
 const languages = createListCollection({
     items: [
@@ -100,26 +104,60 @@ const AddFile = () => {
             <Text mb={4}>
                 Upload a file and select the text language.
             </Text>
+            
             <VStack gap={4}>
                 <Field
                     required
-                    invalid={!!errors.email}
-                    errorText={errors.email?.message}
-                    label="Email"
+                    invalid={!!errors.file}
+                    errorText={errors.file?.message}
+                    label="File"
                 >
-                    <Input
-                        id="email"
-                        {...register("email", {
-                            required: "Email is required",
-                            pattern: emailPattern,
-                        })}
-                        type="email"
-                        placeholder="Email"
-                        _focusVisible={{
-                            borderColor: "ui.main",
-                            boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
-                        }}
+                    <Controller
+                        control={control}
+                        name="file"
+                        rules={{ required: "File is required" }}
+                        render={({field}) => (
+                            <FileUpload.Root
+                                maxW="xl"
+                                alignItems="stretch"
+                                maxFiles={1}
+                                onFileChange={(files) => {
+                                    field.onChange(files[0] || null)
+                                }}
+                            >
+                                <FileUpload.HiddenInput />
+                                <FileUpload.Dropzone>
+                                    <Icon size="md" color="ui.main">
+                                        <LuUpload />
+                                    </Icon>
+                                    <FileUpload.DropzoneContent>
+                                        <Box>
+                                            Drag and drop a file here or click to upload
+                                        </Box>
+                                        <Box color="fg.muted">.pdf, .xlsx up to 10MB</Box>
+                                    </FileUpload.DropzoneContent>
+                                </FileUpload.Dropzone>
+                                <FileUpload.List />
+                            </FileUpload.Root>
+                        )}
                     />
+
+                    {/* <FileUpload.Root maxW="xl" alignItems="stretch" maxFiles={1}>
+                        <FileUpload.HiddenInput />
+                        <FileUpload.Dropzone>
+                            <Icon size="md" color="ui.main">
+                                <LuUpload />
+                            </Icon>
+                            <FileUpload.DropzoneContent>
+                                <Box>
+                                    Drag and drop a file here or click to upload
+                                </Box>
+                                <Box color="fg.muted">.pdf, .xlsx up to 10MB</Box>
+                            </FileUpload.DropzoneContent>
+                        </FileUpload.Dropzone>
+                        <FileUpload.List />
+                    </FileUpload.Root> */}
+
                 </Field>
 
                 
@@ -142,7 +180,7 @@ const AddFile = () => {
                                 value={field.value ? [field.value] : []}
                                 onValueChange={(selectedItem) => {
                                     const itemValue = Array.isArray(selectedItem.value) ? selectedItem.value[0] : selectedItem.value;
-                                    field.onChange(itemValue);
+                                    field.onChange(itemValue); // send value to hook form
                                 }}
                                 onInteractOutside={() => field.onBlur()}
                                 collection={languages}

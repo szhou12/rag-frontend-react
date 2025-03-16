@@ -2,7 +2,8 @@
 
 ## Installation
 ```bash
-npm install @chakra-ui/react@3.8.0
+# npm install @chakra-ui/react@^3.8.0
+npm install @chakra-ui/react@^3.13.0
 npm install @emotion/react
 npm install @tanstack/react-query
 npm install @tanstack/react-query-devtools
@@ -13,6 +14,8 @@ npm install react-icons
 npm install react-error-boundary
 npm install framer-motion
 ```
+### Notes
+- Chakra UI `3.8.0` can't use `FileUpload`.
 
 ## React Folder Naming & Structure
 ```
