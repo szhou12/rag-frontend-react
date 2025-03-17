@@ -1,14 +1,10 @@
 import {
     Button,
     Dialog,
-    Flex,
-    Input,
     Portal,
-    Text,
-    VStack,
 } from "@chakra-ui/react"
 
-const DialogLayout = ({ 
+const AddDataLayout = ({ 
     title, 
     onSubmit, 
     children, 
@@ -77,4 +73,4 @@ const DialogLayout = ({
     )
 }
 
-export default DialogLayout;
+export default AddDataLayout;

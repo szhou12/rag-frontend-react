@@ -19,7 +19,7 @@ import { LuUpload } from "react-icons/lu"
 import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
 import { handleError } from "@/utils"
-import DialogLayout from "../DialogLayout"
+import AddDataLayout from "../AddDataLayout"
 
 
 const languages = createListCollection({
@@ -87,7 +87,7 @@ const AddFile = () => {
     }
 
     return (
-        <DialogLayout
+        <AddDataLayout
             title="Upload File"
             onSubmit={handleSubmit(onSubmit)}
             isSubmitting={isSubmitting}
@@ -204,7 +204,7 @@ const AddFile = () => {
                 </Field>
             </Stack>
 
-        </DialogLayout>
+        </AddDataLayout>
     )
 }
 

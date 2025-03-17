@@ -2,13 +2,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Controller, useForm } from "react-hook-form"
 import {
     Button,
-    Box,
     createListCollection,
-    Dialog,
-    Flex,
     NumberInput,
     Input,
-    Icon,
     Portal,
     Select,
     Stack,
@@ -22,7 +18,7 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
 import { Checkbox } from "@/components/ui/checkbox"
 import { urlPattern, handleError } from "@/utils"
-import DialogLayout from "../DialogLayout"
+import AddDataLayout from "../AddDataLayout"
 
 const languages = createListCollection({
     items: [
@@ -96,7 +92,7 @@ const AddWebpage = () => {
     }
 
     return (
-        <DialogLayout
+        <AddDataLayout
             title="Scrape Webpage"
             onSubmit={handleSubmit(onSubmit)}
             isSubmitting={isSubmitting}
@@ -267,7 +263,7 @@ const AddWebpage = () => {
 
             </Stack>
 
-        </DialogLayout>
+        </AddDataLayout>
     )
 }
 

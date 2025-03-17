@@ -14,10 +14,9 @@ import {
 import { useState } from "react"
 import { FaPlus } from "react-icons/fa"
 import { Field } from "@/components/ui/field"
-import { Checkbox } from "@/components/ui/checkbox"
 import useCustomToast from "@/hooks/useCustomToast"
-import DialogLayout from "../DialogLayout"
 import { emailPattern, passwordRules, confirmPasswordRules, handleError } from "@/utils"
+import AddDataLayout from "../AddDataLayout"
 
 const roles = createListCollection({
     items: [
@@ -101,7 +100,7 @@ const AddUser = () => {
     }
 
     return (
-        <DialogLayout
+        <AddDataLayout
             title="Add User"
             onSubmit={handleSubmit(onSubmit)}
             isSubmitting={isSubmitting}
@@ -224,7 +223,7 @@ const AddUser = () => {
                 </Field>
             </Stack>
 
-        </DialogLayout>
+        </AddDataLayout>
     )
 }
 
