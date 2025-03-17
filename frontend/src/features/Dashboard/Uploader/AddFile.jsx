@@ -18,8 +18,9 @@ import { LuUpload } from "react-icons/lu"
 
 import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
-import DialogLayout from "../DialogLayout"
 import { handleError } from "@/utils"
+import DialogLayout from "../DialogLayout"
+
 
 const languages = createListCollection({
     items: [
@@ -43,10 +44,8 @@ const AddFile = () => {
 
     const {
         control,
-        register,
         handleSubmit,
         reset,
-        getValues,
         formState: { errors, isValid, isSubmitting },
     } = useForm({
         mode: "onChange", // Validation occurs as soon as values change

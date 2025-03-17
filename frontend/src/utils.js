@@ -73,3 +73,17 @@ export const confirmPasswordRules = (getValues, isRequired = true) => {
 
     return rules
 }
+
+/**
+ * Validate URL using Built-in Browser Validation
+ */
+export const urlPattern = {
+    validate: (value) => {
+        try {
+            new URL(value);
+            return true;
+        } catch (error) {
+            return "Please enter a valid URL";
+        }
+    }
+}

@@ -2,11 +2,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Controller, useForm } from "react-hook-form"
 import {
     Button,
+    Box,
     createListCollection,
     Dialog,
     Flex,
     NumberInput,
     Input,
+    Icon,
+    Portal,
+    Select,
     Stack,
     Text,
     VStack,
@@ -17,6 +21,8 @@ import { FaPlus } from "react-icons/fa"
 import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
 import { Checkbox } from "@/components/ui/checkbox"
+import { urlPattern, handleError } from "@/utils"
+import DialogLayout from "../DialogLayout"
 
 const languages = createListCollection({
     items: [
@@ -65,7 +71,7 @@ const AddWebpage = () => {
         },
 
         onSuccess: () => {
-            showSuccessToast("Webpage(s) scraped successfully")
+            showSuccessToast(`${getValues("pages")} Webpage(s) scraped successfully!`)
             reset({
                 url: "",
                 pages: 1,
@@ -110,56 +116,91 @@ const AddWebpage = () => {
             <VStack gap={4}>
                 <Field
                     required
-                    invalid={!!errors.email}
-                    errorText={errors.email?.message}
-                    label="Email"
+                    invalid={!!errors.url}
+                    errorText={errors.url?.message}
+                    label="URL"
                 >
-                    <Input
-                        id="email"
-                        {...register("email", {
-                            required: "Email is required",
-                            pattern: emailPattern,
-                        })}
-                        type="email"
-                        placeholder="Email"
-                        _focusVisible={{
-                            borderColor: "ui.main",
-                            boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                    <Controller
+                        control={control}
+                        name="url" // key defined in useForm()
+                        rules={{
+                            required: "URL is required",
+                            validate: urlPattern.validate,
                         }}
+                        render={({field}) => (
+                            <Input
+                                {...field} // pass field.value to key in name="url" to contruct {"url": field.value} in useForm()
+                                id="url"
+                                type="url"
+                                placeholder="https://www.example.com"
+                                _focusVisible={{
+                                    borderColor: "ui.main",
+                                    boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                                }}
+                            />
+                        )}
                     />
                 </Field>
 
                 <Field
-                    required
-                    invalid={!!errors.password}
-                    errorText={errors.password?.message}
-                    label="Set Password"
+                    invalid={!!errors.pages}
+                    errorText={errors.pages?.message}
+                    label="Pages to Scrape"
                 >
-                    <Input
-                        id="password"
-                        {...register("password", passwordRules())}
-                        placeholder="Password"
-                        type="password"
+                    <Controller
+                        control={control}
+                        name="pages"
+                        render={({field}) => (
+                            <NumberInput.Root
+                                name={field.name}
+                                value={field.value}
+                                onValueChange={({ value }) => {
+                                    field.onChange(value)
+                                }}
+                                defaultValue="1"
+                                min={1}
+                                max={10}
+                                width="100%"
+                            >
+                                <NumberInput.Control />
+                                <NumberInput.Input onBlur={field.onBlur} />
+
+                            </NumberInput.Root>
+                        )}
                     />
                 </Field>
 
                 <Field
-                    required
-                    invalid={!!errors.confirm_password}
-                    errorText={errors.confirm_password?.message}
-                    label="Confirm Password"
+                    invalid={!!errors.refresh_frequency}
+                    errorText={errors.refresh_frequency?.message}
+                    label="Refresh Frequency (Days)"
                 >
-                    <Input
-                        id="confirmPassword"
-                        {...register("confirm_password", confirmPasswordRules(getValues))}
-                        type="password"
-                        placeholder="Confirm Password"
+                    <Controller
+                        control={control}
+                        name="refresh_frequency"
+                        render={({field}) => (
+                            <NumberInput.Root
+                                name={field.name}
+                                value={field.value}
+                                onValueChange={({ value }) => {
+                                    field.onChange(value)
+                                }}
+                                defaultValue="0"
+                                min={0}
+                                max={1095}
+                                width="100%"
+                            >
+                                <NumberInput.Control />
+                                <NumberInput.Input onBlur={field.onBlur} />
+
+                            </NumberInput.Root>
+                        )}
                     />
                 </Field>
             </VStack>
 
             <Stack mt={4} gap="4" align="flex-start">
-            <Field
+                <Field
                     required
                     invalid={!!errors.language}
                     errorText={errors.language?.message}
@@ -204,8 +245,26 @@ const AddWebpage = () => {
                             </Select.Root>
                         )}
                     />
-                    
                 </Field>
+
+                <Controller
+                    control={control}
+                    name="auto_download"
+                    render={({field}) => (
+                        <Field disabled={field.disabled}>
+                            <Checkbox
+                                variant="outline"
+                                colorPalette="teal"
+                                checked={field.value}
+                                onCheckedChange={({ checked }) => field.onChange(checked)}
+                            >
+                                Activate auto-download?
+                            </Checkbox>
+                        </Field>
+                    )}
+                />
+
+
             </Stack>
 
         </DialogLayout>
