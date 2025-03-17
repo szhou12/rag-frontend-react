@@ -49,13 +49,14 @@ const AddFile = () => {
         getValues,
         formState: { errors, isValid, isSubmitting },
     } = useForm({
-        mode: "onBlur",
+        mode: "onChange", // Validation occurs as soon as values change
         criteriaMode: "all",
         defaultValues: {
             file: null,
             language: "",
         }
     })
+
 
     const mutation = useMutation({
         // TODO: probly needs async function
@@ -121,8 +122,13 @@ const AddFile = () => {
                                 maxW="xl"
                                 alignItems="stretch"
                                 maxFiles={1}
-                                onFileChange={(files) => {
-                                    field.onChange(files[0] || null)
+                                accept={[
+                                    "application/pdf",  // .pdf
+                                    "application/vnd.ms-excel",  // .xls
+                                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  // .xlsx
+                                ]}
+                                onFileChange={(details) => {
+                                    field.onChange(details.acceptedFiles[0] || null)
                                 }}
                             >
                                 <FileUpload.HiddenInput />
@@ -134,29 +140,15 @@ const AddFile = () => {
                                         <Box>
                                             Drag and drop a file here or click to upload
                                         </Box>
-                                        <Box color="fg.muted">.pdf, .xlsx up to 10MB</Box>
+                                        <Box color="fg.muted">
+                                            PDF, Excel (.xls, .xlsx) up to 10MB
+                                        </Box>
                                     </FileUpload.DropzoneContent>
                                 </FileUpload.Dropzone>
                                 <FileUpload.List />
                             </FileUpload.Root>
                         )}
                     />
-
-                    {/* <FileUpload.Root maxW="xl" alignItems="stretch" maxFiles={1}>
-                        <FileUpload.HiddenInput />
-                        <FileUpload.Dropzone>
-                            <Icon size="md" color="ui.main">
-                                <LuUpload />
-                            </Icon>
-                            <FileUpload.DropzoneContent>
-                                <Box>
-                                    Drag and drop a file here or click to upload
-                                </Box>
-                                <Box color="fg.muted">.pdf, .xlsx up to 10MB</Box>
-                            </FileUpload.DropzoneContent>
-                        </FileUpload.Dropzone>
-                        <FileUpload.List />
-                    </FileUpload.Root> */}
 
                 </Field>
 

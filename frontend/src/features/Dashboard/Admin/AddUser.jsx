@@ -55,7 +55,7 @@ const AddUser = () => {
         getValues,
         formState: { errors, isValid, isSubmitting },
     } = useForm({
-        mode: "onBlur",
+        mode: "onBlur", // Validation occurs when the user leaves the field
         criteriaMode: "all",
         defaultValues: {
             email: "",
