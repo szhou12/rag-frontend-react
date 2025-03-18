@@ -18,7 +18,7 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
 import { Checkbox } from "@/components/ui/checkbox"
 import { urlPattern, handleError } from "@/utils"
-import AddDataLayout from "../AddDataLayout"
+import DataFormLayout from "../DataFormLayout"
 
 const languages = createListCollection({
     items: [
@@ -92,17 +92,26 @@ const AddWebpage = () => {
     }
 
     return (
-        <AddDataLayout
+        <DataFormLayout
             title="Scrape Webpage"
             onSubmit={handleSubmit(onSubmit)}
             isSubmitting={isSubmitting}
-            isValid={isValid}
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             triggerButton={
                 <Button value="add-webpage" my={4}>
                     <FaPlus fontSize="16px" />
                     Scrape Webpage
+                </Button>
+            }
+            submitButton={
+                <Button
+                    variant="solid"
+                    type="submit"
+                    disabled={!isValid}
+                    loading={isSubmitting}
+                >
+                    Save
                 </Button>
             }
         >
@@ -263,7 +272,7 @@ const AddWebpage = () => {
 
             </Stack>
 
-        </AddDataLayout>
+        </DataFormLayout>
     )
 }
 

@@ -4,15 +4,15 @@ import {
     Portal,
 } from "@chakra-ui/react"
 
-const AddDataLayout = ({ 
+const DataFormLayout = ({ 
     title, 
     onSubmit, 
-    children, 
     isSubmitting, 
-    isValid, 
     isOpen, 
     setIsOpen, 
-    triggerButton
+    triggerButton,
+    submitButton,
+    children,
 }) => {
 
     return (
@@ -52,14 +52,9 @@ const AddDataLayout = ({
                                         Cancel
                                     </Button>
                                 </Dialog.ActionTrigger>
-                                <Button
-                                    variant="solid"
-                                    type="submit"
-                                    disabled={!isValid}
-                                    isLoading={isSubmitting}
-                                >
-                                    Save
-                                </Button>
+
+                                {submitButton}
+
                             </Dialog.Footer>
                         </form>
 
@@ -73,4 +68,4 @@ const AddDataLayout = ({
     )
 }
 
-export default AddDataLayout;
+export default DataFormLayout;

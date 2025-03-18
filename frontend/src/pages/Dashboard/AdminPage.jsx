@@ -3,6 +3,7 @@ import {
     Heading,
 } from "@chakra-ui/react"
 import AddUser from "@/features/Dashboard/Admin/AddUser"
+import UsersTable from "@/features/Dashboard/Admin/UsersTable"
 
 
 export default function AdminPage() {
@@ -12,6 +13,7 @@ export default function AdminPage() {
 				Users Management
 			</Heading>
             <AddUser />
+            <UsersTable />
 		</Container>
 	)
 }

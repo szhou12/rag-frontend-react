@@ -1,3 +1,4 @@
+import { z } from "zod"
 
 /**
  * Handle API errors by displaying a toast notification with the error message.
@@ -87,3 +88,16 @@ export const urlPattern = {
         }
     }
 }
+
+/**
+ * 
+ * Take page parameter from URL ("/admin?page=2") and Do 2 things:
+ * 1. Validate: validate if page param's value a number
+ * 2. Convert: 
+ *      if not a number, convert to a number {page: "2"} -> {page: 2}; 
+ *      if missing or invalid, set to default: {page: "abc"} -> {page: 1}
+ * 
+ */
+export const pageSearchSchema = z.object({
+    page: z.number().catch(1),
+})

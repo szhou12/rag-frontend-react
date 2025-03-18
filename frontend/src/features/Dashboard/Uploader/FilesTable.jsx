@@ -15,21 +15,44 @@ import { FiSearch } from "react-icons/fi"
 import { Tooltip } from "@/components/ui"
 import DataTableLayout from "../DataTableLayout"
 import FileActionsMenu from "./FileActionsMenu"
+import { PendingDataTable } from "@/components/Dashboard/PendingDataTable"
 
 function FilesTable() {
     // ... data fetching logic ...
 
+    const columnHeaders = [
+        "File Name",
+        "Date Added",
+        "Language",
+        "Pages",
+        "Size",
+        "Actions",
+    ]
+    
     return (
-        <DataTableLayout>
+        <DataTableLayout
+            isLoading={isLoading}
+            isEmpty={items.length === 0}
+            pendingComponent={<PendingDataTable columnHeaders={columnHeaders} />}
+            emptyStateProps={{
+                title: "No files found in Database",
+                description: "Upload a file to get started"
+            }}
+            paginationProps={{
+                count,
+                pageSize: PER_PAGE,
+                onPageChange: ({ page }) => setPage(page)
+            }}
+        >
             <Table.Root size={{ base: "sm", md: "md" }}>
+
                 <Table.Header>
                     <Table.Row>
-                        <Table.ColumnHeader w="sm">File Name</Table.ColumnHeader>
-                        <Table.ColumnHeader w="sm">Date Added</Table.ColumnHeader>
-                        <Table.ColumnHeader w="sm">Language</Table.ColumnHeader>
-                        <Table.ColumnHeader w="sm">Pages</Table.ColumnHeader>
-                        <Table.ColumnHeader w="sm">Size</Table.ColumnHeader>
-                        <Table.ColumnHeader w="sm">Actions</Table.ColumnHeader>
+                        {columnHeaders.map((header, index) => (
+                            <Table.ColumnHeader key={index} w="sm">
+                                {header}
+                            </Table.ColumnHeader>
+                        ))}
                     </Table.Row>
                 </Table.Header>
 
@@ -40,12 +63,12 @@ function FilesTable() {
                                 <Tooltip
                                     content={file.name}
                                     showArrow
+                                    positioning={{ placement: "left-end" }}
                                 >
                                     <Box as="span" isTruncated>
                                         {file.name}
                                     </Box>
                                 </Tooltip>
-                                {file.name}
                             </Table.Cell>
 
                             <Table.Cell>

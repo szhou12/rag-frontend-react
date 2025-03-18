@@ -16,7 +16,7 @@ import { FaPlus } from "react-icons/fa"
 import { Field } from "@/components/ui/field"
 import useCustomToast from "@/hooks/useCustomToast"
 import { emailPattern, passwordRules, confirmPasswordRules, handleError } from "@/utils"
-import AddDataLayout from "../AddDataLayout"
+import DataFormLayout from "../DataFormLayout"
 
 const roles = createListCollection({
     items: [
@@ -100,17 +100,26 @@ const AddUser = () => {
     }
 
     return (
-        <AddDataLayout
+        <DataFormLayout
             title="Add User"
             onSubmit={handleSubmit(onSubmit)}
             isSubmitting={isSubmitting}
-            isValid={isValid}
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             triggerButton={
                 <Button value="add-user" my={4}>
                     <FaPlus fontSize="16px" />
                     Add User
+                </Button>
+            }
+            submitButton={
+                <Button
+                    variant="solid"
+                    type="submit"
+                    disabled={!isValid}
+                    loading={isSubmitting}
+                >
+                    Save
                 </Button>
             }
         >
@@ -223,7 +232,7 @@ const AddUser = () => {
                 </Field>
             </Stack>
 
-        </AddDataLayout>
+        </DataFormLayout>
     )
 }
 

@@ -19,7 +19,7 @@ import { LuUpload } from "react-icons/lu"
 import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
 import { handleError } from "@/utils"
-import AddDataLayout from "../AddDataLayout"
+import DataFormLayout from "../DataFormLayout"
 
 
 const languages = createListCollection({
@@ -87,17 +87,26 @@ const AddFile = () => {
     }
 
     return (
-        <AddDataLayout
+        <DataFormLayout
             title="Upload File"
             onSubmit={handleSubmit(onSubmit)}
             isSubmitting={isSubmitting}
-            isValid={isValid}
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             triggerButton={
                 <Button value="add-file" my={4}>
                     <FaPlus fontSize="16px" />
                     Upload File
+                </Button>
+            }
+            submitButton={
+                <Button
+                    variant="solid"
+                    type="submit"
+                    disabled={!isValid}
+                    loading={isSubmitting}
+                >
+                    Save
                 </Button>
             }
         >
@@ -204,7 +213,7 @@ const AddFile = () => {
                 </Field>
             </Stack>
 
-        </AddDataLayout>
+        </DataFormLayout>
     )
 }
 
