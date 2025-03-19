@@ -72,3 +72,15 @@ npx @chakra-ui/cli snippet add select
     3. implement `forgot password` link.
 - `RegisterForm.jsx`
     1. Add `<PasswordStrengthMeter>` to show password strength.
+- `UsersTable.jsx`
+    1. update `getUsersQueryOptions`: API call to fetch users data from backend
+- `DeleteUser.jsx`
+    1. update `deleteUser` to use backend API.
+- `WebpagesTable.jsx`
+    1. update `getWebpagesQueryOptions`: API call to fetch webpages data from backend
+- `DeleteWebpage.jsx`
+    1. update `deleteWebpage` to use backend API.
+- `FilesTable.jsx`
+    1. update `getFilesQueryOptions`: API call to fetch files data from backend
+- `DeleteFile.jsx`
+    1. update `deleteFile` to use backend API.

@@ -91,7 +91,7 @@ export const urlPattern = {
 
 /**
  * 
- * Take page parameter from URL ("/admin?page=2") and Do 2 things:
+ * Take page parameter from URL ("/admin?page=2") and DO 2 things:
  * 1. Validate: validate if page param's value a number
  * 2. Convert: 
  *      if not a number, convert to a number {page: "2"} -> {page: 2}; 

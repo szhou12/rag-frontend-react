@@ -32,7 +32,7 @@ const DeleteUser = ({ id }) => {
         formState: {isSubmitting},
     } = useForm()
 
-    // TODO: DELETE when backend is ready
+    // TODO: UPDATE when backend is ready
     const deleteUser = async(id) => {
         // UsersService.deleteUser({ id })
 
@@ -54,6 +54,7 @@ const DeleteUser = ({ id }) => {
         },
 
         onSettled: () => {
+            // trigger auto-refresh of users table so that the deleted user removed from the table
             queryClient.invalidateQueries()
         },
         
@@ -72,9 +73,9 @@ const DeleteUser = ({ id }) => {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             triggerButton={
-                <Button variant="ghost" colorPalette="red" size="sm">
+                <Button variant="ghost" colorPalette="red" size="sm" w="full" justifyContent="start">
                     <FiTrash2 fontSize="16px" />
-                    Delete User
+                    Delete
                 </Button>
             }
             submitButton={
@@ -89,7 +90,7 @@ const DeleteUser = ({ id }) => {
             }
         >
             <Text mb={4}>
-                All items associated with this user will also be{" "}
+                All information associated with this user will also be{" "}
                 <strong>permanently deleted.</strong> Are you sure? You will not
                 be able to undo this action.
             </Text>

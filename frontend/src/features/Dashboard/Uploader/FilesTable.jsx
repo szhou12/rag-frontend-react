@@ -9,16 +9,71 @@ import {
     VStack,
 } from "@chakra-ui/react"
 import { useQuery } from "@tanstack/react-query"
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { FiSearch } from "react-icons/fi"
 
-import { Tooltip } from "@/components/ui"
+import { Tooltip } from "@/components/ui/tooltip"
 import DataTableLayout from "../DataTableLayout"
 import FileActionsMenu from "./FileActionsMenu"
 import { PendingDataTable } from "@/components/Dashboard/PendingDataTable"
+import { Route } from "@/routes/_dashboard-layout/uploader"
+import { usePagination } from "@/hooks/usePagination"
+
+// TODO: DELETE when backend is ready
+// Fake file data
+const MOCK_FILES = Array.from({ length: 15 }, (_, index) => ({
+    id: index + 1,
+    name: `document-${index + 1}${index % 2 === 0 ? '.pdf' : '.xlsx'}`,
+    date_added: new Date(2024, 0, index + 1).toLocaleDateString(),
+    language: index % 3 === 0 ? 'zh' : 'en', // Mix of English and Chinese
+    pages: Math.floor(Math.random() * 50) + 1, // Random pages between 1-50
+    size: (Math.random() * 10).toFixed(2), // Random size between 0-10 MB
+}));
+
+// TODO: DELETE when backend is ready
+// Mock service that simulates API calls
+const MockFilesService = {
+    readFiles: ({ skip, limit }) => {
+        // Simulate API delay
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    data: MOCK_FILES.slice(skip, skip + limit),
+                    count: MOCK_FILES.length
+                });
+            }, 800); // 0.8 second delay
+        });
+    }
+};
+
+
+const PER_PAGE = 5
+
+// TODO: Comment off when backend is ready
+function getFilesQueryOptions({ page }) {
+    return {
+        queryFn: () =>
+            // FilesService.readFiles({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+            MockFilesService.readFiles({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+
+        queryKey: ["files", page],
+    }
+}
 
 function FilesTable() {
-    // ... data fetching logic ...
+    // Set new page number in the URL
+    const { setPage } = usePagination({ from: Route.fullPath })
+
+    // Get current page number from the URL: /uploader?page=2 -> {page: 2}
+    const { page } = Route.useSearch()
+
+    // Fetch files data from the backend
+    const { data, isLoading, isPlaceholderData } = useQuery({
+        ...getFilesQueryOptions({ page }),
+        placeholderData: (prevData) => prevData,
+    })
+
+    const files = data?.data.slice(0, PER_PAGE) ?? []
+    const count = data?.count ?? 0
+
 
     const columnHeaders = [
         "File Name",
@@ -32,7 +87,7 @@ function FilesTable() {
     return (
         <DataTableLayout
             isLoading={isLoading}
-            isEmpty={items.length === 0}
+            isEmpty={files.length === 0}
             pendingComponent={<PendingDataTable columnHeaders={columnHeaders} />}
             emptyStateProps={{
                 title: "No files found in Database",
@@ -57,7 +112,7 @@ function FilesTable() {
                 </Table.Header>
 
                 <Table.Body>
-                    {files?.map((file) => {
+                    {files?.map((file) => (
                         <Table.Row key={file.id} opacity={isPlaceholderData ? 0.5 : 1}>
                             <Table.Cell truncate maxW="sm">
                                 <Tooltip
@@ -84,7 +139,7 @@ function FilesTable() {
                             </Table.Cell>
 
                             <Table.Cell>
-                                `${file.size} MB`
+                                {`${file.size} MB`}
                             </Table.Cell>
 
                             <Table.Cell>
@@ -93,7 +148,7 @@ function FilesTable() {
                                 />
                             </Table.Cell>
                         </Table.Row>
-                    })}
+                    ))}
                 </Table.Body>
             </Table.Root>
         </DataTableLayout>

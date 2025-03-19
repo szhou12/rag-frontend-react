@@ -6,6 +6,7 @@ import {
     Table,
     VStack,
   } from "@chakra-ui/react"
+  import { FiSearch } from "react-icons/fi"
 
   import {
     PaginationItems,

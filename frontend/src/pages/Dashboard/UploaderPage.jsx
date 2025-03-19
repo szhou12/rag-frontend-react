@@ -3,6 +3,8 @@ import {
     Heading,
 } from "@chakra-ui/react"
 import AddFile from "@/features/Dashboard/Uploader/AddFile"
+import FilesTable from "@/features/Dashboard/Uploader/FilesTable"
+
 
 export default function UploaderPage() {
     return (
@@ -11,6 +13,7 @@ export default function UploaderPage() {
 				File Uploader
 			</Heading>
             <AddFile />
+			<FilesTable />
 		</Container>
 	)
 }

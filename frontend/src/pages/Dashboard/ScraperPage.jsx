@@ -3,7 +3,7 @@ import {
     Heading,
 } from "@chakra-ui/react"
 import AddWebpage from "@/features/Dashboard/Scraper/AddWebpage"
-
+import WebpagesTable from "@/features/Dashboard/Scraper/WebpagesTable"
 export default function ScraperPage() {
     return (
 		<Container maxW="full">
@@ -11,6 +11,7 @@ export default function ScraperPage() {
 				Web Scraper
 			</Heading>
             <AddWebpage />
+            <WebpagesTable />
 		</Container>
 	)
 }

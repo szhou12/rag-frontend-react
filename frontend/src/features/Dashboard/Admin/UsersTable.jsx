@@ -1,23 +1,17 @@
 import {
     Badge,
     Box,
-    Container,
-    EmptyState,
     Flex,
-    Heading,
     Table,
-    VStack,
 } from "@chakra-ui/react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
-import { FiSearch } from "react-icons/fi"
 
 import { Tooltip } from "@/components/ui/tooltip"
 import DataTableLayout from "../DataTableLayout"
 import UserActionsMenu from "./UserActionsMenu"
 import { PendingDataTable } from "@/components/Dashboard/PendingDataTable"
 import { Route } from "@/routes/_dashboard-layout/admin"
-
+import { usePagination } from "@/hooks/usePagination"
 
 // TODO: DELETE when backend is ready
 // Fake user data
@@ -96,35 +90,13 @@ function UsersTable() {
     const queryClient = useQueryClient()
     const currentUser = queryClient.getQueryData(["currentUser"])
 
-    /**
-     * Set new page number in the URL
-     *   User clicks page 2
-     *     ↓
-     *   onPageChange({ page: 2 }) triggered in <pagination>
-     *     ↓
-     *   setPage(2)
-     *     ↓
-     *   navigate({ search: (prev) => ({ ...prev, page: 2 }) })
-     *     ↓
-     *   URL updates to: /admin?page=2
-     * 
-     */
-    const navigate = useNavigate({ from: Route.fullPath })
-    const setPage = (page) => {
-        navigate({
-            search: (prev) => ({...prev, page}), // ...prev preserves other search parameters in URL
-        })
-    }
+    // Set new page number in the URL
+    const { setPage } = usePagination({ from: Route.fullPath })
 
-    /**
-     * Get current page number from the URL
-     * /admin?page=2 -> {page: 2}
-     */
+    // Get current page number from the URL: /admin?page=2 -> {page: 2}
     const { page } = Route.useSearch()
 
-    /**
-     * Fetch users data from the backend
-     */
+    // Fetch users data from the backend
     const { data, isLoading, isPlaceholderData } = useQuery({
         ...getUsersQueryOptions({ page }),
         placeholderData: (prevData) => prevData,  // Keep previous page data visible while loading new data
@@ -132,7 +104,6 @@ function UsersTable() {
 
     // extract data from API response: data = { data: [user1, user2, user3], count: 25 }
     const users = data?.data.slice(0, PER_PAGE) ?? []
-    console.log("users", users)
     const count = data?.count ?? 0
 
 
