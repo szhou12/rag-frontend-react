@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Controller, useForm } from "react-hook-form"
 import {
     Button,
-    createListCollection,
     NumberInput,
     Input,
     Portal,
@@ -19,19 +18,8 @@ import { Field } from "@/components/ui/field"
 import { Switch } from "@/components/ui/switch"
 import { urlPattern, handleError } from "@/utils"
 import DataFormLayout from "../DataFormLayout"
+import { languages } from "@/constants/languages"
 
-const languages = createListCollection({
-    items: [
-        { 
-            label: "English", 
-            value: "en",
-         },
-        { 
-            label: "中文", 
-            value: "zh",
-        },
-    ],
-})
 
 const AddWebpage = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -62,7 +50,7 @@ const AddWebpage = () => {
     const mutation = useMutation({
         // TODO: probly needs async function
         mutationFn: (data) => {
-            // UsersService.createUser({ requestBody: data })
+            // WebpagesService.createWebpages({ requestBody: data })
             console.log("Add Webpage:", data)
         },
 

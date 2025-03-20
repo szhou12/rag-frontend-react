@@ -76,15 +76,43 @@ npx @chakra-ui/cli snippet add switch
     1. Add `<PasswordStrengthMeter>` to show password strength.
 - `UsersTable.jsx`
     1. update `getUsersQueryOptions`: API call to fetch users data from backend
+- `AddUser.jsx`
+    1. update `UsersService.createUser` to use backend API.
 - `DeleteUser.jsx`
     1. update `deleteUser` to use backend API.
 - `EditUser.jsx`
     1. update `UsersService.updateUser` to send backend API.
 - `WebpagesTable.jsx`
     1. update `getWebpagesQueryOptions`: API call to fetch webpages data from backend
+- `AddWebpage.jsx`
+    1. update `WebpagesService.createWebpage` to use backend API.
+    2. NOTE: useForm data fields are different from data fields stored in backend!
+    ```json
+    // frontend form data:
+    {
+        url: "",
+        pages: 1, // not stored in backend
+        language: "",
+        refresh_frequency: 0,
+        auto_download: false,
+    }
+    // backend data (presented on table):
+    {
+        id: 1,
+        url: "example.com",
+        date_updated: "2024-01-01", // added by backend
+        language: "en",
+        refresh_frequency: 0,
+        auto_download: false,
+    }
+    ```
 - `DeleteWebpage.jsx`
     1. update `deleteWebpage` to use backend API.
+- `EditWebpage.jsx`
+    1. update `WebpagesService.updateWebpage` to use backend API.
 - `FilesTable.jsx`
     1. update `getFilesQueryOptions`: API call to fetch files data from backend
+- `AddFile.jsx`
+    1. update `FilesService.createFile` to use backend API.
 - `DeleteFile.jsx`
     1. update `deleteFile` to use backend API.

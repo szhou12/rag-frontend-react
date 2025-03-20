@@ -20,20 +20,8 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
 import { handleError } from "@/utils"
 import DataFormLayout from "../DataFormLayout"
+import { languages } from "@/constants/languages"
 
-
-const languages = createListCollection({
-    items: [
-        { 
-            label: "English", 
-            value: "en",
-         },
-        { 
-            label: "中文", 
-            value: "zh",
-        },
-    ],
-})
 
 const AddFile = () => {
     const [isOpen, setIsOpen] = useState(false)

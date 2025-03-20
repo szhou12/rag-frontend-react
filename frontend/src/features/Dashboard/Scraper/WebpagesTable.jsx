@@ -25,7 +25,8 @@ const MOCK_WEBPAGES = Array.from({ length: 18 }, (_, index) => ({
     url: `https://example${index + 1}.com/page-${index + 1}`,
     date_updated: new Date(2024, 0, index + 1).toLocaleDateString(),
     language: index % 3 === 0 ? 'zh' : 'en', // Mix of English and Chinese
-    frequency: [0, 3, 7, 14, 30][Math.floor(Math.random() * 5)], // Random frequency in days
+    refresh_frequency: [0, 3, 7, 14, 30][Math.floor(Math.random() * 5)], // Random frequency in days
+    auto_download: index % 3 === 0 ? true : false,
 }));
 
 // TODO: DELETE when backend is ready
@@ -80,6 +81,7 @@ function WebpagesTable() {
         "Date Updated",
         "Language",
         "Update Freq (Days)",
+        "Auto-Download",
         "Actions",
     ]
 
@@ -134,7 +136,11 @@ function WebpagesTable() {
                             </Table.Cell>
 
                             <Table.Cell>
-                                {webpage.frequency}
+                                {webpage.refresh_frequency}
+                            </Table.Cell>
+
+                            <Table.Cell>
+                                {webpage.auto_download ? "✅" : "❌"}
                             </Table.Cell>
 
                             <Table.Cell>
