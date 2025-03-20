@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Controller, useForm } from "react-hook-form"
 import {
     Button,
-    createListCollection,
     Input,
     Portal,
     Select,
@@ -17,26 +16,8 @@ import { Field } from "@/components/ui/field"
 import useCustomToast from "@/hooks/useCustomToast"
 import { emailPattern, passwordRules, confirmPasswordRules, handleError } from "@/utils"
 import DataFormLayout from "../DataFormLayout"
+import { roles } from "@/constants/roles"
 
-const roles = createListCollection({
-    items: [
-        { 
-            label: "User", 
-            value: "user",
-            description: "Access to Chat Page",
-         },
-        { 
-            label: "Staff", 
-            value: "staff",
-            description: "Access to Chat Page and Dashboard",
-        },
-        { 
-            label: "Admin", 
-            value: "admin",
-            description: "Access to Chat Page, Dashboard, and Users Management",
-        },
-    ],
-})
 
 const AddUser = () => {
     // state whether the dialog is open or closed
@@ -61,12 +42,11 @@ const AddUser = () => {
             password: "",
             confirm_password: "",
             role: "",
-            is_active: true,
-            // is_superuser: false,
         }
     })
 
     // data: UserCreate
+    // NOTE: UserCreate should remove confirm_password field
     const mutation = useMutation({
         mutationFn: (data) => {
             // UsersService.createUser({ requestBody: data })
@@ -169,7 +149,7 @@ const AddUser = () => {
                     label="Confirm Password"
                 >
                     <Input
-                        id="confirmPassword"
+                        id="confirm_password"
                         {...register("confirm_password", confirmPasswordRules(getValues))}
                         type="password"
                         placeholder="Confirm Password"

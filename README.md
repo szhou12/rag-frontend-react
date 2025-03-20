@@ -57,7 +57,9 @@ src/
 
 ## Chakra UI V3 Code Snippets
 ```bash
+npx @chakra-ui/cli snippet add checkbox
 npx @chakra-ui/cli snippet add select
+npx @chakra-ui/cli snippet add switch
 ```
 
 ## TODO After Backend Setup
@@ -76,6 +78,8 @@ npx @chakra-ui/cli snippet add select
     1. update `getUsersQueryOptions`: API call to fetch users data from backend
 - `DeleteUser.jsx`
     1. update `deleteUser` to use backend API.
+- `EditUser.jsx`
+    1. update `UsersService.updateUser` to send backend API.
 - `WebpagesTable.jsx`
     1. update `getWebpagesQueryOptions`: API call to fetch webpages data from backend
 - `DeleteWebpage.jsx`

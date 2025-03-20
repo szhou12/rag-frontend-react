@@ -1,21 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import {
     Button,
-    createListCollection,
-    Input,
-    Portal,
-    Select,
-    Span,
-    Stack,
     Text,
-    VStack,
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { FiTrash2 } from "react-icons/fi"
-import { Field } from "@/components/ui/field"
 import useCustomToast from "@/hooks/useCustomToast"
-import { emailPattern, passwordRules, confirmPasswordRules, handleError } from "@/utils"
+import { handleError } from "@/utils"
 import DataFormLayout from "../DataFormLayout"
 
 const DeleteUser = ({ id }) => {
@@ -33,7 +25,7 @@ const DeleteUser = ({ id }) => {
     } = useForm()
 
     // TODO: UPDATE when backend is ready
-    const deleteUser = async(id) => {
+    const deleteUser = async (id) => {
         // UsersService.deleteUser({ id })
 
         // Simulate network delay
@@ -55,7 +47,9 @@ const DeleteUser = ({ id }) => {
 
         onSettled: () => {
             // trigger auto-refresh of users table so that the deleted user removed from the table
-            queryClient.invalidateQueries()
+            // queryKey: ["users"] is defined in getUsersQueryOptions()
+            // NOTE: No queryKey (queryClient.invalidateQueries()) means to auto-refresh all data tables including users table, files table and webpages table
+            queryClient.invalidateQueries({ queryKey: ["users"] })
         },
         
     })

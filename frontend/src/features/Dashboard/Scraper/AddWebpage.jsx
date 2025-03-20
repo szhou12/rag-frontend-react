@@ -16,7 +16,7 @@ import { FaPlus } from "react-icons/fa"
 
 import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Switch } from "@/components/ui/switch"
 import { urlPattern, handleError } from "@/utils"
 import DataFormLayout from "../DataFormLayout"
 
@@ -101,7 +101,7 @@ const AddWebpage = () => {
             triggerButton={
                 <Button value="add-webpage" my={4}>
                     <FaPlus fontSize="16px" />
-                    Scrape Webpage
+                    Scrape Web
                 </Button>
             }
             submitButton={
@@ -257,14 +257,14 @@ const AddWebpage = () => {
                     name="auto_download"
                     render={({field}) => (
                         <Field disabled={field.disabled}>
-                            <Checkbox
-                                variant="outline"
+                            <Switch
                                 colorPalette="teal"
+                                size="lg"
                                 checked={field.value}
                                 onCheckedChange={({ checked }) => field.onChange(checked)}
                             >
                                 Activate auto-download?
-                            </Checkbox>
+                            </Switch>
                         </Field>
                     )}
                 />

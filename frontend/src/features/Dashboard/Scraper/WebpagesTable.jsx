@@ -55,7 +55,7 @@ function getWebpagesQueryOptions({ page }) {
             // WebpagesService.readWebpages({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
             MockWebpagesService.readWebpages({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
 
-        queryKey: ["webpages", page],
+        queryKey: ["webpages", page], // give data table a namespace/key ["webpages"]
     }
 }
 

@@ -21,7 +21,6 @@ const MOCK_USERS = Array.from({ length: 23 }, (_, index) => ({
     role: index === 0 ? 'admin' : (index < 3 ? 'staff' : 'user'),
     created_at: new Date(2024, 0, index + 1).toLocaleDateString(),
     last_login: index < 5 ? new Date().toLocaleDateString() : 'Never',
-    is_active: Math.random() > 0.3, // 70% chance of being active
 }));
 
 // TODO: DELETE when backend is ready
@@ -81,7 +80,7 @@ function getUsersQueryOptions({ page }) {
                 limit: PER_PAGE
             }),
 
-        queryKey: ["users", page],
+        queryKey: ["users", page], // give data table a namespace/key ["users"]
     }
 }
 
@@ -112,7 +111,6 @@ function UsersTable() {
         "Role",
         "Created At",
         "Last Login",
-        "Status",
         "Actions",
     ]
 
@@ -159,7 +157,19 @@ function UsersTable() {
                             </Table.Cell>
 
                             <Table.Cell>
-                                {user.role}
+                                <Badge
+                                    colorPalette={
+                                        user.role === 'admin' 
+                                            ? 'red'
+                                            : user.role === 'staff'
+                                                ? 'orange'
+                                                : 'teal'
+                                    }
+                                    // variant="outline"
+                                    textTransform="capitalize"
+                                >
+                                    {user.role}
+                                </Badge>
                             </Table.Cell>
 
                             <Table.Cell>
@@ -168,19 +178,6 @@ function UsersTable() {
 
                             <Table.Cell>
                                 {user.last_login}
-                            </Table.Cell>
-
-                            <Table.Cell>
-                                <Flex gap={2}>
-                                    <Box 
-                                        w="2"
-                                        h="2"
-                                        borderRadius="50%"
-                                        bg={user.is_active ? "teal" : "red"}
-                                        alignSelf="center"
-                                    />
-                                    {user.is_active ? "Active" : "Inactive"}
-                                </Flex>
                             </Table.Cell>
                             
                             <Table.Cell>

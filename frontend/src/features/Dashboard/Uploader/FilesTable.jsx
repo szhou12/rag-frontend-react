@@ -19,7 +19,7 @@ import { usePagination } from "@/hooks/usePagination"
 
 // TODO: DELETE when backend is ready
 // Fake file data
-const MOCK_FILES = Array.from({ length: 15 }, (_, index) => ({
+const MOCK_FILES = Array.from({ length: 16 }, (_, index) => ({
     id: index + 1,
     name: `document-${index + 1}${index % 2 === 0 ? '.pdf' : '.xlsx'}`,
     date_added: new Date(2024, 0, index + 1).toLocaleDateString(),
@@ -54,7 +54,7 @@ function getFilesQueryOptions({ page }) {
             // FilesService.readFiles({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
             MockFilesService.readFiles({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
 
-        queryKey: ["files", page],
+        queryKey: ["files", page], // give data table a namespace/key ["files"]
     }
 }
 
