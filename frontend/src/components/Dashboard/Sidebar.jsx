@@ -11,8 +11,11 @@ import Logo from "/rmi_logo_horitzontal_no_tagline.svg"
 import { SidebarLink } from './SidebarLink'
 import { SearchField } from '../Common/SearchField'
 import { UserProfile } from '../Common/UserProfile'
+import useAuth from '@/hooks/useAuth'
 
 export const Sidebar = (props) => {
+    const { isAdmin } = useAuth()
+
     return (
         <Stack
             flex="1"
@@ -39,9 +42,13 @@ export const Sidebar = (props) => {
                         <LuFileUp /> Uploader
                     </SidebarLink>
 
-                    <SidebarLink href="/dashboard/admin">
-                        <LuUsers /> Admin
-                    </SidebarLink>
+                    
+                    {isAdmin() && (
+                        <SidebarLink href="/dashboard/admin">
+                            <LuUsers /> Admin
+                        </SidebarLink>
+                    )}
+
                 </Stack>
             </Stack>
 

@@ -3,6 +3,11 @@ import { LuAlignRight } from 'react-icons/lu'
 import Logo from "/rmi_logo_horitzontal_no_tagline.svg"
 import { Sidebar } from './Sidebar'
 
+/**
+ * 
+ * Sidebar in mobile view.
+ * 
+ */
 // props: ContainerProps (import from chakra-ui)
 export const Navbar = (props) => {
     return (

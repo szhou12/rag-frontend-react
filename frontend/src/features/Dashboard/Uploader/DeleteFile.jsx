@@ -1,19 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import {
     Button,
-    createListCollection,
-    Input,
-    Portal,
-    Select,
-    Span,
-    Stack,
     Text,
-    VStack,
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { FiTrash2 } from "react-icons/fi"
-import { Field } from "@/components/ui/field"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 import DataFormLayout from "../DataFormLayout"
@@ -31,7 +23,7 @@ const DeleteFile = ({ id }) => {
     } = useForm()
 
     // TODO: UPDATE when backend is ready
-    const deleteFile = async(id) => {
+    const deleteFile = async (id) => {
         // FilesService.deleteFile({ id })
 
         // Simulate network delay

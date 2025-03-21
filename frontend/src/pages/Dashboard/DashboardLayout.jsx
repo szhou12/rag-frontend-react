@@ -11,7 +11,7 @@ function DashboardLayout() {
             <Flex flex="1" overflow="hidden">
                 <Sidebar hideBelow="md" />
                 <Flex flex="1" direction="column" p={4} overflowY="auto">
-                    <Outlet />
+                    <Outlet /> {/* render the child route component: IndexPage, ScraperPage, UploaderPage, AdminPage */}
                 </Flex>
             </Flex>
             

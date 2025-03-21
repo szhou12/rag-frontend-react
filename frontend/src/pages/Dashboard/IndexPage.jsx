@@ -15,6 +15,7 @@ import {
 	FcGlobe,
 } from 'react-icons/fc'
 import { Link } from '@tanstack/react-router'
+import useAuth from '@/hooks/useAuth'
 
 // heading: string
 // description: string
@@ -62,6 +63,8 @@ const LinkCard = ({ heading, description, icon, href }) => {
 }
 
 function CardTable() {
+	const { isAdmin } = useAuth()
+
 	return (
 		<>
 			<Flex py={8} gap={4} flexWrap="wrap" justify="flex-start">
@@ -77,12 +80,15 @@ function CardTable() {
 					description={'Upload file documents to the DB.'}
 					href={'/dashboard/uploader'}
 				/>
-				<LinkCard
-					heading={'Admin'}
-					icon={<Icon as={FcConferenceCall} w={10} h={10} />}
-					description={'Manage currently registered users.'}
-					href={'/dashboard/admin'}
-				/>
+				
+				{isAdmin() && (
+					<LinkCard
+						heading={'Admin'}
+						icon={<Icon as={FcConferenceCall} w={10} h={10} />}
+						description={'Manage currently registered users.'}
+						href={'/dashboard/admin'}
+					/>
+				)}
 			</Flex>
 		</>
 	)

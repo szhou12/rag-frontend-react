@@ -59,11 +59,11 @@ const isLoggedIn = () => {
 }
 
 
- const useAuth = () => {
+const useAuth = () => {
     const [error, setError] = useState(null)
     const navigate = useNavigate()
     const queryClient = useQueryClient()
-
+    
     const { showSuccessToast, showErrorToast } = useCustomToast()
 
 
@@ -84,16 +84,18 @@ const isLoggedIn = () => {
 
     /**
      * TODO: DELETE when u manage to make queryFn execute!!!
+     * Step 1. Attempts to get user from React Query
      */
     const { data: queryUser } = useQuery({
         queryKey: ["currentUser"],
         queryFn: UsersService.readUserMe,
         enabled: isLoggedIn(),
     })
-
+    // Step 2. Gets user from localStorage as fallback
     const userFromStorage = isLoggedIn() 
         ? JSON.parse(localStorage.getItem("user") || "null") 
         : null;
+    // Step 3. Construct returned user object by using React Query data if available, falls back to localStorage
     const user = queryUser || userFromStorage;
 
     /**
@@ -281,6 +283,10 @@ const isLoggedIn = () => {
         navigate({ to: "/" })
     }
 
+    const isAdmin = () => {
+        return user?.role === 'admin';
+    }
+
     return {
         signUpMutation,
         loginMutation,
@@ -288,10 +294,9 @@ const isLoggedIn = () => {
         user, // currently logged-in user from useQuery()
         error,
         resetError: () => setError(null),
+        isAdmin,
     }
-
- }
+}
     
-
- export { isLoggedIn }
- export default useAuth
+export { isLoggedIn }
+export default useAuth
