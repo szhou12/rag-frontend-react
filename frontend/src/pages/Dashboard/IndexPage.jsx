@@ -67,7 +67,13 @@ function CardTable() {
 
 	return (
 		<>
-			<Flex py={8} gap={4} flexWrap="wrap" justify="flex-start">
+			<Flex
+				py={8}
+				gap={4}
+				flexWrap="wrap"
+				justify={{ base: "center", md: "flex-start" }} // center on mobile, start from left on desktop
+				maxW={{ base: "full", md: "2xl" }} // 2 cards per row in desktop
+			>
 				<LinkCard
 					heading={'Scraper'}
 					icon={<Icon as={FcGlobe} w={10} h={10} />}
