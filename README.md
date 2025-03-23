@@ -41,6 +41,13 @@ src/
 │   ├── Auth/
 │   ├── Chat/             
 │   └── Dashboard/
+│
+├── layouts/                   # Reusable layouts
+│   ├── Common/                # reusable layouts used by > 2 components 
+│   │   └── SidebarLayout.jsx    # used by both Dashboard and Chat
+│   ├── Auth/   
+│   ├── Chat/             
+│   └── Dashboard/
 |
 ├── hooks/                # Custom React hooks
 |
