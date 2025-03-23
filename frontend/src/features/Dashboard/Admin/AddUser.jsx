@@ -15,9 +15,8 @@ import { FaPlus } from "react-icons/fa"
 import { Field } from "@/components/ui/field"
 import useCustomToast from "@/hooks/useCustomToast"
 import { emailPattern, passwordRules, confirmPasswordRules, handleError } from "@/utils"
-import DataFormLayout from "../DataFormLayout"
 import { roles } from "@/constants/roles"
-
+import { DataFormLayout } from "@/layouts/Dashboard/DataFormLayout"
 
 const AddUser = () => {
     // state whether the dialog is open or closed

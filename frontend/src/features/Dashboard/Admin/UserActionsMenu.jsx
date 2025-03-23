@@ -1,7 +1,7 @@
 
 import EditUser from "./EditUser";
 import DeleteUser from "./DeleteUser";
-import ActionsMenuLayout from "../ActionsMenuLayout";
+import { ActionsMenuLayout } from "@/layouts/Dashboard/ActionsMenuLayout";
 
 const UserActionsMenu = ({ user, disabled }) => {
     return (

@@ -16,7 +16,7 @@ import { FiTrash2 } from "react-icons/fi"
 import { Field } from "@/components/ui/field"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
-import DataFormLayout from "../DataFormLayout"
+import { DataFormLayout } from "@/layouts/Dashboard/DataFormLayout"
 
 const DeleteWebpage = ({ id }) => {
 

@@ -15,8 +15,8 @@ import { FiEdit2 } from "react-icons/fi"
 import { Field } from "@/components/ui/field"
 import useCustomToast from "@/hooks/useCustomToast"
 import { emailPattern, passwordRules, confirmPasswordRules, handleError } from "@/utils"
-import DataFormLayout from "../DataFormLayout"
 import { roles } from "@/constants/roles"
+import { DataFormLayout } from "@/layouts/Dashboard/DataFormLayout"
 
 
 const EditUser = ({ user }) => {

@@ -1,7 +1,8 @@
 import { Link } from '@chakra-ui/react';
 import { Link as RouterLink } from '@tanstack/react-router';
-import AuthLayout from './AuthLayout';
 import LoginForm from '@/features/Auth/LoginForm';
+import { AuthLayout } from '@/layouts/Auth/AuthLayout';
+
 
 const LoginPage = () => {
     return (

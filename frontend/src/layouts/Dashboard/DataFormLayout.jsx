@@ -4,7 +4,7 @@ import {
     Portal,
 } from "@chakra-ui/react"
 
-const DataFormLayout = ({ 
+export const DataFormLayout = ({ 
     title, 
     onSubmit, 
     isSubmitting, 
@@ -67,5 +67,3 @@ const DataFormLayout = ({
         
     )
 }
-
-export default DataFormLayout;

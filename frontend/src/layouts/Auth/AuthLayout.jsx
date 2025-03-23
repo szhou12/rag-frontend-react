@@ -8,7 +8,7 @@ import {
 import Logo from "/rmi_logo_horitzontal_no_tagline.svg"
 import { useColorModeValue } from "@/components/ui/color-mode";
 
-const AuthLayout = ({ title, description, children, footer }) => {
+export const AuthLayout = ({ title, description, children, footer }) => {
     return (
         <Container maxW="md" py={{ base: '12', md: '24' }}>
             <Stack gap="8">
@@ -28,5 +28,3 @@ const AuthLayout = ({ title, description, children, footer }) => {
         </Container>
     );
 };
-
-export default AuthLayout;

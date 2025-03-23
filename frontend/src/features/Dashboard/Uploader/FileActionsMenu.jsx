@@ -1,6 +1,6 @@
-import ActionsMenuLayout from "../ActionsMenuLayout";
 // import EditFile from "./EditFile";
 import DeleteFile from "./DeleteFile";
+import { ActionsMenuLayout } from "@/layouts/Dashboard/ActionsMenuLayout";
 
 const FileActionsMenu = ({ file }) => {
     return (

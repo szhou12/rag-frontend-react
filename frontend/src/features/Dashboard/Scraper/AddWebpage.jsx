@@ -17,9 +17,8 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
 import { Switch } from "@/components/ui/switch"
 import { urlPattern, handleError } from "@/utils"
-import DataFormLayout from "../DataFormLayout"
 import { languages } from "@/constants/languages"
-
+import { DataFormLayout } from "@/layouts/Dashboard/DataFormLayout"
 
 const AddWebpage = () => {
     const [isOpen, setIsOpen] = useState(false)

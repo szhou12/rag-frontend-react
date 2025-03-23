@@ -8,65 +8,100 @@ import {
     LuCircleHelp,
 } from 'react-icons/lu'
 import Logo from "/rmi_logo_horitzontal_no_tagline.svg"
-import { SidebarLink } from './SidebarLink'
+import { SidebarLink } from '../Common/SidebarLink'
 import { SearchField } from '../Common/SearchField'
 import { UserProfile } from '../Common/UserProfile'
 import useAuth from '@/hooks/useAuth'
+import { SidebarLayout } from '@/layouts/Common/SidebarLayout'
+
+
+
+// export const Sidebar = (props) => {
+//     const { isAdmin } = useAuth()
+
+//     return (
+//         <Stack
+//             flex="1"
+//             p={{ base: '4', md: '6' }}
+//             bg="bg.panel"
+//             borderRightWidth="1px"
+//             justifyContent="space-between"
+//             maxW="xs"
+//             {...props}
+//         >
+//             <Stack gap="6">
+//                 <Image src={Logo} alt="RMI Logo" w="100px" maxW="2xs" style={{ alignSelf: 'center' }}/>
+//                 <SearchField />
+//                 <Stack gap="1">
+//                     <SidebarLink href="/dashboard">
+//                         <LuLayoutDashboard /> Home
+//                     </SidebarLink>
+
+//                     <SidebarLink href="/dashboard/scraper">
+//                         <LuGlobe /> Scraper
+//                     </SidebarLink>
+
+//                     <SidebarLink href="/dashboard/uploader">
+//                         <LuFileUp /> Uploader
+//                     </SidebarLink>
+
+                    
+//                     {isAdmin() && (
+//                         <SidebarLink href="/dashboard/admin">
+//                             <LuUsers /> Admin
+//                         </SidebarLink>
+//                     )}
+
+//                 </Stack>
+//             </Stack>
+
+//             <Stack gap="4" separator={<StackSeparator />}>
+//                 <Box />
+//                 <Stack gap="1">
+//                     <SidebarLink>
+//                         <LuCircleHelp /> Help Center
+//                     </SidebarLink>
+
+//                     <SidebarLink>
+//                         <LuSettings /> Settings
+//                     </SidebarLink>
+//                 </Stack>
+
+//                 <UserProfile />
+                
+//             </Stack>
+//         </Stack>
+//     )
+// }
 
 export const Sidebar = (props) => {
     const { isAdmin } = useAuth()
 
-    return (
-        <Stack
-            flex="1"
-            p={{ base: '4', md: '6' }}
-            bg="bg.panel"
-            borderRightWidth="1px"
-            justifyContent="space-between"
-            maxW="xs"
-            {...props}
-        >
-            <Stack gap="6">
-                <Image src={Logo} alt="RMI Logo" w="100px" maxW="2xs" style={{ alignSelf: 'center' }}/>
-                <SearchField />
-                <Stack gap="1">
-                    <SidebarLink href="/dashboard">
-                        <LuLayoutDashboard /> Home
-                    </SidebarLink>
+    const DashboardContent = () => (
+        <Stack gap="1">
+            <SidebarLink href="/dashboard">
+                <LuLayoutDashboard /> Home
+            </SidebarLink>
 
-                    <SidebarLink href="/dashboard/scraper">
-                        <LuGlobe /> Scraper
-                    </SidebarLink>
+            <SidebarLink href="/dashboard/scraper">
+                <LuGlobe /> Scraper
+            </SidebarLink>
 
-                    <SidebarLink href="/dashboard/uploader">
-                        <LuFileUp /> Uploader
-                    </SidebarLink>
-
-                    
-                    {isAdmin() && (
-                        <SidebarLink href="/dashboard/admin">
-                            <LuUsers /> Admin
-                        </SidebarLink>
-                    )}
-
-                </Stack>
-            </Stack>
-
-            <Stack gap="4" separator={<StackSeparator />}>
-                <Box />
-                <Stack gap="1">
-                    <SidebarLink>
-                        <LuCircleHelp /> Help Center
-                    </SidebarLink>
-
-                    <SidebarLink>
-                        <LuSettings /> Settings
-                    </SidebarLink>
-                </Stack>
-
-                <UserProfile />
-                
-            </Stack>
+            <SidebarLink href="/dashboard/uploader">
+                <LuFileUp /> Uploader
+            </SidebarLink>
+            
+            {isAdmin() && (
+                <SidebarLink href="/dashboard/admin">
+                    <LuUsers /> Admin
+                </SidebarLink>
+            )}
         </Stack>
+    )
+
+    return (
+        <SidebarLayout {...props}>
+            <DashboardContent />
+        </SidebarLayout>
     )
 }

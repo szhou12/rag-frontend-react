@@ -11,12 +11,11 @@ import {
 import { useQuery } from "@tanstack/react-query"
 
 import { Tooltip } from "@/components/ui/tooltip"
-import DataTableLayout from "../DataTableLayout"
 import WebpageActionsMenu from "./WebpageActionsMenu"
 import { PendingDataTable } from "@/components/Dashboard/PendingDataTable"
 import { Route } from "@/routes/_dashboard-layout/scraper"
 import { usePagination } from "@/hooks/usePagination"
-
+import { DataTableLayout } from "@/layouts/Dashboard/DataTableLayout"
 
 // TODO: DELETE when backend is ready
 // Fake webpage data

@@ -2,7 +2,7 @@ import { IconButton } from "@chakra-ui/react"
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { MenuContent, MenuRoot, MenuTrigger } from "@/components/ui/menu"
 
-const ActionsMenuLayout = ({ children, disabled = false }) => {
+export const ActionsMenuLayout = ({ children, disabled = false }) => {
     return (
         <MenuRoot>
             <MenuTrigger asChild>
@@ -16,5 +16,3 @@ const ActionsMenuLayout = ({ children, disabled = false }) => {
         </MenuRoot>
     )
 }
-
-export default ActionsMenuLayout;

@@ -15,7 +15,7 @@ import {
     PaginationRoot,
   } from "@/components/ui/pagination"
 
-const DataTableLayout = ({
+export const DataTableLayout = ({
     isLoading,
     pendingComponent,
     isEmpty,
@@ -68,5 +68,3 @@ const DataTableLayout = ({
 
 
 }
-
-export default DataTableLayout;

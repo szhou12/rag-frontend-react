@@ -16,8 +16,9 @@ import { Field } from "@/components/ui/field"
 import { Switch } from "@/components/ui/switch"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
-import DataFormLayout from "../DataFormLayout"
 import { languages } from "@/constants/languages"
+import { DataFormLayout } from "@/layouts/Dashboard/DataFormLayout"
+
 
 const EditWebpage = ({ webpage }) => {
     const [isOpen, setIsOpen] = useState(false)

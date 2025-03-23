@@ -7,12 +7,11 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { Tooltip } from "@/components/ui/tooltip"
-import DataTableLayout from "../DataTableLayout"
 import UserActionsMenu from "./UserActionsMenu"
 import { PendingDataTable } from "@/components/Dashboard/PendingDataTable"
 import { Route } from "@/routes/_dashboard-layout/admin"
 import { usePagination } from "@/hooks/usePagination"
-
+import { DataTableLayout } from "@/layouts/Dashboard/DataTableLayout"
 // TODO: DELETE when backend is ready
 // Fake user data
 const MOCK_USERS = Array.from({ length: 23 }, (_, index) => ({

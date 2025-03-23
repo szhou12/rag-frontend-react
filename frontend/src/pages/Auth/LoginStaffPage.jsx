@@ -1,5 +1,5 @@
-import AuthLayout from './AuthLayout';
 import LoginStaffForm from '@/features/Auth/LoginStaffForm';
+import { AuthLayout } from '@/layouts/Auth/AuthLayout';
 
 const LoginStaffPage = () => {
     return (

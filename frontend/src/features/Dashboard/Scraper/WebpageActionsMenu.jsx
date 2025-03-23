@@ -1,6 +1,7 @@
-import ActionsMenuLayout from "../ActionsMenuLayout";
 import EditWebpage from "./EditWebpage";
 import DeleteWebpage from "./DeleteWebpage";
+import { ActionsMenuLayout } from "@/layouts/Dashboard/ActionsMenuLayout";
+
 
 const WebpageActionsMenu = ({ webpage }) => {
     return (

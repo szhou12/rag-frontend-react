@@ -8,7 +8,7 @@ import { useState } from "react"
 import { FiTrash2 } from "react-icons/fi"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
-import DataFormLayout from "../DataFormLayout"
+import { DataFormLayout } from "@/layouts/Dashboard/DataFormLayout"
 
 const DeleteFile = ({ id }) => {
     // state whether the dialog is open or closed

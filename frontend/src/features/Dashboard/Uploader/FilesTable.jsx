@@ -11,11 +11,12 @@ import {
 import { useQuery } from "@tanstack/react-query"
 
 import { Tooltip } from "@/components/ui/tooltip"
-import DataTableLayout from "../DataTableLayout"
 import FileActionsMenu from "./FileActionsMenu"
 import { PendingDataTable } from "@/components/Dashboard/PendingDataTable"
 import { Route } from "@/routes/_dashboard-layout/uploader"
 import { usePagination } from "@/hooks/usePagination"
+import { DataTableLayout } from "@/layouts/Dashboard/DataTableLayout"
+
 
 // TODO: DELETE when backend is ready
 // Fake file data
