@@ -17,7 +17,7 @@ import { DataTableLayout } from "@/layouts/Dashboard/DataTableLayout"
 const MOCK_USERS = Array.from({ length: 23 }, (_, index) => ({
     id: index + 1,
     email: `user${index + 1}@example.com`,
-    role: index === 0 ? 'admin' : (index < 3 ? 'staff' : 'user'),
+    role: index === 0 ? 'admin' : (index < 3 ? 'staff' : 'client'),
     created_at: new Date(2024, 0, index + 1).toLocaleDateString(),
     last_login: index < 5 ? new Date().toLocaleDateString() : 'Never',
 }));

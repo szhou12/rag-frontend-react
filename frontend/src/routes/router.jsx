@@ -4,12 +4,16 @@ import HomePage from '@/pages/HomePage'
 import { Route as LoginImport } from './login'
 import { Route as LoginStaffImport } from './login-staff'
 import { Route as RegisterImport } from './register'
+
 import { Route as DashboardLayoutImport } from './_dashboard-layout'
 import { Route as DashboardIndexImport } from './_dashboard-layout/index'
 import { Route as AdminImport } from './_dashboard-layout/admin'
 import { Route as ScraperImport } from './_dashboard-layout/scraper'
 import { Route as UploaderImport } from './_dashboard-layout/uploader'
-import { Route as ChatImport } from './chat'
+
+// import { Route as ChatImport } from './chat'
+import { Route as ChatImport } from './_chat-layout'
+import { Route as ChatIndexImport } from './_chat-layout/index'
 
 // Create a root route
 const rootRoute = createRootRoute()
@@ -86,28 +90,49 @@ const dashboardUploaderRoute = UploaderImport.update({
     getParentRoute: () => dashboardLayoutRoute,
 })
 
+// TEST UI
+// const chatRoute = ChatImport.update({
+//     path: "/chat",
+//     getParentRoute: () => rootRoute,
+// })
+
 /**
  * Chat Route
  */
 const chatRoute = ChatImport.update({
-    path: "/chat",
+    id: "/_chat",
     getParentRoute: () => rootRoute,
+})
+
+/**
+ * Chat Index Route
+ */
+const chatIndexRoute = ChatIndexImport.update({
+    path: "/chat",
+    getParentRoute: () => chatRoute,
 })
 
 
 // Finally, create the router for all routes
 const routeTree = rootRoute.addChildren([
     indexRoute,
+
     loginRoute,
     loginStaffRoute,
     registerRoute,
+
     dashboardLayoutRoute.addChildren([
         dashboardIndexRoute,
         dashboardAdminRoute,
         dashboardScraperRoute,
         dashboardUploaderRoute,
     ]),
-    chatRoute,
+
+    // chatRoute,
+
+    chatRoute.addChildren([
+        chatIndexRoute,
+    ]),
 ])
   
 

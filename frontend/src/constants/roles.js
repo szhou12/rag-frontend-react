@@ -3,8 +3,8 @@ import { createListCollection } from "@chakra-ui/react"
 export const roles = createListCollection({
     items: [
         { 
-            label: "User", 
-            value: "user",
+            label: "Client", 
+            value: "client",
             description: "Access to Chat Page",
          },
         { 
