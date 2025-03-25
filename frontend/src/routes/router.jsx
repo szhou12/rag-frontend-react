@@ -14,6 +14,7 @@ import { Route as UploaderImport } from './_dashboard-layout/uploader'
 // import { Route as ChatImport } from './chat'
 import { Route as ChatImport } from './_chat-layout'
 import { Route as ChatIndexImport } from './_chat-layout/index'
+import { Route as ConversationImport } from './_chat-layout/conversation'
 
 // Create a root route
 const rootRoute = createRootRoute()
@@ -112,6 +113,11 @@ const chatIndexRoute = ChatIndexImport.update({
     getParentRoute: () => chatRoute,
 })
 
+const conversationRoute = ConversationImport.update({
+    path: "/chat/conversation",
+    getParentRoute: () => chatRoute,
+})
+
 
 // Finally, create the router for all routes
 const routeTree = rootRoute.addChildren([
@@ -132,6 +138,7 @@ const routeTree = rootRoute.addChildren([
 
     chatRoute.addChildren([
         chatIndexRoute,
+        conversationRoute,
     ]),
 ])
   

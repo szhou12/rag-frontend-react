@@ -24,11 +24,12 @@ export default function IndexPage() {
         <Flex
             direction="column"
             height="100vh"
+            overflow="hidden" // disable scrolling so footer fixed at bottom
         >
 
             <Box 
                 flex="1" 
-                overflow="auto"
+                overflow="overflow" // enable scrolling for this box only
                 pt={{ base: "16", md: "20" }}  // Account for navbar height
                 pb={{ base: "24", md: "32" }}  // Account for navbar height
             >

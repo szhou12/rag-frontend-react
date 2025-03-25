@@ -5,23 +5,12 @@ import {
     Flex,
     StackSeparator,
 } from '@chakra-ui/react'
-import {
-    LuLayoutDashboard,
-    LuFileUp,
-    LuGlobe,
-    LuUsers,
-    LuCircleHelp,
-    LuSettings,
-} from 'react-icons/lu'
 import { BsChatTextFill, BsMicFill, BsPaperclip, BsPinAngleFill } from 'react-icons/bs'
-
-
-import { ChatMessage } from './ChatMessage'
+import { ChatTab } from './ChatTab'
 import { SearchField } from '../Common/SearchField'
 import { ChatGroupHeader } from './ChatGroupHeader'
-import { group, messages } from './fakedata'
 import { SidebarFooter } from '../Common/SidebarFooter'
-
+import { group, messages } from './fakedata'
 
 export const Sidebar = (props) => {
 
@@ -42,7 +31,7 @@ export const Sidebar = (props) => {
 
                 <Stack spacing="0" mx="-4">
                     {messages.map((message, index) => (
-                        <ChatMessage key={index} data={message} />
+                        <ChatTab key={index} data={message} />
                     ))}
                 </Stack>
             </Stack>
@@ -55,6 +44,7 @@ export const Sidebar = (props) => {
     return (
         <Stack
             flex="1"
+            height="100%"
             p={{ base: '4', md: '6' }}
             bg="bg.panel"
             borderRightWidth="1px"
@@ -62,14 +52,16 @@ export const Sidebar = (props) => {
             maxW="xs"
             {...props}
         >
-            <Header />
+            <Stack flex="1" overflow="hidden">
+                <Header />
 
-            <Flex px="4">
-                <SearchField />
-            </Flex>
+                <Flex px="4">
+                    <SearchField />
+                </Flex>
 
-            <ChatList />
-
+                <ChatList />
+            </Stack>
+            
             <SidebarFooter />
         </Stack>
     )

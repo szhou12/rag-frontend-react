@@ -5,6 +5,7 @@ import {
     IconButton,
     Textarea,
   } from '@chakra-ui/react'
+  import { Link } from '@tanstack/react-router'
 import { LuImagePlus, LuMic, LuSendHorizontal } from 'react-icons/lu'
 
 /**
@@ -32,8 +33,14 @@ export const ChatTextarea = () => {
                     <IconButton variant="ghost" aria-label="Record audio">
                         <LuMic />
                     </IconButton>
+
+
                     <IconButton aria-label="Send message">
-                        <LuSendHorizontal />
+                        {/* TODO */}
+                        <Link to="/chat/conversation">
+                            <LuSendHorizontal />
+                        </Link>
+                        
                     </IconButton>
                 </HStack>
                 

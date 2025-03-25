@@ -1,6 +1,7 @@
-import { Avatar, Box, HStack, IconButton, Text } from '@chakra-ui/react'
+import { Box, HStack, Text } from '@chakra-ui/react'
 import { UserMenu } from './UserMenu'
 import useAuth from '@/hooks/useAuth'
+import { Avatar } from "@/components/ui/avatar"
 
 export const UserProfile = () => {
     const { user, logout } = useAuth()
@@ -11,10 +12,7 @@ export const UserProfile = () => {
     return (
         <HStack gap="3" justify="space-between">
             <HStack gap="3">
-                <Avatar.Root>
-                    <Avatar.Fallback />
-                    <Avatar.Image src={avatarSrc} />
-                </Avatar.Root>
+                <Avatar src={avatarSrc} />
 
                 <Box>
                     <Text textStyle="sm" fontWeight="medium">

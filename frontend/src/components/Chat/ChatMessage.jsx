@@ -1,43 +1,47 @@
-import { 
-    // Avatar, 
-    // AvatarBadge, 
-    Box,
+import {
+    Box, 
     HStack, 
-    Stack, 
+    Stack,
+    Spinner,
     Text,
-} from '@chakra-ui/react'
+} from "@chakra-ui/react"
+import { Avatar } from "@/components/ui/avatar"
 
-export const ChatMessage = (props) => {
-    const {name, image, updatedAt, message } = props.data
-
+export const ChatMessage = ({ author, messages = [], isLoading = false }) => {
     return (
-        <HStack
-            align="flex-start"
-            gap="3"
-            px="4"
-            py="3"
-            _hover={{
-                bg: 'colorPalette.subtle',
-                color: 'colorPalette.fg',
-            }}
-            rounded="md"
-        >
-
-            <Stack spacing="0" fontSize="sm" flex="1" width="100%">
-                <HStack spacing="1">
-                    <Text fontWeight="medium" flex="1" truncate>
-                        {message}
-                    </Text>
-
-                    
-                    <Text color="fg.subtle" fontSize="xs" flexShrink="0">
-                        {updatedAt}
-                    </Text>
-                </HStack>
+        <HStack align="flex-start" gap="5">
+            <Box pt="1">
+                <Avatar size="sm" src={author.image} name={author.name} />
+            </Box>
+            <Stack spacing="1">
+                <Text fontWeight="medium">{author.name}</Text>
+                <Stack spacing="2" position="relative">
+                    {messages.map((message, index) => (
+                        <Box 
+                            key={index}
+                            lineHeight="tall"
+                            maxW="100%"
+                            position="relative"
+                        >
+                            {isLoading ? (
+                                <Spinner 
+                                    color="teal.500"
+                                    size="lg"
+                                    css={{ "--spinner-track-color": "colors.gray.200" }}
+                                />
+                            ) : (
+                                <Text
+                                    whiteSpace="pre-wrap"     // Preserve line breaks and wrap text
+                                    wordBreak="break-word"    // Break long words if necessary
+                                    overflowWrap="break-word" // Ensure long words don't overflow
+                                >
+                                    {message}
+                                </Text>
+                            )}
+                        </Box>
+                    ))}
+                </Stack>
             </Stack>
-
-            
-            
         </HStack>
     )
 }

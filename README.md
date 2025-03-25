@@ -23,7 +23,10 @@ npm install zod
 src/
 |
 ├── components/           # Shared, reusable UI components
-│   ├── Common/             
+│   ├── Common/
+│   ├── Chat/
+│   │   ├── ChatTab.jsx      # historic converasation tab on Sidebar
+│   │   └── ChatMessage.jsx  # a single message in current conversation       
 │   └── ui/
 |
 ├── features/             # Self-contained feature modules. Specific to business logic.
@@ -67,6 +70,7 @@ src/
 npx @chakra-ui/cli snippet add checkbox
 npx @chakra-ui/cli snippet add select
 npx @chakra-ui/cli snippet add switch
+npx @chakra-ui/cli snippet add avatar
 ```
 
 ## TODO After Backend Setup
