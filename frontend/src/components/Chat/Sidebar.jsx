@@ -3,7 +3,16 @@ import {
     Stack,
     Text,
     Flex,
+    StackSeparator,
 } from '@chakra-ui/react'
+import {
+    LuLayoutDashboard,
+    LuFileUp,
+    LuGlobe,
+    LuUsers,
+    LuCircleHelp,
+    LuSettings,
+} from 'react-icons/lu'
 import { BsChatTextFill, BsMicFill, BsPaperclip, BsPinAngleFill } from 'react-icons/bs'
 
 
@@ -11,38 +20,16 @@ import { ChatMessage } from './ChatMessage'
 import { SearchField } from '../Common/SearchField'
 import { ChatGroupHeader } from './ChatGroupHeader'
 import { group, messages } from './fakedata'
+import { SidebarFooter } from '../Common/SidebarFooter'
 
 
 export const Sidebar = (props) => {
 
-    // const ConversationList = () => (
-    //     <Box
-    //         flex="1"
-    //         overflow="auto"
-    //     >
-    //         <Stack gap="1">
-    //             <SidebarLink href="">
-    //                 Conversation 1
-    //             </SidebarLink>
-
-    //             <SidebarLink href="">
-    //                 Conversation 2
-    //             </SidebarLink>
-                
-    //         </Stack>
-    //     </Box> 
-    // )
-
-    // return (
-    //     <SidebarLayout {...props}>
-    //         <ConversationList />
-    //     </SidebarLayout>
-    // )
 
     const Header = () => (
         <Box px="5">
             <Text fontSize="lg" fontWeight="medium">
-                Messages ({messages.length})
+                Conversations ({messages.length})
             </Text>
         </Box>
     )
@@ -51,7 +38,7 @@ export const Sidebar = (props) => {
         <Stack mt="2" spacing="4" flex="1" overflowY="auto" px="5" pb="5">
             <Stack mt="2" spacing="4">
 
-                <ChatGroupHeader icon={BsChatTextFill}>Prev Chats</ChatGroupHeader>
+                <ChatGroupHeader icon={BsChatTextFill}>history</ChatGroupHeader>
 
                 <Stack spacing="0" mx="-4">
                     {messages.map((message, index) => (
@@ -64,12 +51,15 @@ export const Sidebar = (props) => {
     )
 
 
+
     return (
         <Stack
-            spacing="4"
-            width="320px"
-            borderEndWidth="1px"
-            pt="6"
+            flex="1"
+            p={{ base: '4', md: '6' }}
+            bg="bg.panel"
+            borderRightWidth="1px"
+            justifyContent="space-between"
+            maxW="xs"
             {...props}
         >
             <Header />
@@ -79,6 +69,8 @@ export const Sidebar = (props) => {
             </Flex>
 
             <ChatList />
+
+            <SidebarFooter />
         </Stack>
     )
 }

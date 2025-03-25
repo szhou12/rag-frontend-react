@@ -16,19 +16,21 @@ export const ChatMessage = (props) => {
             gap="3"
             px="4"
             py="3"
-            _hover={{ bg: 'bg.muted' }}
+            _hover={{
+                bg: 'colorPalette.subtle',
+                color: 'colorPalette.fg',
+            }}
             rounded="md"
         >
 
-            <Stack spacing="0" fontSize="sm" flex="1" isTruncated>
+            <Stack spacing="0" fontSize="sm" flex="1" width="100%">
                 <HStack spacing="1">
-                    <Box isTruncated>
-                        <Text fontWeight="medium" flex="1">
-                            {message}
-                        </Text>
-                    </Box>
+                    <Text fontWeight="medium" flex="1" truncate>
+                        {message}
+                    </Text>
+
                     
-                    <Text color="fg.subtle" fontSize="xs">
+                    <Text color="fg.subtle" fontSize="xs" flexShrink="0">
                         {updatedAt}
                     </Text>
                 </HStack>

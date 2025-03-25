@@ -13,7 +13,7 @@ import { ChatFooter } from '@/features/Chat/ChatFooter'
 export default function IndexPage() {
 
     const Header = () => (
-        <Heading size={{ base: "2xl", md: "4xl" }} fontWeight="normal">
+        <Heading size="4xl" fontWeight="normal">
             <Span color="colorPalette.fg">Hello, Client</Span> <br />
             <Span color="fg.muted">How can I help you today?</Span>
         </Heading>
@@ -25,7 +25,7 @@ export default function IndexPage() {
             direction="column"
             height="100vh"
         >
-            
+
             <Box 
                 flex="1" 
                 overflow="auto"

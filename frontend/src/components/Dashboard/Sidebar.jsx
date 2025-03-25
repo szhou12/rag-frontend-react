@@ -17,7 +17,7 @@ import useAuth from '@/hooks/useAuth'
 import Logo from "/rmi_logo_horitzontal_no_tagline.svg"
 import { SidebarLink } from '@/components/Common/SidebarLink'
 import { SearchField } from '@/components/Common/SearchField'
-import { UserProfile } from '@/components/Common/UserProfile'
+import { SidebarFooter } from '@/components/Common/SidebarFooter'
 
 export const Sidebar = (props) => {
     const { isAdmin } = useAuth()
@@ -44,23 +44,6 @@ export const Sidebar = (props) => {
         </Stack>
     )
 
-    const Footer = () => (
-        <Stack gap="4" separator={<StackSeparator />}>
-            <Box /> {/* Spacer */}
-            <Stack gap="1">
-                <SidebarLink>
-                    <LuCircleHelp /> Help Center
-                </SidebarLink>
-
-                <SidebarLink>
-                    <LuSettings /> Settings
-                </SidebarLink>
-            </Stack>
-
-            <UserProfile />
-        </Stack>
-    )
-
     return (
         <Stack
             flex="1"
@@ -77,7 +60,7 @@ export const Sidebar = (props) => {
                 <DashboardContent />
             </Stack>
 
-            <Footer />
+            <SidebarFooter />
         </Stack>
     )
 }

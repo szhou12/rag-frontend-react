@@ -12,11 +12,11 @@ export const SidebarLink = (props) => {
             gap="3"
             color="fg.muted"
             _hover={{
-            bg: 'colorPalette.subtle',
-            color: 'colorPalette.fg',
+                bg: 'colorPalette.subtle',
+                color: 'colorPalette.fg',
             }}
             _currentPage={{
-            color: 'colorPalette.fg',
+                color: 'colorPalette.fg',
             }}
             asChild
             {...buttonProps}
