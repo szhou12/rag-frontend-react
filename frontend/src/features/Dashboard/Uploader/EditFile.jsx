@@ -19,8 +19,7 @@ import { handleError } from "@/utils"
 import { languages } from "@/constants/languages"
 import { DataFormLayout } from "@/layouts/Dashboard/DataFormLayout"
 
-
-const EditWebpage = ({ webpage }) => {
+const EditFile = ({ file }) => {
     const [isOpen, setIsOpen] = useState(false)
 
     const queryClient = useQueryClient()
@@ -37,17 +36,17 @@ const EditWebpage = ({ webpage }) => {
     } = useForm({
         mode: "onBlur",
         criteriaMode: "all",
-        defaultValues: webpage,
+        defaultValues: file,
     })
 
     const mutation = useMutation({
         mutationFn: (data) => {
             // WebpagesService.updateWebpage({ webpageId: webpage.id, requestBody: data })
-            console.log("Update Scraping Rules:", data)
+            console.log("Update File Info:", data)
         },
 
         onSuccess: () => {
-            showSuccessToast("Scraping rules updated successfully!")
+            showSuccessToast("File info updated successfully!")
             reset()
             setIsOpen(false)
             
@@ -58,7 +57,7 @@ const EditWebpage = ({ webpage }) => {
         },
 
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["webpages"] })
+            queryClient.invalidateQueries({ queryKey: ["files"] })
         },
 
     })
@@ -69,7 +68,7 @@ const EditWebpage = ({ webpage }) => {
 
     return (
         <DataFormLayout
-            title="Edit Scraping Rules"
+            title="Edit File Info"
             onSubmit={handleSubmit(onSubmit)}
             isSubmitting={isSubmitting}
             isOpen={isOpen}
@@ -91,52 +90,44 @@ const EditWebpage = ({ webpage }) => {
             }
         >
             <Text mb={4}>
-                Update the scraping rules for this webpage.
+                Update the info for this webpage.
             </Text>
             <VStack gap={4}>
                 <Field
-                    disabled
-                    invalid={!!errors.url}
-                    errorText={errors.url?.message}
-                    label="URL"
+                    invalid={!!errors.filename}
+                    errorText={errors.filename?.message}
+                    label="Filename"
                 >
                     <Input
-                        id="url"
-                        {...register("url")}
-                        type="url"
+                        id="filename"
+                        type="text"
+                        {...register("filename")}
+                        _focusVisible={{
+                            borderColor: "ui.main",
+                            boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                        }}
                     />
                 </Field>
 
                 <Field
-                    invalid={!!errors.refresh_frequency}
-                    errorText={errors.refresh_frequency?.message}
-                    label="Refresh Frequency (Days)"
+                    invalid={!!errors.author}
+                    errorText={errors.author?.message}
+                    label="Author(s)"
                 >
-                    <Controller
-                        control={control}
-                        name="refresh_frequency"
-                        render={({field}) => (
-                            <NumberInput.Root
-                                name={field.name}
-                                value={field.value}
-                                onValueChange={({ value }) => {
-                                    field.onChange(value)
-                                }}
-                                min={0}
-                                max={1095}
-                                width="100%"
-                            >
-                                <NumberInput.Control />
-                                <NumberInput.Input onBlur={field.onBlur} />
-
-                            </NumberInput.Root>
-                        )}
+                    <Input
+                        id="author"
+                        type="text"
+                        {...register("author")}
+                        _focusVisible={{
+                            borderColor: "ui.main",
+                            boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                        }}
                     />
                 </Field>
             </VStack>
 
-            <Stack mt={4} gap="4" align="flex-start">
-                {/* <Field
+            {/* <Stack mt={4} gap="4" align="flex-start">
+                <Field
                     required
                     invalid={!!errors.language}
                     errorText={errors.language?.message}
@@ -181,28 +172,11 @@ const EditWebpage = ({ webpage }) => {
                             </Select.Root>
                         )}
                     />
-                </Field> */}
-
-                <Controller
-                    control={control}
-                    name="auto_download"
-                    render={({field}) => (
-                        <Field disabled={field.disabled}>
-                            <Switch
-                                colorPalette="teal"
-                                size="lg"
-                                checked={field.value}
-                                onCheckedChange={({ checked }) => field.onChange(checked)}
-                            >
-                                Activate auto-download?
-                            </Switch>
-                        </Field>
-                    )}
-                />
-            </Stack>
+                </Field>
+            </Stack> */}
 
         </DataFormLayout>
     )
 }
 
-export default EditWebpage
+export default EditFile

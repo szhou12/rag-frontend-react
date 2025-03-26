@@ -27,6 +27,8 @@ const MOCK_FILES = Array.from({ length: 16 }, (_, index) => ({
     language: index % 3 === 0 ? 'zh' : 'en', // Mix of English and Chinese
     pages: Math.floor(Math.random() * 50) + 1, // Random pages between 1-50
     size: (Math.random() * 10).toFixed(2), // Random size between 0-10 MB
+    author: `Author ${index + 1}`,
+    filename: `GivenFilename ${index + 1}`,
 }));
 
 // TODO: DELETE when backend is ready

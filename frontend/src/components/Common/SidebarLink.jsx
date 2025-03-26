@@ -16,6 +16,7 @@ export const SidebarLink = (props) => {
                 color: 'colorPalette.fg',
             }}
             _currentPage={{
+                bg: 'colorPalette.subtle',
                 color: 'colorPalette.fg',
             }}
             asChild

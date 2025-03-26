@@ -1,11 +1,11 @@
-// import EditFile from "./EditFile";
+import EditFile from "./EditFile";
 import DeleteFile from "./DeleteFile";
 import { ActionsMenuLayout } from "@/layouts/Dashboard/ActionsMenuLayout";
 
 const FileActionsMenu = ({ file }) => {
     return (
         <ActionsMenuLayout>
-            {/* <EditFile file={file} /> */}
+            <EditFile file={file} />
             <DeleteFile id={file.id} />
         </ActionsMenuLayout>
     )

@@ -5,7 +5,9 @@ import {
     Box,
     createListCollection,
     FileUpload,
+    HStack,
     Icon,
+    Input,
     Portal,
     Select,
     Stack,
@@ -30,6 +32,7 @@ const AddFile = () => {
     const { showSuccessToast, showErrorToast } = useCustomToast()
 
     const {
+        register,
         control,
         handleSubmit,
         reset,
@@ -40,6 +43,8 @@ const AddFile = () => {
         defaultValues: {
             file: null,
             language: "",
+            filename: "",
+            author: "",
         }
     })
 
@@ -53,10 +58,7 @@ const AddFile = () => {
 
         onSuccess: () => {
             showSuccessToast("File uploaded successfully")
-            reset({
-                file: null,
-                language: "",
-            })
+            reset()
             setIsOpen(false)
         },
 
@@ -116,7 +118,7 @@ const AddFile = () => {
                             <FileUpload.Root
                                 maxW="xl"
                                 alignItems="stretch"
-                                maxFiles={1}
+                                maxFiles={1} // # of files can be uploaded at once
                                 accept={[
                                     "application/pdf",  // .pdf
                                     "application/vnd.ms-excel",  // .xls
@@ -196,8 +198,42 @@ const AddFile = () => {
                             </Select.Root>
                         )}
                     />
-                    
                 </Field>
+
+                <HStack gap={4} w="full">
+
+                    <Field
+                        invalid={!!errors.filename}
+                        errorText={errors.filename?.message}
+                        label="Filename"
+                    >
+                        <Input
+                            id="filename"
+                            type="text"
+                            {...register("filename")}
+                            _focusVisible={{
+                                borderColor: "ui.main",
+                                boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                            }}
+                        />
+                    </Field>
+
+                    <Field
+                        invalid={!!errors.author}
+                        errorText={errors.author?.message}
+                        label="Author(s)"
+                    >
+                        <Input
+                            id="author"
+                            type="text"
+                            {...register("author")}
+                            _focusVisible={{
+                                borderColor: "ui.main",
+                                boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                            }}
+                        />
+                    </Field>
+                </HStack>
             </Stack>
 
         </DataFormLayout>
