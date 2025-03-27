@@ -11,10 +11,11 @@ import { Route as AdminImport } from './_dashboard-layout/admin'
 import { Route as ScraperImport } from './_dashboard-layout/scraper'
 import { Route as UploaderImport } from './_dashboard-layout/uploader'
 
-// import { Route as ChatImport } from './chat'
-import { Route as ChatImport } from './_chat-layout'
-import { Route as ChatIndexImport } from './_chat-layout/index'
-import { Route as ConversationImport } from './_chat-layout/conversation'
+import { Route as ChatLayoutImport } from './_chat-layout'
+// import { Route as ChatIndexImport } from './_chat-layout/index'
+// import { Route as ConversationImport } from './_chat-layout/conversation'
+import { Route as NewChatImport } from './_chat-layout/newchat'
+import { Route as ChatIdImport } from './_chat-layout/chat-id'
 
 // Create a root route
 const rootRoute = createRootRoute()
@@ -91,32 +92,38 @@ const dashboardUploaderRoute = UploaderImport.update({
     getParentRoute: () => dashboardLayoutRoute,
 })
 
-// TEST UI
-// const chatRoute = ChatImport.update({
-//     path: "/chat",
-//     getParentRoute: () => rootRoute,
-// })
 
 /**
  * Chat Route
  */
-const chatRoute = ChatImport.update({
-    id: "/_chat",
+const chatLayoutRoute = ChatLayoutImport.update({
+    id: "/_chat", // will not show in URL
     getParentRoute: () => rootRoute,
 })
 
 /**
- * Chat Index Route
+ * Chat Index Route + Conversation Route
  */
-const chatIndexRoute = ChatIndexImport.update({
+// const chatIndexRoute = ChatIndexImport.update({
+//     path: "/chat",
+//     getParentRoute: () => chatRoute,
+// })
+// const conversationRoute = ConversationImport.update({
+//     path: "/chat/conversation",
+//     getParentRoute: () => chatRoute,
+// })
+
+const newChatRoute = NewChatImport.update({
     path: "/chat",
-    getParentRoute: () => chatRoute,
+    getParentRoute: () => chatLayoutRoute,
 })
 
-const conversationRoute = ConversationImport.update({
-    path: "/chat/conversation",
-    getParentRoute: () => chatRoute,
+const ongoingChatRoute = ChatIdImport.update({
+    path: "/c/$chatId",
+    getParentRoute: () => chatLayoutRoute,
 })
+
+
 
 
 // Finally, create the router for all routes
@@ -136,9 +143,11 @@ const routeTree = rootRoute.addChildren([
 
     // chatRoute,
 
-    chatRoute.addChildren([
-        chatIndexRoute,
-        conversationRoute,
+    chatLayoutRoute.addChildren([
+        // chatIndexRoute,
+        // conversationRoute,
+        newChatRoute,
+        ongoingChatRoute,
     ]),
 ])
   
