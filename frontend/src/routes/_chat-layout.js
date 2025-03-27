@@ -7,7 +7,9 @@ export const Route = createFileRoute("/_chat")({
 
     beforeLoad: async () => {
         if (!isLoggedIn()) {
-            throw redirect({ to: "/login" })
+            throw redirect({ 
+                to: "/login" 
+            })
         }
     },
 })

@@ -264,7 +264,7 @@ const useAuth = () => {
             if (role === 'client') {
                 navigate({ to: "/chat" });
             } else {
-                navigate({ to: "/dashboard" });
+                navigate({ to: "/dashboard/index" });
             }
         },
 

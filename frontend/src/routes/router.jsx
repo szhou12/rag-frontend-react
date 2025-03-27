@@ -63,7 +63,7 @@ const dashboardLayoutRoute = DashboardLayoutImport.update({
  * Dashboard Index Route
  */
 const dashboardIndexRoute = DashboardIndexImport.update({
-    path: "/dashboard",
+    path: "/dashboard/index",
     getParentRoute: () => dashboardLayoutRoute,
 })
 

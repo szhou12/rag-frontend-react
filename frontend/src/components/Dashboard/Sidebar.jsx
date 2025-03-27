@@ -24,7 +24,7 @@ export const Sidebar = (props) => {
 
     const DashboardContent = () => (
         <Stack gap="1">
-            <SidebarLink href="/dashboard">
+            <SidebarLink href="/dashboard/index">
                 <LuLayoutDashboard /> Home
             </SidebarLink>
 
