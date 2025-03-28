@@ -25,54 +25,63 @@ export const group = {
   
   export const messages = [
     {
+      id: '67c8cb11-23c4-8011-81a9-a602606e0073',  // UUID v4 format
       updatedAt: '2 hrs ago',
       name: 'Segun Adebayo',
       image: '',
       message: 'What is the latest with Chakra UI and this new feature?',
     },
     {
+      id: '67c8cb11-23c4-8011-81a9-a602606e0071', 
       updatedAt: '1 hr ago',
       name: 'John Doe',
       image: '',
       message: 'How can I use the new feature in my project?',
     },
     {
+      id: '67c8cb11-23c4-8011-81a9-a602606e0072', 
       updatedAt: '30 mins ago',
       name: 'Jane Doe',
       image: '',
       message: 'Is there any documentation for this new feature?',
     },
     {
+      id: '67c8cb11-23c4-8011-81a9-a602606e0070',
       updatedAt: '20 mins ago',
       name: 'Alice',
       image: '',
       message: 'What are the benefits of this new feature?',
     },
     {
+      id: '67c8cb11-23c4-8011-81a9-a602606e0079', 
       updatedAt: '10 mins ago',
       name: 'Bob',
       image: '',
       message: 'Can I contribute to the development of this new feature?',
     },
     {
+      id: '67c8cb11-23c4-8011-81a9-a602606e0078', 
       updatedAt: '9 mins ago',
       name: 'Bob',
       image: '',
       message: 'Conversation 1',
     },
     {
+      id: '67c8cb11-23c4-8011-81a9-a602606e0077',
       updatedAt: '8 mins ago',
       name: 'Bob',
       image: '',
       message: 'Conversation 2',
     },
     {
+      id: '67c8cb11-23c4-8011-81a9-a602606e0076', 
       updatedAt: '7 mins ago',
       name: 'Bob',
       image: '',
       message: 'Conversation 3',
     },
     {
+      id: '67c8cb11-23c4-8011-81a9-a602606e0075',
       updatedAt: '6 mins ago',
       name: 'Bob',
       image: '',

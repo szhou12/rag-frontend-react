@@ -10,6 +10,7 @@ import { ChatTextarea } from '@/features/Chat/ChatTextarea'
 import { ChatFooter } from '@/features/Chat/ChatFooter'
 import { ChatMessages } from '@/components/Chat/ChatMessages'
 import { ChatMessage } from '@/components/Chat/ChatMessage'
+import { Route } from '@/routes/_chat-layout/chat-session'
 
 import { chats } from '@/components/Chat/fakedata'
 
@@ -24,13 +25,21 @@ const users = {
     },
 }
 
-export default function ConversationPage() {
+export default function ChatSessionPage() {
+
+    const chatId = Route.useParams().chatId
+
+    console.log("A chat session chatId: ", chatId)
 
     const Conversation = ({data}) => {
         return (
             <ChatMessages>
                 {data.map((chat, index) => (
-                    <ChatMessage key={index} author={users[chat.type]} messages={chat.messages} />
+                    <ChatMessage
+                        key={index}
+                        author={users[chat.type]}
+                        messages={chat.messages}
+                    />
                 ))}
             </ChatMessages>
         )

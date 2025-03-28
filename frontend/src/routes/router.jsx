@@ -12,10 +12,12 @@ import { Route as ScraperImport } from './_dashboard-layout/scraper'
 import { Route as UploaderImport } from './_dashboard-layout/uploader'
 
 import { Route as ChatLayoutImport } from './_chat-layout'
-// import { Route as ChatIndexImport } from './_chat-layout/index'
-// import { Route as ConversationImport } from './_chat-layout/conversation'
 import { Route as NewChatImport } from './_chat-layout/newchat'
-import { Route as ChatIdImport } from './_chat-layout/chat-id'
+import { Route as ChatSessionImport } from './_chat-layout/chat-session'
+
+// import { Route as ChatIndexImport } from './_chat-layout/index'
+// import { Route as ChatIdImport } from './_chat-layout/chat-id'
+
 
 // Create a root route
 const rootRoute = createRootRoute()
@@ -94,7 +96,7 @@ const dashboardUploaderRoute = UploaderImport.update({
 
 
 /**
- * Chat Route
+ * Chat Layout Route
  */
 const chatLayoutRoute = ChatLayoutImport.update({
     id: "/_chat", // will not show in URL
@@ -102,23 +104,17 @@ const chatLayoutRoute = ChatLayoutImport.update({
 })
 
 /**
- * Chat Index Route + Conversation Route
+ * New Chat Route
  */
-// const chatIndexRoute = ChatIndexImport.update({
-//     path: "/chat",
-//     getParentRoute: () => chatRoute,
-// })
-// const conversationRoute = ConversationImport.update({
-//     path: "/chat/conversation",
-//     getParentRoute: () => chatRoute,
-// })
-
 const newChatRoute = NewChatImport.update({
     path: "/chat",
     getParentRoute: () => chatLayoutRoute,
 })
 
-const ongoingChatRoute = ChatIdImport.update({
+/**
+ * Chat Session (existing chat) Route
+ */
+const chatSessionRoute = ChatSessionImport.update({
     path: "/c/$chatId",
     getParentRoute: () => chatLayoutRoute,
 })
@@ -141,13 +137,9 @@ const routeTree = rootRoute.addChildren([
         dashboardUploaderRoute,
     ]),
 
-    // chatRoute,
-
     chatLayoutRoute.addChildren([
-        // chatIndexRoute,
-        // conversationRoute,
         newChatRoute,
-        ongoingChatRoute,
+        chatSessionRoute,
     ]),
 ])
   
