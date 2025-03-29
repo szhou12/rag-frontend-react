@@ -14,6 +14,7 @@ npm install react-icons
 npm install react-error-boundary
 npm install framer-motion
 npm install zod
+npm install uuid
 ```
 ### Notes
 - Chakra UI `3.8.0` can't use `FileUpload`.

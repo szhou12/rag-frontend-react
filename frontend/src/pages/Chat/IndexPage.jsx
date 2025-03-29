@@ -10,6 +10,12 @@ import { PredefinedPrompts } from '@/features/Chat/PredefinedPrompts'
 import { ChatTextarea } from '@/features/Chat/ChatTextarea'
 import { ChatFooter } from '@/features/Chat/ChatFooter'
 
+
+/**
+ * TODO:
+ *  1. click a predefined promppt -> generate a new conversation (UUID4) -> sidebar adds this new conversation -> present dialog in the center & URL redirects to /c/<uuid>
+ *  2. user type in textarea -> generate a new conversation (UUID4) -> sidebar adds this new conversation -> present dialog in the center & URL redirects to /c/<uuid>
+ */
 export default function IndexPage() {
 
     const Header = () => (
@@ -18,6 +24,11 @@ export default function IndexPage() {
             <Span color="fg.muted">How can I help you today?</Span>
         </Heading>
     )
+
+    const handlePromptSelect = (promptText) => {
+        console.log("Selected prompt:", promptText)
+        // We'll add UUID generation and navigation here later
+    }
 
 
     return (
@@ -36,7 +47,10 @@ export default function IndexPage() {
                 <Container maxW="4xl">
                     <Stack gap="10">
                         <Header />
-                        <PredefinedPrompts />
+
+                        <PredefinedPrompts
+                            onPromptSelect={handlePromptSelect}
+                        />
                     </Stack>
                 </Container>
             </Box>

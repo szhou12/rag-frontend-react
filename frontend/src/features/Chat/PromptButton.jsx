@@ -5,7 +5,7 @@ import {
 } from '@chakra-ui/react'
 
 export const PromptButton = (props) => {
-    const { icon, children, ...rest } = props
+    const { icon, children, onClick, ...rest } = props
 
     return (
         <Button
@@ -17,6 +17,7 @@ export const PromptButton = (props) => {
             fontWeight="medium"
             whiteSpace="normal"
             textAlign="start"
+            onClick={() => onClick?.(children)}  // Pass prompt text to handler
             {...rest}
         >
             {children}
