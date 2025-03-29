@@ -6,6 +6,7 @@ import {
     Span,
     Stack,
 } from '@chakra-ui/react'
+import { v4 as uuidv4 } from 'uuid'
 import { PredefinedPrompts } from '@/features/Chat/PredefinedPrompts'
 import { ChatTextarea } from '@/features/Chat/ChatTextarea'
 import { ChatFooter } from '@/features/Chat/ChatFooter'
@@ -26,8 +27,16 @@ export default function IndexPage() {
     )
 
     const handlePromptSelect = (promptText) => {
-        console.log("Selected prompt:", promptText)
-        // We'll add UUID generation and navigation here later
+        // Generate new conversation ID
+        const newChatId = uuidv4()
+        
+        // Log both for verification
+        console.log("New conversation:", {
+            id: newChatId,
+            initialPrompt: promptText
+        })
+
+        // We'll add navigation here in next step
     }
 
 
