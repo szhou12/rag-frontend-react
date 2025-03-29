@@ -7,9 +7,12 @@ import {
     Stack,
 } from '@chakra-ui/react'
 import { v4 as uuidv4 } from 'uuid'
+import { useNavigate } from '@tanstack/react-router'
+
 import { PredefinedPrompts } from '@/features/Chat/PredefinedPrompts'
 import { ChatTextarea } from '@/features/Chat/ChatTextarea'
 import { ChatFooter } from '@/features/Chat/ChatFooter'
+import { Route } from '@/routes/_chat-layout/chat-session'
 
 
 /**
@@ -18,6 +21,7 @@ import { ChatFooter } from '@/features/Chat/ChatFooter'
  *  2. user type in textarea -> generate a new conversation (UUID4) -> sidebar adds this new conversation -> present dialog in the center & URL redirects to /c/<uuid>
  */
 export default function IndexPage() {
+    const navigate = useNavigate()
 
     const Header = () => (
         <Heading size="4xl" fontWeight="normal">
@@ -37,6 +41,12 @@ export default function IndexPage() {
         })
 
         // We'll add navigation here in next step
+        navigate({
+            to: Route.to,
+            params: {
+                chatId: newChatId
+            }
+        })
     }
 
 
