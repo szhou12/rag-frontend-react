@@ -8,11 +8,15 @@ import {
 } from '@chakra-ui/react'
 import { v4 as uuidv4 } from 'uuid'
 import { useNavigate } from '@tanstack/react-router'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { PredefinedPrompts } from '@/features/Chat/PredefinedPrompts'
 import { ChatTextarea } from '@/features/Chat/ChatTextarea'
 import { ChatFooter } from '@/features/Chat/ChatFooter'
 import { Route } from '@/routes/_chat-layout/chat-session'
+import useCustomToast from "@/hooks/useCustomToast"
+
+import { ChatService } from '@/components/Chat/Sidebar'
 
 
 /**
@@ -22,6 +26,9 @@ import { Route } from '@/routes/_chat-layout/chat-session'
  */
 export default function IndexPage() {
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
+
+    const { showErrorToast } = useCustomToast()
 
     const Header = () => (
         <Heading size="4xl" fontWeight="normal">
@@ -30,22 +37,43 @@ export default function IndexPage() {
         </Heading>
     )
 
+    const addChatSession = useMutation({
+        mutationFn: (data) => ChatService.addConversation(data),
+
+        onSuccess: (_, variables) => {
+
+            navigate({
+                to: Route.to,
+                params: {
+                    chatId: variables.id
+                }
+            })
+        },
+
+        onError: (err) => {
+            handleError(err, showErrorToast)
+        },
+
+        onSettled: () => {
+            // Always refetch conversations after mutation (success or error)
+            queryClient.invalidateQueries({ queryKey: ["userChats"] })
+        },
+    })
+
+
     const handlePromptSelect = (promptText) => {
         // Generate new conversation ID
         const newChatId = uuidv4()
         
         // Log both for verification
-        console.log("New conversation:", {
+        console.log("Add a new chat session:", {
             id: newChatId,
             initialPrompt: promptText
         })
 
-        // We'll add navigation here in next step
-        navigate({
-            to: Route.to,
-            params: {
-                chatId: newChatId
-            }
+        addChatSession.mutate({
+            id: newChatId,
+            initialPrompt: promptText
         })
     }
 
