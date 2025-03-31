@@ -132,3 +132,69 @@ npx @chakra-ui/cli snippet add avatar
     - At `IndexPage.jsx`, when user either clicks a predefined prompt or types in the Textarea, triggers two actions: 1. Sidebar adds a new chat tab noting this new chat session. 2. Redirect to `ChatSessionPage.jsx` with the new chat session ID.
     - At `ChatSessionPage.jsx`, when user types in the Textarea, no new chat session create, continue the existing chat session.
     
+## Backend
+1. Create a new conda environment
+```bash
+$ makdir backend
+$ cd backend
+$ conda create --name fastapi-react-py3.13 python=3.13
+$ conda env remove -n fastapi-react-py3.13
+```
+2. Select this Conda Env in Cursor
+    1. Open Command Palette: `Cmd+Shift+P`
+    2. Type and Select: `Python: Select Interpreter`
+    3. Select the Conda Env: `fastapi-react-py3.13`
+    4. Start a new terminal to check the new env is activated
+
+## Backend Management by UV
+1. [uv](https://docs.astral.sh/uv/) for creating a virtual envionment and manage dependencies.
+    - [uv for EVERYTHING: How to use uv for Python, venv, and project management](https://www.youtube.com/watch?v=zgSQr0d5EVg&ab_channel=MattPalmer)
+2. `uv` QuickStart
+    1. STEP 0: Once installed `uv`, add Python 3.13 to `uv` cache `$ uv python install 3.13` (Only need once).
+    2. STEP 1: `uv` to configure a `/backend` directory under `/project-dir`
+    ```bash
+    (project-dir) $ uv init backend
+    ```
+    3. STEP 2: `uv` to create a virtual environment in `/backend`. NOTE: Different projects can have the same default environment name under their directory without conflict. So for convenience, use the default environment name `venv`. The newly created virtual environment will contain a `.gitignore` that excludes the whole environment directory.
+    ```bash
+    # Init with default environment name
+    (backend) $ uv venv --python 3.13
+
+    # Remove the environment (deactivate it first)
+    (backend) $ rm -rf .venv
+
+    # Optionally, init with a custom environment name.
+    (backend) $ uv venv [custom-env-name] --python 3.13
+
+    # Remove the environment with a custom name
+    (backend) $ rm -rf [custom-env-name]
+    ```
+    4. STEP 3: Activate the environment
+    ```bash
+    # default environment name
+    (backend) $ source .venv/bin/activate
+
+    # custom environment name
+    (backend) $ source [custom-env-name]/bin/activate
+    ```
+    5. STEP 4: Install dependencies. `pyproject.toml` lists all installed dependencies.
+    ```bash
+    # install a dependency
+    (backend) $ uv add [dependency-name]
+    # Or
+    (backend) $ uv pip install [dependency-name]
+
+    # remove a dependency
+    (backend) $ uv remove [dependency-name]
+
+    # if you manually add/remove dependencies in pyproject.toml, make uv aware of the change
+    (backend) $ uv sync
+    ```
+
+## Backend Dependencies
+Under `/backend`:
+```bash
+uv add "fastapi[standard]"
+uv add pydantic
+uv add sqlmodel
+```
