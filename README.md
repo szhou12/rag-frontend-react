@@ -128,3 +128,7 @@ npx @chakra-ui/cli snippet add avatar
     1. update `FilesService.createFile` to use backend API.
 - `DeleteFile.jsx`
     1. update `deleteFile` to use backend API.
+- Chat Pages Milestones
+    - At `IndexPage.jsx`, when user either clicks a predefined prompt or types in the Textarea, triggers two actions: 1. Sidebar adds a new chat tab noting this new chat session. 2. Redirect to `ChatSessionPage.jsx` with the new chat session ID.
+    - At `ChatSessionPage.jsx`, when user types in the Textarea, no new chat session create, continue the existing chat session.
+    
