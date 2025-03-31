@@ -56,8 +56,6 @@ export const ChatService = {
 
 export const Sidebar = (props) => {
 
-    console.log("Route.to:", Route.to)
-
     const { data: chats, isPending, error } = useQuery({
         queryFn: () => ChatService.getConversations(),
         queryKey: ["userChats"],

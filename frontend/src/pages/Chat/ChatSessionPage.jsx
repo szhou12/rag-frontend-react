@@ -31,6 +31,11 @@ export default function ChatSessionPage() {
 
     console.log("A chat session chatId: ", chatId)
 
+    // TODO
+    const handleSendMessage = (message) => {
+        console.log("Sending a new message: ", message)
+    }
+
     const Conversation = ({data}) => {
         return (
             <ChatMessages>
@@ -65,7 +70,10 @@ export default function ChatSessionPage() {
             <Box
                 flex="0"
             >
-                <ChatTextarea />
+                <ChatTextarea
+                    isNewChat={false}
+                    onSendMessage={handleSendMessage}
+                />
 
                 <ChatFooter />
             </Box>

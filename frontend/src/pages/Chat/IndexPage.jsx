@@ -103,7 +103,10 @@ export default function IndexPage() {
             </Box>
 
             <Box flex="0">
-                <ChatTextarea />
+                <ChatTextarea
+                    isNewChat={true}
+                    onNewChat={handlePromptSelect}
+                />
 
                 <ChatFooter />
             </Box>
