@@ -149,6 +149,7 @@ $ conda env remove -n fastapi-react-py3.13
 ## Backend Management by UV
 1. [uv](https://docs.astral.sh/uv/) for creating a virtual envionment and manage dependencies.
     - [uv for EVERYTHING: How to use uv for Python, venv, and project management](https://www.youtube.com/watch?v=zgSQr0d5EVg&ab_channel=MattPalmer)
+    - [Start Using UV Python Package Manager for Better Dependency Management](https://medium.com/@gnetkov/start-using-uv-python-package-manager-for-better-dependency-management-183e7e428760)
 2. `uv` QuickStart
     1. STEP 0: Once installed `uv`, add Python 3.13 to `uv` cache `$ uv python install 3.13` (Only need once).
     2. STEP 1: `uv` to configure a `/backend` directory under `/project-dir`
@@ -190,11 +191,10 @@ $ conda env remove -n fastapi-react-py3.13
     # if you manually add/remove dependencies in pyproject.toml, make uv aware of the change
     (backend) $ uv sync
     ```
+3. `pyproject.toml`: lists all installed dependencies.
 
 ## Backend Dependencies
 Under `/backend`:
 ```bash
-uv add "fastapi[standard]"
-uv add pydantic
-uv add sqlmodel
+uv export --format requirements-txt > requirements.txt
 ```
