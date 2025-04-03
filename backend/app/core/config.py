@@ -105,6 +105,7 @@ class Settings(BaseSettings):
     # TODO
     # Email Server Configuration
 
-
+# Initialization Load all configurations
+settings = Settings()
 
 

@@ -8,6 +8,10 @@
 
 2. What is email server for? why would we want to consider using it in a web application?
 
+3. is "sub" a default keyword for JWT? what does it mean?
+
+4. why would we want to encode a JWT as string? in other words, why is encoding necessary?
+
 
 
 ## Review `sqlmodel`
