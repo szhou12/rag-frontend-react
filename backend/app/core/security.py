@@ -2,18 +2,27 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional, Any
 
 import jwt # encode and decode JWT (JSON Web Token)
+from passlib.context import CryptContext # hash user password
 
 from app.core.config import settings
 
 ALGORITHM = "HS256"
 
+# implicitly set default hash algo=bcrypt
+# deprecated="auto" helps hash algo migration in future by auto-deprecating non-default hash algo
+password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 def get_password_hash(password: str) -> str:
-    # TODO
-    pass
+    """
+    Hash a plain text password using bcrypt hashing algorithm. Only hashed password is stored in DB.
+    """
+    return password_context.hash(password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    # TODO
-    pass
+    """
+    Verify user's input plain password matches the hashed password stored in DB.
+    """
+    return password_context.verify(plain_password, hashed_password)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     """
