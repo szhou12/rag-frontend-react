@@ -50,8 +50,7 @@ class Settings(BaseSettings):
 
     # Configuration Metadata
     model_config = SettingsConfigDict(
-        # Use top level .env file (one level above ./backend/)
-        env_file="../.env", # Path to .env file
+        env_file="../.env", # Path to .env file - go one level up from where you run uvicorn
         env_ignore_empty=True, # Ignore empty environment variables
         extra="ignore", # Ignore extra keys that are not explicitly declared
     )
@@ -76,12 +75,16 @@ class Settings(BaseSettings):
             self.FRONTEND_HOST
         ]
     
-    # MySQL Database Configuration
-    MYSQL_USER: str = "root"
-    MYSQL_PASSWORD: str = "password" # TODO: load from .env
-    MYSQL_HOST: str = "localhost"
-    MYSQL_PORT: int = 3306
-    MYSQL_DB: str = "test_react"
+    # MySQL Database Configuration: load values from .env
+    MYSQL_USER: str
+    MYSQL_PASSWORD: str
+    MYSQL_HOST: str
+    MYSQL_PORT: int
+    MYSQL_DB: str
+
+    # First Admin Configuration: load values from .env
+    FIRST_SUPERUSER: EmailStr
+    FIRST_SUPERUSER_PASSWORD: str
 
     @computed_field
     @property
@@ -101,6 +104,7 @@ class Settings(BaseSettings):
             port=str(self.MYSQL_PORT),
             path=f"/{self.MYSQL_DB}"  # Important: Include '/' before DB name
         )
+    
     
     # TODO
     # Email Server Configuration

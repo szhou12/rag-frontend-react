@@ -6,7 +6,7 @@ from passlib.context import CryptContext # hash user password
 
 from app.core.config import settings
 
-ALGORITHM = "HS256"
+JWT_ALGORITHM = "HS256"
 
 # implicitly set default hash algo=bcrypt
 # deprecated="auto" helps hash algo migration in future by auto-deprecating non-default hash algo
@@ -48,7 +48,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
 
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=JWT_ALGORITHM)
     
     return encoded_jwt
 

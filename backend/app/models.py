@@ -25,9 +25,9 @@ class UserBase(SQLModel):
 
 # Database model, database table inferred from class name
 class User(UserBase, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True) # auto-generate
     hashed_password: str
-    created_at: datetime = Field(default_factory=datetime.now, nullable=False, index=True)
+    created_at: datetime = Field(default_factory=datetime.now, nullable=False, index=True) # auto-generate
     # items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
@@ -46,6 +46,12 @@ class User(UserBase, table=True):
 
 # Properties to receive from API on user creation
 class UserCreate(UserBase):
+    """
+    Attributes:
+    - email
+    - role
+    - password (plain text)
+    """
     password: str = Field(min_length=8, max_length=40)
 
 class UserRegister(SQLModel):
