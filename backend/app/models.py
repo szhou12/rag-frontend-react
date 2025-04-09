@@ -22,6 +22,7 @@ class NewPassword(SQLModel):
 class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
     role: str = Field(index=True)
+    username: str | None = Field(default=None, max_length=255)
 
 # Database model, database table inferred from class name
 class User(UserBase, table=True):
@@ -58,6 +59,7 @@ class UserRegister(SQLModel):
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=40)
     role: str = Field(default="client")
+    username: str | None = Field(default=None, max_length=255)
 
 
 # Properties to receive from API on user update, all are optional
@@ -68,6 +70,7 @@ class UserUpdate(UserBase):
 
 class UserUpdateMe(SQLModel):
     email: EmailStr | None = Field(default=None, max_length=255)
+    username: str | None = Field(default=None, max_length=255)
 
 
 class UpdatePassword(SQLModel):

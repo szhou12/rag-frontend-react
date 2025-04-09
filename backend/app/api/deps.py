@@ -45,6 +45,15 @@ TokenDep = Annotated[str, Depends(oauth2_scheme)]
 
 
 def get_current_user(session: SessionDep, token: TokenDep) -> User:
+    """
+    Args:
+        session: a Session type that depends on get_db() to generate such a Session object.
+        token: a string type that depends on oauth2_scheme to generate such a token. 
+
+        - oauth2_scheme follows OAuth2.0 protocol to validate user's identity through (username, password) to generate a Bearer token.
+        - The actual generation process is user POST request sends (username, password) to tokenUrl, under which sits a function that validates identity, generates and returns a JWT token to user.
+    Returns:
+    """
     try:
         payload = jwt.decode(
             token,

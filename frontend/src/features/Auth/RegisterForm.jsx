@@ -21,6 +21,7 @@ const RegisterForm = () => {
         mode: "onBlur",
         criteriaMode: "all",
         defaultValues: {
+            username: "",
             email: "",
             password: "",
             confirm_password: "",
@@ -46,6 +47,23 @@ const RegisterForm = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <Stack gap="6">
                 <Stack gap="5">
+                    <Field
+                        label="Username"
+                        invalid={!!errors.username}
+                        errorText={errors.username?.message}
+                    >
+                        <Input
+                            id="username"
+                            type="text"
+                            minLength={3}
+                            {...register("username", { required: "Username is required" })}
+                            _focusVisible={{
+                                borderColor: "ui.main",
+                                boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                            }}
+                        />
+                    </Field>
+
                     <Field
                         label="Email"
                         invalid={!!errors.email} // Marks the field as invalid when an error exists

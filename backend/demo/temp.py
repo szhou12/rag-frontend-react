@@ -22,7 +22,7 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
-    # username = Column(String, unique=True, index=True)
+    username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
@@ -40,7 +40,7 @@ class TokenData(BaseModel):
 
 # model that contains registration info
 class UserCreate(BaseModel):
-    # username: str
+    username: str
     email: str
     password: str
     role: str
@@ -132,6 +132,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     """
+    token is string type that depends on oauth2_scheme to generate. 
+        oauth2_scheme follows OAuth2.0 protocol to validate user's identity through (username, password) to generate a Bearer token. 
+        The actual generation process is user POST request sends username & password to tokenUrl, through which identity is validated and a token (JWT) is generated and returned to user.
     1. Verifies the JWT token by decoding it using jwt.decode.
     2. Extracts user information from the token payload.
     3. Retrieves the user object from DB.
