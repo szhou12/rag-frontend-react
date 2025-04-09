@@ -7,3 +7,14 @@ htmlcov
 .cache
 .venv
 .DS_Store
+
+
+# MySQL files
+*.sql
+*.sql.gz
+*.dump
+
+# SQLite database files
+*.db
+*.sqlite
+*.sqlite3

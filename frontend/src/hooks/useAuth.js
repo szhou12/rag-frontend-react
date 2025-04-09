@@ -5,6 +5,67 @@ import { useNavigate } from "@tanstack/react-router"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 
+// TODO: DELETE when frontend OpenAPI auto-generation is ready!!!
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8001'; // allow backend URL
+
+const loginUser = async (credentials) => {
+
+    try {
+        const params = new URLSearchParams();
+        for (const key in credentials) {
+            params.append(key, credentials[key]);
+        }
+
+        // POST request goes to backend/demo/auth.py
+        const response = await axios.post(
+            `${API_URL}/auth/token`,
+            params,
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            }
+        );
+
+        // response.data = { access_token: ..., token_type: "bearer"}
+        return response.data
+    } catch (error) {
+        console.error("Login error: ", error);
+        throw error;
+    }
+};
+
+const registerUser = async (userData) => {
+    try {
+        const response = await axios.post(`${API_URL}/auth/register`, userData);
+
+        console.log('Registration data saved to DB:', response.data);
+
+    } catch (error) {
+        console.error("Register error: ", error);
+        throw error;
+    }
+};
+
+const fetchUserProfile = async (token) => {
+    try {
+        const response = await axios.get(
+            `${API_URL}/users/me`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Fetch user profile error: ", error);
+        throw error;
+    }
+};
+
 // TODO: openapi auto-generate: UsersService, LoginService
 
 // TODO: DELETE when backend is ready!!!
@@ -102,29 +163,43 @@ const useAuth = () => {
      * Mock implementation of user registration
      * Simulates backend validation and response
      */
+    // const mockRegisterUser = async (data) => {
+    //     console.log('Registration attempt with:', data);
+        
+    //     // Simulate network delay
+    //     await new Promise(resolve => setTimeout(resolve, 800));
+        
+    //     // Mock validation checks
+    //     if (data.email.includes('exists')) {
+    //         throw new Error('Email already exists');
+    //     }
+        
+    //     if (data.password.length < 8) {
+    //         throw new Error('Password must be at least 8 characters');
+    //     }
+        
+    //     // Simulate successful registration
+    //     return {
+    //         id: Math.random().toString(36).substring(2, 15),
+    //         email: data.email,
+    //         password: data.password,
+    //         createdAt: new Date().toISOString()
+    //     };
+    // };
+
     const mockRegisterUser = async (data) => {
-        console.log('Registration attempt with:', data);
-        
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 800));
-        
-        // Mock validation checks
-        if (data.email.includes('exists')) {
-            throw new Error('Email already exists');
+
+        try {
+            await registerUser(data);
+
+        } catch (error) {
+            console.error("Registration error:", error);
+            throw error;
         }
-        
-        if (data.password.length < 8) {
-            throw new Error('Password must be at least 8 characters');
-        }
-        
-        // Simulate successful registration
-        return {
-            id: Math.random().toString(36).substring(2, 15),
-            email: data.email,
-            password: data.password,
-            createdAt: new Date().toISOString()
-        };
-    };
+
+
+
+    }
 
     /**
      * Calls registerUser to register a new user.
@@ -176,75 +251,113 @@ const useAuth = () => {
      * TODO: DELETE when backend is ready!!!
      * Simulates a successful login API call for frontend testing
      */
+    // const login = async (data) => {
+    //     console.log('login attempt:', data);
+
+    //     // Login type: client, staff, admin
+
+    //     // Check login endpoint type (regular login vs staff login)
+    //     let role = data.loginType === 'staff' ? (data.isAdmin ? 'admin' : 'staff') : 'client';
+
+    //     // Simulate network delay
+    //     await new Promise(resolve => setTimeout(resolve, 800));
+
+    //     // Set expiration time (e.g., 30s from now)
+    //     const expiresAt = new Date().getTime() + (30 * 1000);
+
+    //     if (data.email === "abc@email.com" && data.password === "11111111") {
+    //         const mockResponse = {
+    //             access_token: 'mock-jwt-token-client',
+    //             user: {
+    //                 id: '001',
+    //                 email: data.email,
+    //                 name: 'Test client',
+    //                 role: 'client'
+    //             }
+    //         };
+    //         // Store token in localStorage
+    //         localStorage.setItem("access_token", mockResponse.access_token);
+    //         localStorage.setItem("expires_at", expiresAt.toString());
+    //         // Optionally store user data
+    //         localStorage.setItem("user", JSON.stringify(mockResponse.user));
+    //         return mockResponse;
+    //     } 
+    //     else if (data.email === "staff@email.com" && data.password === "11111111") {
+    //         const mockResponse = {
+    //             access_token: 'mock-jwt-token-staff',
+    //             user: {
+    //                 id: '002',
+    //                 email: data.email,
+    //                 name: 'Test Staff',
+    //                 role: role
+    //             }
+    //         };
+
+    //         localStorage.setItem("access_token", mockResponse.access_token);
+    //         localStorage.setItem("expires_at", expiresAt.toString());
+    //         localStorage.setItem("user", JSON.stringify(mockResponse.user));
+    //         return mockResponse;
+    //     }
+    //     else {
+    //         // For testing different credentials, still return success
+    //         // In a real implementation, you might want to throw an error for invalid credentials
+    //         const mockResponse = {
+    //             access_token: `mock-token-for-${role}-${data.email}`,
+    //             user: {
+    //                 id: Math.random().toString(36).substring(2, 15),
+    //                 email: data.email,
+    //                 name: `Generic ${role.charAt(0).toUpperCase() + role.slice(1)}`,
+    //                 role: role
+    //             }
+    //         };
+    //         localStorage.setItem("access_token", mockResponse.access_token);
+    //         localStorage.setItem("expires_at", expiresAt.toString());
+    //         localStorage.setItem("user", JSON.stringify(mockResponse.user));
+
+    //         return mockResponse;
+    //     }
+
+    //     // Uncomment to simulate login failure for testing error handling
+    //     // throw new Error('Invalid credentials');
+    // }
+
     const login = async (data) => {
-        console.log('login attempt:', data);
+        // LoginForm passed in data = { email, password, role }
 
-        // Login type: client, staff, admin
+        try {
+            const response = await loginUser({
+                username: data.email, // map email to username as OAuth2PasswordRequestForm requires username
+                password: data.password,
+                role: data.loginType,
+            });
 
-        // Check login endpoint type (regular login vs staff login)
-        let role = data.loginType === 'staff' ? (data.isAdmin ? 'admin' : 'staff') : 'client';
 
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 800));
+            if (response?.access_token) {
+                // Store token
+                localStorage.setItem("access_token", response.access_token);
 
-        // Set expiration time (e.g., 30s from now)
-        const expiresAt = new Date().getTime() + (30 * 1000);
+                // Fetch user profile using the token
+                const userProfile = await fetchUserProfile(response.access_token);
 
-        if (data.email === "abc@email.com" && data.password === "11111111") {
-            const mockResponse = {
-                access_token: 'mock-jwt-token-client',
-                user: {
-                    id: '001',
-                    email: data.email,
-                    name: 'Test client',
-                    role: 'client'
-                }
-            };
-            // Store token in localStorage
-            localStorage.setItem("access_token", mockResponse.access_token);
-            localStorage.setItem("expires_at", expiresAt.toString());
-            // Optionally store user data
-            localStorage.setItem("user", JSON.stringify(mockResponse.user));
-            return mockResponse;
-        } 
-        else if (data.email === "staff@email.com" && data.password === "11111111") {
-            const mockResponse = {
-                access_token: 'mock-jwt-token-staff',
-                user: {
-                    id: '002',
-                    email: data.email,
-                    name: 'Test Staff',
-                    role: role
-                }
-            };
+                console.log('userProfile:', userProfile);
 
-            localStorage.setItem("access_token", mockResponse.access_token);
-            localStorage.setItem("expires_at", expiresAt.toString());
-            localStorage.setItem("user", JSON.stringify(mockResponse.user));
-            return mockResponse;
+                const expiresAt = new Date().getTime() + (15 * 60 * 1000); // 15mins
+                localStorage.setItem("expires_at", expiresAt.toString());
+                
+                // Store user data
+                localStorage.setItem("user", JSON.stringify(userProfile));
+
+                return {
+                    access_token: response.access_token,
+                    user: userProfile
+                };
+            }
+        } catch (error) {
+            console.error("Login error: ", error);
+            throw error;
         }
-        else {
-            // For testing different credentials, still return success
-            // In a real implementation, you might want to throw an error for invalid credentials
-            const mockResponse = {
-                access_token: `mock-token-for-${role}-${data.email}`,
-                user: {
-                    id: Math.random().toString(36).substring(2, 15),
-                    email: data.email,
-                    name: `Generic ${role.charAt(0).toUpperCase() + role.slice(1)}`,
-                    role: role
-                }
-            };
-            localStorage.setItem("access_token", mockResponse.access_token);
-            localStorage.setItem("expires_at", expiresAt.toString());
-            localStorage.setItem("user", JSON.stringify(mockResponse.user));
-
-            return mockResponse;
-        }
-
-        // Uncomment to simulate login failure for testing error handling
-        // throw new Error('Invalid credentials');
     }
+
 
 
     /**
@@ -258,7 +371,17 @@ const useAuth = () => {
         onSuccess: (data) => {
             // Get user role from the response or from localStorage
             const user = data.user || JSON.parse(localStorage.getItem("user"));
-            const role = user?.role || 'client';
+            let role = user?.role || 'client';
+
+            console.log('loginMutation onSuccess user:', user);
+            console.log('loginMutation onSuccess role:', role);
+
+            console.log('Access Token:', localStorage.getItem('access_token'));
+            console.log('Expires At:', localStorage.getItem('expires_at'));
+
+            if (user.email === "admin01@email.com") {
+                role = 'admin';
+            }
             
             // Redirect based on role
             if (role === 'client') {
@@ -280,11 +403,13 @@ const useAuth = () => {
     const logout = () => {
         // TODO: replace localStorage
         localStorage.removeItem("access_token")
+        localStorage.removeItem("expires_at")
+        localStorage.removeItem("user")
         navigate({ to: "/" })
     }
 
     const isAdmin = () => {
-        return user?.role === 'admin';
+        return user?.role === 'admin' || user?.email === "admin01@email.com";
     }
 
     return {

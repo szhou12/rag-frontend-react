@@ -35,7 +35,7 @@ def get_db() -> Generator[Session, None, None]:
 SessionDep = Annotated[Session, Depends(get_db)]
 
 # oauth2_scheme is a dependency callable object (acts like a function) that extracts the token from Authorization header.
-# Workflow: client sends a POST request to tokenUrl -> backend generates a encoded JWT sent back to client -> client's future requests will have Authorization header with this token included inside for oauth2_scheme to extract..
+# Workflow: client sends a POST request to tokenUrl -> backend generates a encoded JWT sent back to client -> client's future requests will have Authorization header with this token included inside for oauth2_scheme to extract.
 oauth2_scheme = OAuth2PasswordBearer(
     # URL endpoint where the token is expected from
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"

@@ -198,3 +198,14 @@ Under `/backend`:
 ```bash
 uv export --format requirements-txt > requirements.txt
 ```
+
+```
+# /backend
+$ uv run main.py
+
+# /frontend
+$ npm run dev
+
+# /backend
+
+```

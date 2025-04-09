@@ -24,6 +24,7 @@ const RegisterForm = () => {
             email: "",
             password: "",
             confirm_password: "",
+            role: "client",
         },
     })
 
