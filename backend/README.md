@@ -100,7 +100,7 @@
     ```
     - OAuth2PasswordBearer = OAuth2.0 + Password + Bearer
         - OAuth2.0 framework: overall security protocol adopted for "security checks" and "gain access".
-        - Password: How a user pass "security checks" and prove their identity - Use their passwords. Per FastAPI, the user must send `(username, password)` as form data for validation. It MUST be named as `username`, CANNOT be replaced by `email`!
+        - Password: How a user pass "security checks" and prove their identity - Use their passwords. Per FastAPI, the user MUST send `(username, password)` as form data for validation. It MUST be named as `username`, CANNOT be replaced by `email`!
         - Bearer: Token type that user will get after pass. HTTP request's header includes an Authorization header that contains a Bearer token (often JWT). i.e., Header has `Authorization: Bearer <token>`
     - tokenUrl: Frontend POST request sends to this address to generate a Bearer token.
     - Token types introduction: [Token types | Google Cloud](https://cloud.google.com/docs/authentication/token-types)

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from .temp import get_current_active_user
+from .temp import get_current_active_user, get_client_user, get_staff_user, get_admin_user
 from .temp import UserResponse
 from .temp import User
 
@@ -14,3 +14,17 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
     FastAPI seems to automatically handle model conversion and translate database model supported by SQLAlchemy.
     """
     return current_user
+
+@router.get("/chat")
+async def get_chat(user: User = Depends(get_client_user)):
+    return {"message": "Chat access granted", "user": user.email}
+
+@router.get("/dashboard")
+async def get_dashboard(user: User = Depends(get_staff_user)):
+    return {"message": "Dashboard access granted", "user": user.email}
+
+@router.get("/dashboard/admin")
+async def get_admin_dashboard(user: User = Depends(get_admin_user)):
+    return {"message": "Admin dashboard access granted", "user": user.email}
+
+

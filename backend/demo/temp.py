@@ -1,9 +1,9 @@
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime, timedelta, timezone
 import bcrypt
 
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import Depends, HTTPException, status, Security
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, SecurityScopes
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import declarative_base
@@ -37,6 +37,7 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     # username: Optional[str] = None
     email: Optional[str] = None
+    scopes: List[str] = []
 
 # model that contains registration info
 class UserCreate(BaseModel):
@@ -80,7 +81,20 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="auth/token",
+    scopes={
+        "chat": "Access chat",
+        "dashboard": "Access general dashboard",
+        "dashboard:admin": "Access admin dashboard page"
+    },
+)
+
+ROLE_SCOPES = {
+    "client": ["chat"],
+    "staff": ["chat", "dashboard"],
+    "admin": ["chat", "dashboard", "dashboard:admin"]
+}
 
 def get_password_hash(password: str) -> str:
     """
@@ -112,7 +126,7 @@ def authenticate_user(db: Session, email: str, password: str):
         return False
     return user
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+def create_access_token(data: dict, role: str, expires_delta: Optional[timedelta] = None):
     """
     Generates an access token using the provided data.
 
@@ -121,6 +135,8 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """
     to_encode = data.copy()
 
+    scopes = ROLE_SCOPES.get(role, [])
+    to_encode.update({"scopes": scopes})
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
@@ -130,7 +146,10 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def get_current_user(
+        token: str = Depends(oauth2_scheme), 
+        db: Session = Depends(get_db)
+):
     """
     token is string type that depends on oauth2_scheme to generate. 
         oauth2_scheme follows OAuth2.0 protocol to validate user's identity through (username, password) to generate a Bearer token. 
@@ -162,6 +181,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     
     return user
 
+
 # TODO: DELETE THIS FUNCTION
 async def get_current_active_user(current_user: User = Depends(get_current_user)):
     """
@@ -170,3 +190,61 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     # if current_user.disabled:
     #     raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+
+async def get_current_user_with_scopes(
+        security_scopes: SecurityScopes,
+        token: str = Depends(oauth2_scheme),
+        db: Session = Depends(get_db)
+):
+    # Create authentication requirements message
+    if security_scopes.scopes:
+        authenticate_value = f'Bearer scope="{" ".join(security_scopes.scopes)}"'
+    else:
+        authenticate_value = "Bearer"
+
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": authenticate_value},
+    )
+
+    # Decode JWT token
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+        
+        token_scopes = payload.get("scopes", [])
+        token_data = TokenData(email=email, scopes=token_scopes)
+    except InvalidTokenError:
+        raise credentials_exception
+    
+    # Get user from DB
+    user = get_user(db, email=token_data.email)
+    if user is None:
+        raise credentials_exception
+    
+    # Check scopes
+    for scope in security_scopes.scopes:
+        if scope not in token_data.scopes:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Not enough permissions. Required scope: {scope}",
+                headers={"WWW-Authenticate": authenticate_value},
+            )
+    
+    return user
+
+# Any authenticated user can access (no specific scope required) 
+def get_client_user(user: User = Depends(get_current_user_with_scopes)):
+    return user
+
+# Only users with "dashboard" scope can access (staff and admin)
+def get_staff_user(user: User = Security(get_current_user_with_scopes, scopes=["dashboard"])):
+    return user
+
+# Only users with "dashboard:admin" scope can access (admin only)
+def get_admin_user(user: User = Security(get_current_user_with_scopes, scopes=["dashboard:admin"])):
+    return user
