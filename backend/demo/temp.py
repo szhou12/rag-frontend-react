@@ -48,8 +48,9 @@ class UserCreate(BaseModel):
 
 # model that contains user's public info stored in DB
 class UserResponse(BaseModel):
-    # username: str
+    username: str
     email: Optional[str] = None
+    role: str
 
 # model that contains user's whole info stored in DB
 class UserInDB(UserResponse):
@@ -218,6 +219,10 @@ async def get_current_user_with_scopes(
         
         token_scopes = payload.get("scopes", [])
         token_data = TokenData(email=email, scopes=token_scopes)
+        # TokenData: {
+        #     "email": "test@test.com",
+        #     "scopes": ["chat", "dashboard"]
+        # }
     except InvalidTokenError:
         raise credentials_exception
     
@@ -227,6 +232,8 @@ async def get_current_user_with_scopes(
         raise credentials_exception
     
     # Check scopes
+    # security_scopes.scopes = scopes required by the endpoint
+    # token_data.scopes = scopes allowed for the user's role
     for scope in security_scopes.scopes:
         if scope not in token_data.scopes:
             raise HTTPException(

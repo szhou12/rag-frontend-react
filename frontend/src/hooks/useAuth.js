@@ -14,9 +14,25 @@ const loginUser = async (credentials) => {
 
     try {
         const params = new URLSearchParams();
-        for (const key in credentials) {
-            params.append(key, credentials[key]);
-        }
+        // for (const key in credentials) {
+        //     params.append(key, credentials[key]);
+        // }
+
+        // Map roles to their corresponding scopes
+        const scopeMap = {
+            'client': 'chat',
+            'staff': 'chat dashboard',
+            'admin': 'chat dashboard dashboard:admin'
+        };
+
+        // Basic credentials
+        params.append('username', credentials.username);
+        params.append('password', credentials.password);
+        
+        // Add scopes based on role
+        const scope = scopeMap[credentials.role] || 'chat';  // Default to 'chat' if role not found
+        params.append('scope', scope);  // Note: using 'scope' (singular) as required by OAuth2
+
 
         // POST request goes to backend/demo/auth.py
         const response = await axios.post(
@@ -371,7 +387,7 @@ const useAuth = () => {
         onSuccess: (data) => {
             // Get user role from the response or from localStorage
             const user = data.user || JSON.parse(localStorage.getItem("user"));
-            let role = user?.role || 'client';
+            const role = user?.role || 'client';
 
             console.log('loginMutation onSuccess user:', user);
             console.log('loginMutation onSuccess role:', role);
@@ -379,9 +395,6 @@ const useAuth = () => {
             console.log('Access Token:', localStorage.getItem('access_token'));
             console.log('Expires At:', localStorage.getItem('expires_at'));
 
-            if (user.email === "admin01@email.com") {
-                role = 'admin';
-            }
             
             // Redirect based on role
             if (role === 'client') {
@@ -409,7 +422,7 @@ const useAuth = () => {
     }
 
     const isAdmin = () => {
-        return user?.role === 'admin' || user?.email === "admin01@email.com";
+        return user?.role === 'admin';
     }
 
     return {

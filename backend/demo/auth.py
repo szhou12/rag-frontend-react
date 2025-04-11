@@ -48,7 +48,12 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)) -> UserRespon
     if db_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Account already registered")
     hashed_pwd = get_password_hash(user.password)
-    db_user = User(email=user.email, hashed_password=hashed_pwd, role=user.role) # how to pass in role? -> RegisterForm.jsx sets default role to "client"
+    db_user = User(
+        username=user.username,
+        email=user.email, 
+        hashed_password=hashed_pwd, 
+        role=user.role
+    ) # how to pass in role? -> RegisterForm.jsx sets default role to "client"
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
