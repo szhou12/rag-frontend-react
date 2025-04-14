@@ -127,7 +127,7 @@ def authenticate_user(db: Session, email: str, password: str):
         return False
     return user
 
-def create_access_token(data: dict, role: str, expires_delta: Optional[timedelta] = None):
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """
     Generates an access token using the provided data.
 
@@ -136,8 +136,6 @@ def create_access_token(data: dict, role: str, expires_delta: Optional[timedelta
     """
     to_encode = data.copy()
 
-    scopes = ROLE_SCOPES.get(role, [])
-    to_encode.update({"scopes": scopes})
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:

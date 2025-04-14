@@ -3,6 +3,8 @@
 - [Review `sqlmodel`](#review-sqlmodel)
 - [Review `FastAPI`](#review-fastapi)
 - [Helpful Links](#helpful-links)
+
+
 ## Review Backend Development General Concepts
 1. What is the relationship between a web framework (FastAPI) and a web server (Uvicorn)? Can you use a daily-life analogy to explain it?
 
@@ -105,8 +107,14 @@
     - tokenUrl: Frontend POST request sends to this address to generate a Bearer token.
     - Token types introduction: [Token types | Google Cloud](https://cloud.google.com/docs/authentication/token-types)
 
+## Review `React`
+1. What are key characteristics that differentiate a React hook `useAuth` from a utility function `isLoggedIn()`?
+    - Hooks can use other hooks AND utility functions.
+    - Utility functions can ONLY use other utility functions (no hooks allowed).
+    - Hooks must start with "use" prefix.
+    - Hooks can only be called inside React components or other hooks, not allowed in non-React contexts like `beforeLoad`
 
-
+2. Use localStorage to store user data is not a good practice. localStorage should only store access token.
 
 
 ## Helpful Links

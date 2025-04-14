@@ -126,7 +126,7 @@ export default function HomePage() {
                             >
                                 Sign Up
                             </Button>
-                            <Button
+                            {/* <Button
                                 variant='surface' 
                                 colorPalette="teal"
                                 size={{ base: 'lg', md: '2xl' }}
@@ -136,7 +136,7 @@ export default function HomePage() {
                                     <LuLockKeyhole />
                                 </Icon>
                                 Staff Log In
-                            </Button>
+                            </Button> */}
                         </Stack>
                     </HeroHeader>
 

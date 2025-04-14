@@ -69,10 +69,12 @@ const LoginForm = () => {
 
         try {
             // Call `loginMutation` to actually send the login request to the backend.
-            await loginMutation.mutateAsync({
-                ...data,
-                loginType: 'client'
-            })
+            // await loginMutation.mutateAsync({
+            //     ...data,
+            //     loginType: 'client'
+            // })
+            await loginMutation.mutateAsync(data)
+
         } catch (error) {
             // `loginMutation` inside handles error, which displays the error by a toast
         }

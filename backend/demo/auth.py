@@ -24,19 +24,21 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     # Check if the requested scopes are allowed for the user's role
     ## Q: where should form_data.scopes come from?
     ## A: Frontend sets in login form
-    for scope in form_data.scopes:
-        if scope not in ROLE_SCOPES.get(user.role, []):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Not enough permissions. Scope '{scope}' not allowed for role '{user.role}'",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+    # for scope in form_data.scopes:
+    #     if scope not in ROLE_SCOPES.get(user.role, []):
+    #         raise HTTPException(
+    #             status_code=status.HTTP_401_UNAUTHORIZED,
+    #             detail=f"Not enough permissions. Scope '{scope}' not allowed for role '{user.role}'",
+    #             headers={"WWW-Authenticate": "Bearer"},
+    #         )
 
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.email}, 
-        role=user.role,
+        data={
+            "sub": user.email,
+            "scopes": ROLE_SCOPES.get(user.role, [])
+        }, 
         expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")

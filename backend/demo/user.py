@@ -11,7 +11,7 @@ async def read_users_me(current_user: User = Depends(get_current_user_with_scope
     """
     Notice that the dependency get_current_active_user returns a SQLAlchemy ORM object (User)
     but this endpoint returns a Pydantic model object (UserResponse)
-    FastAPI seems to automatically handle model conversion and translate database model supported by SQLAlchemy.
+    FastAPI automatically handles model conversion and translate database model supported by SQLAlchemy.
     """
     return current_user
 

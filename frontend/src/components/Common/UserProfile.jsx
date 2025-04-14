@@ -7,7 +7,7 @@ export const UserProfile = () => {
     const { user, logout } = useAuth()
 
 
-    const avatarSrc = `https://api.dicebear.com/9.x/thumbs/svg?seed=${user.email}`
+    const avatarSrc = `https://api.dicebear.com/9.x/thumbs/svg?seed=${user?.email}`
 
     return (
         <HStack gap="3" justify="space-between">
@@ -16,7 +16,7 @@ export const UserProfile = () => {
 
                 <Box>
                     <Text textStyle="sm" fontWeight="medium">
-                        {user.email}
+                        {user?.email}
                     </Text>
                 </Box>
             </HStack>

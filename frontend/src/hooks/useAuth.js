@@ -14,24 +14,24 @@ const loginUser = async (credentials) => {
 
     try {
         const params = new URLSearchParams();
-        // for (const key in credentials) {
-        //     params.append(key, credentials[key]);
-        // }
+        for (const key in credentials) {
+            params.append(key, credentials[key]);
+        }
 
-        // Map roles to their corresponding scopes
-        const scopeMap = {
-            'client': 'chat',
-            'staff': 'chat dashboard',
-            'admin': 'chat dashboard dashboard:admin'
-        };
+        // // Map roles to their corresponding scopes
+        // const scopeMap = {
+        //     'client': 'chat',
+        //     'staff': 'chat dashboard',
+        //     'admin': 'chat dashboard dashboard:admin'
+        // };
 
-        // Basic credentials
-        params.append('username', credentials.username);
-        params.append('password', credentials.password);
+        // // Basic credentials
+        // params.append('username', credentials.username);
+        // params.append('password', credentials.password);
         
-        // Add scopes based on role
-        const scope = scopeMap[credentials.role] || 'chat';  // Default to 'chat' if role not found
-        params.append('scope', scope);  // Note: using 'scope' (singular) as required by OAuth2
+        // // Add scopes based on role
+        // const scope = scopeMap[credentials.role] || 'chat';  // Default to 'chat' if role not found
+        // params.append('scope', scope);  // Note: using 'scope' (singular) as required by OAuth2
 
 
         // POST request goes to backend/demo/auth.py
@@ -88,92 +88,107 @@ const fetchUserProfile = async (token) => {
 const UsersService = {
     readUserMe: async () => {
         // return the user from localStorage if it exists
-        console.log("triggering UsersService.readUserMe...")
-        const user = localStorage.getItem("user")
-        console.log('user from localStorage:', user)
-        if (user) {
-            return JSON.parse(user)
+        // console.log("triggering UsersService.readUserMe...")
+        // const user = localStorage.getItem("user")
+        // console.log('user from localStorage:', user)
+        // if (user) {
+        //     return JSON.parse(user)
+        // }
+        // return null
+        try {
+            const token = localStorage.getItem("access_token")
+            const response = await axios.get(
+                `${API_URL}/users/me`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                }
+            );
+            console.log('user from UsersService.readUserMe:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error("Fetch user profile error: ", error);
+            throw error;
         }
-        return null
     }
 };
 
 /**
- * TODO: Comment off when access_token expiration is implemented!!!
- * Check if the user is logged in. Used to decide whether to fetch the current user's data (readUserMe)
+ * Utility function (NOT a hook)
+ * Check if the user is logged in (if token exists in localStorage). Used to direct users to the web pages.
  * @returns {boolean}
  * 
  * TODO: localStorage is a globally accessible object. Not a safe practice.
  *       Switch to HTTP-only cookies for tokens in production!
  */
-// const isLoggedIn = () => {
-//     return localStorage.getItem("access_token") !== null
-// }
+const isLoggedIn = () => {
+    return localStorage.getItem("access_token") !== null
+}
+
+const getUserRole = async () => {
+    if (!isLoggedIn()) {
+        return null
+    }
+
+    try {
+        const response = await UsersService.readUserMe()
+        return response?.role || null
+    } catch (error) {
+        console.error("Error getting user role:", error)
+        return null
+    }
+}
 
 
 /**
  * TODO: DELETE when access_token expiration is implemented!!!
  */
-const isLoggedIn = () => {
-    const token = localStorage.getItem("access_token");
-    const expiresAt = localStorage.getItem("expires_at");
+// const isLoggedIn = () => {
+//     const token = localStorage.getItem("access_token");
+//     const expiresAt = localStorage.getItem("expires_at");
     
-    if (!token || !expiresAt) {
-        return false;
-    }
+//     if (!token || !expiresAt) {
+//         return false;
+//     }
     
-    // Check if token has expired
-    const now = new Date().getTime();
-    if (now > parseInt(expiresAt)) {
-        // Token expired, clean up localStorage
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("expires_at");
-        localStorage.removeItem("user");
-        return false;
-    }
+//     // Check if token has expired
+//     const now = new Date().getTime();
+//     if (now > parseInt(expiresAt)) {
+//         // Token expired, clean up localStorage
+//         localStorage.removeItem("access_token");
+//         localStorage.removeItem("expires_at");
+//         localStorage.removeItem("user");
+//         return false;
+//     }
     
-    return true;
-}
+//     return true;
+// }
 
 
+
+/**
+ * React Hook that manages user authentication state and actions.
+ * 
+ * @returns {Object} An object containing:
+ *   - signUpMutation: A mutation for user registration.
+ *   - loginMutation: A mutation for user login.
+ *   - logout: A function to log out the user.
+ *   - user: The currently logged-in user's profile data.
+ *   - error: The error state for the authentication process.
+ */
 const useAuth = () => {
+    const { showSuccessToast, showErrorToast } = useCustomToast()
+    
     const [error, setError] = useState(null)
     const navigate = useNavigate()
+
+    /**
+     * Sign Up Process
+     */
+    // ONLY used for Sign Up process. Has nothing to do with useQuery()
     const queryClient = useQueryClient()
     
-    const { showSuccessToast, showErrorToast } = useCustomToast()
-
-
-    /**
-     * Fetch the currently logged-in user's data.
-     *  `queryKey`: Tthis query has a name "currentUser". Helps React Query track and update the data under this name.
-     *  `queryFn`: The actual API call (`UsersService.readUserMe`) that fetches user data.
-     *  `enabled`: This query ONLY runs if `isLoggedIn()` returns true (meaning there's an access token present).
-     * Data (`user`) will be `undefined` until the query completes. On success, `user` contains the current user's profile info.
-     */
-
-    // TODO: Comment off when u manage to make queryFn execute!!!
-    // const { data: user } = useQuery({
-    //     queryKey: ["currentUser"],
-    //     queryFn: UsersService.readUserMe,
-    //     enabled: isLoggedIn(),
-    // })
-
-    /**
-     * TODO: DELETE when u manage to make queryFn execute!!!
-     * Step 1. Attempts to get user from React Query
-     */
-    const { data: queryUser } = useQuery({
-        queryKey: ["currentUser"],
-        queryFn: UsersService.readUserMe,
-        enabled: isLoggedIn(),
-    })
-    // Step 2. Gets user from localStorage as fallback
-    const userFromStorage = isLoggedIn() 
-        ? JSON.parse(localStorage.getItem("user") || "null") 
-        : null;
-    // Step 3. Construct returned user object by using React Query data if available, falls back to localStorage
-    const user = queryUser || userFromStorage;
 
     /**
      * Mock implementation of user registration
@@ -247,6 +262,11 @@ const useAuth = () => {
             queryClient.invalidateQueries({ queryKey: ["users"] })
         },
     })
+
+    /**
+     * Log In Process
+     */
+
 
     // TODO: Comment off when backend is ready!!!
     /**
@@ -344,7 +364,7 @@ const useAuth = () => {
             const response = await loginUser({
                 username: data.email, // map email to username as OAuth2PasswordRequestForm requires username
                 password: data.password,
-                role: data.loginType,
+                // role: data.loginType,
             });
 
 
@@ -411,15 +431,55 @@ const useAuth = () => {
     })
 
     /**
+     * Log Out Process
      * Clears token and redirects to login page.
      */
     const logout = () => {
         // TODO: replace localStorage
         localStorage.removeItem("access_token")
-        localStorage.removeItem("expires_at")
-        localStorage.removeItem("user")
+        // localStorage.removeItem("expires_at")
+        // localStorage.removeItem("user")
         navigate({ to: "/" })
     }
+
+    /**
+     * Post-Login Process: Fetch the currently logged-in user's data.
+     */
+
+     /**
+     * Fetch the currently logged-in user's data.
+     *  `queryKey`: Tthis query has a name "currentUser". Helps React Query track and update the data under this name.
+     *  `queryFn`: The actual API call (`UsersService.readUserMe`) that fetches user data.
+     *  `enabled`: This query ONLY runs if `isLoggedIn()` returns true (meaning there's an access token present).
+     * Data (`user`) will be `undefined` until the query completes. On success, `user` contains the current user's profile info.
+     */
+
+    // TODO: Comment off when u manage to make queryFn execute!!!
+    // const { data: user } = useQuery({
+    //     queryKey: ["currentUser"],
+    //     queryFn: UsersService.readUserMe,
+    //     enabled: isLoggedIn(),
+    // })
+
+    /**
+     * what this function means:
+     * 1. enabled: this function only runs if user is logged in (has access token)
+     * 2. queryFn: useQuery calls UsersService.readUserMe to get user's profile data. Expects a Promise so needs async fcn.
+     * 3. queryKey: user's profile data is stored in React Query's cache under the name ["currentUser"]
+     * 4. data: queryUser: user's profile data is returned under the name "queryUser"
+     */
+    const { data: user } = useQuery({
+        queryKey: ["currentUser"],
+        queryFn: UsersService.readUserMe,
+        enabled: isLoggedIn(),
+    })
+    // Step 2. Gets user from localStorage as fallback
+    // const userFromStorage = isLoggedIn() 
+    //     ? JSON.parse(localStorage.getItem("user") || "null") 
+    //     : null;
+    // // Step 3. Construct returned user object by using React Query data if available, falls back to localStorage
+    // const user = queryUser || userFromStorage;
+    console.log('UserResponse from useQuery:', user);
 
     const isAdmin = () => {
         return user?.role === 'admin';
@@ -436,5 +496,5 @@ const useAuth = () => {
     }
 }
     
-export { isLoggedIn }
+export { isLoggedIn, getUserRole }
 export default useAuth
