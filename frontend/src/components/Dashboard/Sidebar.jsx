@@ -9,6 +9,7 @@ import {
     LuFileUp,
     LuGlobe,
     LuUsers,
+    LuMessageSquareText,
     LuCircleHelp,
     LuSettings,
 } from 'react-icons/lu'
@@ -20,7 +21,7 @@ import { SearchField } from '@/components/Common/SearchField'
 import { SidebarFooter } from '@/components/Common/SidebarFooter'
 
 export const Sidebar = (props) => {
-    const { isAdmin } = useAuth()
+    const { user, isLoadingUser } = useAuth()
 
     const DashboardContent = () => (
         <Stack gap="1">
@@ -35,12 +36,18 @@ export const Sidebar = (props) => {
             <SidebarLink href="/dashboard/uploader">
                 <LuFileUp /> Uploader
             </SidebarLink>
+
             
-            {isAdmin() && (
+            {!isLoadingUser && user?.role === "admin" && (
                 <SidebarLink href="/dashboard/admin">
                     <LuUsers /> Admin
                 </SidebarLink>
             )}
+
+            <SidebarLink href="/chat">
+                <LuMessageSquareText /> Chat
+            </SidebarLink>
+
         </Stack>
     )
 

@@ -342,22 +342,25 @@ const useAuth = () => {
     const loginMutation = useMutation({
         mutationFn: login,
 
-        onSuccess: async () => {
-            // Step 3: Invalidate currentUser info in React Query cache
-            queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+        onSuccess: () => {
+            // // Step 3: Invalidate currentUser info in React Query cache
+            // queryClient.invalidateQueries({ queryKey: ["currentUser"] });
 
-            // Step 4: Explicitly fetch newly logged-in user info from DB, store in cache
-            const newUserData = await queryClient.fetchQuery({
-                queryKey: ["currentUser"],
-                queryFn: UsersService.readUserMe,
-            });
+            // // Step 4: Explicitly fetch newly logged-in user info from DB, store in cache
+            // const newUserData = await queryClient.fetchQuery({
+            //     queryKey: ["currentUser"],
+            //     queryFn: UsersService.readUserMe,
+            // });
 
-            // Step 5: Redirect based on newly fetched user role
-            if (newUserData.role === 'client') {
-                navigate({ to: "/chat" });
-            } else {
-                navigate({ to: "/dashboard/index" });
-            }
+            // // Step 5: Redirect based on newly fetched user role
+            // if (newUserData.role === 'client') {
+            //     navigate({ to: "/chat" });
+            // } else {
+            //     navigate({ to: "/dashboard/index" });
+            // }
+
+            navigate({ to: "/chat" })
+
 
         },
 
@@ -405,7 +408,7 @@ const useAuth = () => {
      * 3. queryKey: user's profile data is stored in React Query's cache under the name ["currentUser"]
      * 4. data: queryUser: user's profile data is returned under the name "queryUser"
      */
-    const { data: user } = useQuery({
+    const { data: user, isLoading: isLoadingUser } = useQuery({
         queryKey: ["currentUser"],
         queryFn: UsersService.readUserMe,
         enabled: isLoggedIn(),
@@ -427,6 +430,7 @@ const useAuth = () => {
         loginMutation,
         logout,
         user, // currently logged-in user from useQuery()
+        isLoadingUser,
         error,
         resetError: () => setError(null),
         isAdmin,

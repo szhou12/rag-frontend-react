@@ -81,18 +81,20 @@ export default function IndexPage() {
     return (
         <Flex
             direction="column"
-            height="100vh"
-            overflow="hidden" // disable scrolling so footer fixed at bottom
+            flex="1"
+            height="100%" // Use height 100% to fill parent instead of 100vh
+            width="100%" // Ensure full width
+            overflow="hidden" // Prevent overall scrolling so footer fixed at bottom
         >
 
             <Box 
                 flex="1" 
-                overflow="overflow" // enable scrolling for this box only
-                pt={{ base: "16", md: "20" }}  // Account for navbar height
-                pb={{ base: "24", md: "32" }}  // Account for navbar height
+                overflow="auto" // enable scrolling for this box only
+                pt={{ base: "8", md: "12" }}  // Account for navbar height
+                pb={{ base: "8", md: "12" }}  // Account for navbar height
             >
                 <Container maxW="4xl">
-                    <Stack gap="10">
+                    <Stack gap="8">
                         <Header />
 
                         <PredefinedPrompts
@@ -102,7 +104,7 @@ export default function IndexPage() {
                 </Container>
             </Box>
 
-            <Box flex="0">
+            <Box flex="0" width="100%">
                 <ChatTextarea
                     isNewChat={true}
                     onNewChat={handlePromptSelect}

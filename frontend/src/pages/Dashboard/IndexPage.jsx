@@ -13,7 +13,9 @@ import {
 	FcConferenceCall,
 	FcFinePrint,
 	FcGlobe,
+	FcSms,
 } from 'react-icons/fc'
+import { BsFillChatRightDotsFill } from "react-icons/bs"
 import { Link } from '@tanstack/react-router'
 import useAuth from '@/hooks/useAuth'
 
@@ -63,7 +65,7 @@ const LinkCard = ({ heading, description, icon, href }) => {
 }
 
 function CardTable() {
-	const { isAdmin } = useAuth()
+	const { user, isLoadingUser } = useAuth()
 
 	return (
 		<>
@@ -86,8 +88,8 @@ function CardTable() {
 					description={'Upload file documents to the DB.'}
 					href={'/dashboard/uploader'}
 				/>
-				
-				{isAdmin() && (
+
+				{!isLoadingUser && user?.role === "admin" && (
 					<LinkCard
 						heading={'Admin'}
 						icon={<Icon as={FcConferenceCall} w={10} h={10} />}
@@ -95,6 +97,13 @@ function CardTable() {
 						href={'/dashboard/admin'}
 					/>
 				)}
+
+				<LinkCard
+					heading={'Chat'}
+					icon={<Icon as={FcSms} w={10} h={10} />}
+					description={'Access AI Chat Page.'}
+					href={'/chat'}
+				/>
 			</Flex>
 		</>
 	)

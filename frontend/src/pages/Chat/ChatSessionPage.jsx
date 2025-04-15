@@ -54,22 +54,22 @@ export default function ChatSessionPage() {
     return (
         <Flex
             direction="column"
-            height="100vh"
-            overflow="hidden"
+            flex="1"
+            height="100%" // Use height 100% to fill parent instead of 100vh
+            width="100%" // Ensure full width
+            overflow="hidden" // Prevent overall scrolling
         >
 
             <Box 
                 flex="1" 
                 overflow="auto"
-                pt={{ base: "16", md: "20" }}  // Account for navbar height
-                pb={{ base: "24", md: "32" }}  // Account for navbar height
+                pt={{ base: "8", md: "12" }}  // Account for navbar height
+                pb={{ base: "8", md: "12" }}  // Account for navbar height
             >
                 <Conversation data={chats} />
             </Box>
 
-            <Box
-                flex="0"
-            >
+            <Box flex="0" width="100%">
                 <ChatTextarea
                     isNewChat={false}
                     onSendMessage={handleSendMessage}
