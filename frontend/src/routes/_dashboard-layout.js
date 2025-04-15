@@ -6,17 +6,19 @@ import { DashboardLayout } from "@/layouts/Dashboard/DashboardLayout"
 export const Route = createFileRoute("/_dashboard")({
     component: DashboardLayout,
 
-    // TODO: add RBAC check here
     // NOTE: CANNOT use useAuth hook (user) in beforeLoad fcn
     // bc beforeLoad is not a React component or hook, rather a route loader
     // that runs before the component renders.
     beforeLoad: async () => {
+        console.log("Dashboard layout beforeLoad executing");
+
         if (!isLoggedIn()) {
             throw redirect({
-                to: "/login-staff",
+                to: "/login",
             })
         }
 
+        // Role check: only staff and admin can access this route
         const role = await getUserRole()
         if (!role || role === "client") {
             throw redirect({

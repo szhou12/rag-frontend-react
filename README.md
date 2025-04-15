@@ -64,6 +64,21 @@ src/
 ├── App.jsx               # Main app component
 ├── main.jsx              # Entry point
 └── theme.jsx             # design theme
+
+
+
+/src
+├── main.py
+├── api/
+│   ├── __init__.py
+│   ├── deps.py          # for shared Depends()
+│   ├── main.py
+│   └── routes/          # API routes
+│         ├── login.py
+│         ├── chat.py          # RAG-based chat
+│         ├── users.py         # User management CRUD (admin ONLY)
+│         ├── scraper.py       # Web scraping CRUD
+│         └── uploader.py      # File upload CRUD
 ```
 
 ## Chakra UI V3 Code Snippets

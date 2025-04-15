@@ -283,115 +283,53 @@ const useAuth = () => {
     //     localStorage.setItem("access_token", response.access_token)
     // }
 
-    /**
-     * TODO: DELETE when backend is ready!!!
-     * Simulates a successful login API call for frontend testing
-     */
-    // const login = async (data) => {
-    //     console.log('login attempt:', data);
-
-    //     // Login type: client, staff, admin
-
-    //     // Check login endpoint type (regular login vs staff login)
-    //     let role = data.loginType === 'staff' ? (data.isAdmin ? 'admin' : 'staff') : 'client';
-
-    //     // Simulate network delay
-    //     await new Promise(resolve => setTimeout(resolve, 800));
-
-    //     // Set expiration time (e.g., 30s from now)
-    //     const expiresAt = new Date().getTime() + (30 * 1000);
-
-    //     if (data.email === "abc@email.com" && data.password === "11111111") {
-    //         const mockResponse = {
-    //             access_token: 'mock-jwt-token-client',
-    //             user: {
-    //                 id: '001',
-    //                 email: data.email,
-    //                 name: 'Test client',
-    //                 role: 'client'
-    //             }
-    //         };
-    //         // Store token in localStorage
-    //         localStorage.setItem("access_token", mockResponse.access_token);
-    //         localStorage.setItem("expires_at", expiresAt.toString());
-    //         // Optionally store user data
-    //         localStorage.setItem("user", JSON.stringify(mockResponse.user));
-    //         return mockResponse;
-    //     } 
-    //     else if (data.email === "staff@email.com" && data.password === "11111111") {
-    //         const mockResponse = {
-    //             access_token: 'mock-jwt-token-staff',
-    //             user: {
-    //                 id: '002',
-    //                 email: data.email,
-    //                 name: 'Test Staff',
-    //                 role: role
-    //             }
-    //         };
-
-    //         localStorage.setItem("access_token", mockResponse.access_token);
-    //         localStorage.setItem("expires_at", expiresAt.toString());
-    //         localStorage.setItem("user", JSON.stringify(mockResponse.user));
-    //         return mockResponse;
-    //     }
-    //     else {
-    //         // For testing different credentials, still return success
-    //         // In a real implementation, you might want to throw an error for invalid credentials
-    //         const mockResponse = {
-    //             access_token: `mock-token-for-${role}-${data.email}`,
-    //             user: {
-    //                 id: Math.random().toString(36).substring(2, 15),
-    //                 email: data.email,
-    //                 name: `Generic ${role.charAt(0).toUpperCase() + role.slice(1)}`,
-    //                 role: role
-    //             }
-    //         };
-    //         localStorage.setItem("access_token", mockResponse.access_token);
-    //         localStorage.setItem("expires_at", expiresAt.toString());
-    //         localStorage.setItem("user", JSON.stringify(mockResponse.user));
-
-    //         return mockResponse;
-    //     }
-
-    //     // Uncomment to simulate login failure for testing error handling
-    //     // throw new Error('Invalid credentials');
-    // }
-
     const login = async (data) => {
         // LoginForm passed in data = { email, password, role }
 
-        try {
-            const response = await loginUser({
-                username: data.email, // map email to username as OAuth2PasswordRequestForm requires username
-                password: data.password,
-                // role: data.loginType,
-            });
+        // try {
+        //     // TODO: replace with LoginService.loginAccessToken by OpenAPI
+        //     const response = await loginUser({
+        //         username: data.email, // map email to username as OAuth2PasswordRequestForm requires username
+        //         password: data.password,
+        //     });
 
 
-            if (response?.access_token) {
-                // Store token
-                localStorage.setItem("access_token", response.access_token);
+        //     if (response?.access_token) {
+        //         // Store token
+        //         localStorage.setItem("access_token", response.access_token);
 
-                // Fetch user profile using the token
-                const userProfile = await fetchUserProfile(response.access_token);
+        //         // Fetch user profile using the token
+        //         const userProfile = await fetchUserProfile(response.access_token);
 
-                console.log('userProfile:', userProfile);
+        //         console.log('userProfile:', userProfile);
 
-                const expiresAt = new Date().getTime() + (15 * 60 * 1000); // 15mins
-                localStorage.setItem("expires_at", expiresAt.toString());
+        //         const expiresAt = new Date().getTime() + (15 * 60 * 1000); // 15mins
+        //         localStorage.setItem("expires_at", expiresAt.toString());
                 
-                // Store user data
-                localStorage.setItem("user", JSON.stringify(userProfile));
+        //         // Store user data
+        //         localStorage.setItem("user", JSON.stringify(userProfile));
 
-                return {
-                    access_token: response.access_token,
-                    user: userProfile
-                };
-            }
-        } catch (error) {
-            console.error("Login error: ", error);
-            throw error;
-        }
+        //         return {
+        //             access_token: response.access_token,
+        //             user: userProfile
+        //         };
+        //     }
+        // } catch (error) {
+        //     console.error("Login error: ", error);
+        //     throw error;
+        // }
+
+        
+        // Step 1: POST request to authenticate input email & password, return JWT token
+        // TODO: replace with LoginService.loginAccessToken by OpenAPI
+         const response = await loginUser({
+            username: data.email, // map email to username as OAuth2PasswordRequestForm requires username
+            password: data.password,
+        });
+
+        // Step 2: Store JWT token in localStorage
+        localStorage.setItem("access_token", response.access_token);
+
     }
 
 
@@ -404,24 +342,23 @@ const useAuth = () => {
     const loginMutation = useMutation({
         mutationFn: login,
 
-        onSuccess: (data) => {
-            // Get user role from the response or from localStorage
-            const user = data.user || JSON.parse(localStorage.getItem("user"));
-            const role = user?.role || 'client';
+        onSuccess: async () => {
+            // Step 3: Invalidate currentUser info in React Query cache
+            queryClient.invalidateQueries({ queryKey: ["currentUser"] });
 
-            console.log('loginMutation onSuccess user:', user);
-            console.log('loginMutation onSuccess role:', role);
+            // Step 4: Explicitly fetch newly logged-in user info from DB, store in cache
+            const newUserData = await queryClient.fetchQuery({
+                queryKey: ["currentUser"],
+                queryFn: UsersService.readUserMe,
+            });
 
-            console.log('Access Token:', localStorage.getItem('access_token'));
-            console.log('Expires At:', localStorage.getItem('expires_at'));
-
-            
-            // Redirect based on role
-            if (role === 'client') {
+            // Step 5: Redirect based on newly fetched user role
+            if (newUserData.role === 'client') {
                 navigate({ to: "/chat" });
             } else {
                 navigate({ to: "/dashboard/index" });
             }
+
         },
 
         // err: <ApiError>
