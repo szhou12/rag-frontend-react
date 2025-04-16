@@ -17,4 +17,5 @@ dependencies = [
     "alembic>=1.15.2", # DB version control and migration
     "sqlalchemy>=2.0.40",
     "uvicorn>=0.34.0",
+    "python-multipart>=0.0.20",
 ]

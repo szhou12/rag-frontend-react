@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-
+from typing import Optional
 from pydantic import EmailStr
 from sqlmodel import SQLModel, Field, Relationship
 
@@ -86,3 +86,51 @@ class UsersPublic(SQLModel):
     data: list[UserPublic]
     count: int
 
+
+### Uploads
+# Shared properties
+class UploadBase(SQLModel):
+    filename: str = Field(min_length=1, max_length=255)
+    author: str = Field(min_length=1, max_length=255)
+    language: str = Field(min_length=1, max_length=5)
+
+
+## Incoming API Schemas
+# Properties to receive on upload creation from Frontend
+class UploadCreate(UploadBase):
+    pass
+
+# Properties to recieve on upload update
+class UploadUpdate(UploadBase):
+    pass
+
+
+## Database model stored in DB
+# TODO: adjust
+class Upload(UploadBase, table=True):
+    """
+    fields:
+        - id: uuid.UUID
+        - filename: str
+        - author: str
+        - language: str
+        - date: datetime
+        - filepath: Optional[str]
+        - size_mb: Optional[float]
+    """
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    date: datetime = Field(default_factory=datetime.now) # date uploaded
+    filepath: Optional[str] = Field(default=None)
+    size_mb: Optional[float] = Field(default=None)
+
+## Returning API Schemas
+# Properties to return via API, id is always required
+class UploadPublic(UploadBase):
+    id: uuid.UUID
+    filepath: Optional[str] = None
+    size_mb: Optional[float] = None
+    date: Optional[datetime] = None
+
+class UploadsPublic(SQLModel):
+    data: list[UploadPublic]
+    count: int

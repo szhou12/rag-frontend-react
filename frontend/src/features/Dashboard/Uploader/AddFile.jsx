@@ -200,40 +200,47 @@ const AddFile = () => {
                     />
                 </Field>
 
-                <HStack gap={4} w="full">
+                <Field
+                    required
+                    invalid={!!errors.filename}
+                    errorText={errors.filename?.message}
+                    label="Filename"
+                >
+                    <Input
+                        id="filename"
+                        type="text"
+                        {...register("filename", {
+                            required: "Filename is required",
+                        })}
+                        _focusVisible={{
+                            borderColor: "ui.main",
+                            boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                        }}
+                    />
+                </Field>
 
-                    <Field
-                        invalid={!!errors.filename}
-                        errorText={errors.filename?.message}
-                        label="Filename"
-                    >
-                        <Input
-                            id="filename"
-                            type="text"
-                            {...register("filename")}
-                            _focusVisible={{
-                                borderColor: "ui.main",
-                                boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
-                            }}
-                        />
-                    </Field>
+                <Field
+                    required
+                    invalid={!!errors.author}
+                    errorText={errors.author?.message}
+                    label="Author(s)"
+                >
+                    <Input
+                        id="author"
+                        type="text"
+                        {...register("author", {
+                            required: "Author(s) is required",
+                        })}
+                        _focusVisible={{
+                            borderColor: "ui.main",
+                            boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                        }}
+                    />
+                </Field>
 
-                    <Field
-                        invalid={!!errors.author}
-                        errorText={errors.author?.message}
-                        label="Author(s)"
-                    >
-                        <Input
-                            id="author"
-                            type="text"
-                            {...register("author")}
-                            _focusVisible={{
-                                borderColor: "ui.main",
-                                boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
-                            }}
-                        />
-                    </Field>
-                </HStack>
+                {/* <HStack gap={4} w="full">
+                
+                </HStack> */}
             </Stack>
 
         </DataFormLayout>

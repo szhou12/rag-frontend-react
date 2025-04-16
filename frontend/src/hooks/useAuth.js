@@ -284,41 +284,7 @@ const useAuth = () => {
     // }
 
     const login = async (data) => {
-        // LoginForm passed in data = { email, password, role }
-
-        // try {
-        //     // TODO: replace with LoginService.loginAccessToken by OpenAPI
-        //     const response = await loginUser({
-        //         username: data.email, // map email to username as OAuth2PasswordRequestForm requires username
-        //         password: data.password,
-        //     });
-
-
-        //     if (response?.access_token) {
-        //         // Store token
-        //         localStorage.setItem("access_token", response.access_token);
-
-        //         // Fetch user profile using the token
-        //         const userProfile = await fetchUserProfile(response.access_token);
-
-        //         console.log('userProfile:', userProfile);
-
-        //         const expiresAt = new Date().getTime() + (15 * 60 * 1000); // 15mins
-        //         localStorage.setItem("expires_at", expiresAt.toString());
-                
-        //         // Store user data
-        //         localStorage.setItem("user", JSON.stringify(userProfile));
-
-        //         return {
-        //             access_token: response.access_token,
-        //             user: userProfile
-        //         };
-        //     }
-        // } catch (error) {
-        //     console.error("Login error: ", error);
-        //     throw error;
-        // }
-
+        // LoginForm passed in data = { email, password }
         
         // Step 1: POST request to authenticate input email & password, return JWT token
         // TODO: replace with LoginService.loginAccessToken by OpenAPI
@@ -359,6 +325,7 @@ const useAuth = () => {
             //     navigate({ to: "/dashboard/index" });
             // }
 
+            // Step 3: Once login succeeds, navigate to Chat page for all roles
             navigate({ to: "/chat" })
 
 
