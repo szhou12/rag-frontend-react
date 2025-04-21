@@ -45,9 +45,9 @@ def get_user_by_email(*, session: Session, email: str) -> User | None:
     Returns:
         User | None: The first matched user by email, or None if no match is found
     """
-    sql = select(User).where(User.email == email)
-    first_matched_user = session.exec(sql).first()
-    return first_matched_user
+    sql_stmt = select(User).where(User.email == email)
+    session_user = session.exec(sql_stmt).first()
+    return session_user
 
 def authenticate(*, session: Session, email: str, password: str) -> User | None:
     """

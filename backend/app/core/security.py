@@ -30,15 +30,16 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
     Args:
         data (dict): The payload data to include in the JWT. Common keys include:
-            - 'sub': The subject of the token, typically a user ID. Standard keyword for JWT, aiming to identify the principal that is the subject of the JWT. It's a string or a unique identifier for the user.
-            - 'roles': A list of roles associated with the user (e.g., ['client'], ['staff', 'admin'])
+        - 'sub': The subject of the token, typically a user ID. Standard keyword for JWT, aiming to identify the principal that is the subject of the JWT. It's a string or a unique identifier for the user.
+        - 'scopes': A list of roles associated with the user (e.g., ['client'], ['staff', 'admin'])
+        - e.g. data={ "sub": user.email, "scopes": [user.role] }
+
         expires_delta (Optional[timedelta]): Optional expiration time for the token. Defaults to 15 minutes if not provided.
 
     Returns:
         str: The encoded JWT string.
-
     Example:
-        token = create_access_token({"sub": "user_id"}, timedelta(minutes=30))
+        token = create_access_token(data={ "sub": user.email, "scopes": [user.role] }, timedelta(minutes=30))
     """
     to_encode = data.copy()
 

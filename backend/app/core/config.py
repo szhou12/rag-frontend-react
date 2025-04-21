@@ -61,6 +61,12 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8 # token expires in 8 days = 60 minutes * 24 hours * 8 days
     FRONTEND_HOST: str = "http://localhost:5173" # Frontend host URL
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
+    
+    ROLE_SCOPES = {
+        "client": ["chat"],
+        "staff": ["chat", "dashboard"],
+        "admin": ["chat", "dashboard", "dashboard:admin"]
+    }
 
     # CORS Configuration
     ## Specify which domains are allowed to access the backend

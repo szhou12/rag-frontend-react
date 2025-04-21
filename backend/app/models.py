@@ -1,17 +1,18 @@
 import uuid
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 from pydantic import EmailStr
 from sqlmodel import SQLModel, Field, Relationship
 
 # JSON payload containing access token
 class Token(SQLModel):
     access_token: str
-    token_type: str = "Bearer"
+    token_type: str = "bearer"
 
 # Contents of JWT token
 class TokenPayload(SQLModel):
     sub: str | None = None
+    scopes: List[str] = []
 
 class NewPassword(SQLModel):
     token: str

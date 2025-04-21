@@ -35,6 +35,7 @@ const loginUser = async (credentials) => {
 
 
         // POST request goes to backend/demo/auth.py
+        // TODO: change to /login/token for formal endpoint
         const response = await axios.post(
             `${API_URL}/auth/token`,
             params,

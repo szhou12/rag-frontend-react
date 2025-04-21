@@ -2,7 +2,7 @@ from collections.abc import Generator
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, SecurityScopes
 import jwt
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
@@ -38,43 +38,82 @@ SessionDep = Annotated[Session, Depends(get_db)]
 # Workflow: client sends a POST request to tokenUrl -> backend generates a encoded JWT sent back to client -> client's future requests will have Authorization header with this token included inside for oauth2_scheme to extract.
 oauth2_scheme = OAuth2PasswordBearer(
     # URL endpoint where the token is expected from
-    tokenUrl=f"{settings.API_V1_STR}/login/access-token"
+    tokenUrl=f"{settings.API_V1_STR}/login/token",
+    scopes={
+        "chat": "Access chat",
+        "dashboard": "Access general dashboard",
+        "dashboard:admin": "Access admin dashboard page"
+    },
 )
 
 TokenDep = Annotated[str, Depends(oauth2_scheme)]
 
 
-def get_current_user(session: SessionDep, token: TokenDep) -> User:
-    """
-    Args:
-        session: a Session type that depends on get_db() to generate such a Session object.
-        token: a string type that depends on oauth2_scheme to generate such a token. 
 
-        - oauth2_scheme follows OAuth2.0 protocol to validate user's identity through (username, password) to generate a Bearer token.
-        - The actual generation process is user POST request sends (username, password) to tokenUrl, under which sits a function that validates identity, generates and returns a JWT token to user.
-    Returns:
+async def get_current_user_with_scopes(
+        security_scopes: SecurityScopes,
+        session: SessionDep,
+        token: TokenDep,
+) -> User:
     """
+    Decode JWT token and verify user has required scopes.
+
+    This dependency function decodes the JWT access token, checks user existence, and verifies the user has the required scopes for the endpoint.
+
+    Args:
+        security_scopes (SecurityScopes): Scopes required by the endpoint
+        session (SessionDep): Database session dependency
+        token (TokenDep): JWT token from request header
+
+    Returns:
+        User: User ORM in DB
+
+    Raises:
+        HTTPException: 
+            - 401 if token is invalid or missing required scopes
+            - 403 if credentials cannot be validated
+            - 404 if user not found
+            - 400 if user is inactive
+    """
+    # Create authentication requirements message
+    if security_scopes.scopes:
+        authenticate_value = f'Bearer scope="{" ".join(security_scopes.scopes)}"'
+    else:
+        authenticate_value = "Bearer"
+
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": authenticate_value},
+    )
+
     try:
+        # Decode and validate JWT token
         payload = jwt.decode(
-            token,
-            settings.SECRET_KEY,
-            algorithms=[security.JWT_ALGORITHM]
+            token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
         )
         token_data = TokenPayload(**payload)
-    except (InvalidTokenError, ValidationError):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate credentials"
-        )
-    user = session.get(User, token_data.sub)
 
+        # Check if every scope required by an endpoint exists in user's token
+        # security_scopes.scopes = scopes required by the endpoint
+        # e.g. def get_admin( user: User = Security(get_current_user_with_scopes, scopes=["dashboard:admin"]) )
+        # meaning: this endpoint requires user has "dashboard:admin" scope in token in order to access.
+        # token_data.scopes = allowed scope list in user's token
+        for scope in security_scopes.scopes:
+            if scope not in token_data.scopes:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Not enough permissions. Required scope: {scope}",
+                    headers={"WWW-Authenticate": authenticate_value},
+                )
+    except (InvalidTokenError, ValidationError):
+        raise credentials_exception
+    
+    # Get user from DB
+    user = session.get(User, token_data.sub)
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
+        raise HTTPException(status_code=404, detail="User not found")
     
     return user
 
-
-CurrentUser = Annotated[User, Depends(get_current_user)]
+CurrentUser = Annotated[User, Depends(get_current_user_with_scopes)]
