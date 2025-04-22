@@ -1,9 +1,11 @@
+import uuid
 from typing import Optional, List
 from datetime import datetime, timedelta, timezone
 import bcrypt
 
 from fastapi import Depends, HTTPException, status, Security
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, SecurityScopes
+import logging
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import declarative_base
@@ -12,8 +14,10 @@ from sqlalchemy.orm import sessionmaker, Session
 import jwt
 from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
+from sqlmodel import SQLModel, Field
 
-
+logger = logging.getLogger('uvicorn.error')
+logger.setLevel(logging.DEBUG)
 
 
 ##### models.py #####
@@ -56,6 +60,57 @@ class UserResponse(BaseModel):
 class UserInDB(UserResponse):
     # private info
     hashed_password: str
+
+
+# Upload DB model & schema
+# Shared properties
+class UploadBase(SQLModel):
+    filename: str = Field(min_length=1, max_length=255)
+    author: str = Field(min_length=1, max_length=255)
+    language: str = Field(min_length=1, max_length=5)
+
+
+## Incoming API Schemas
+# Properties to receive on upload creation from Frontend
+class UploadCreate(UploadBase):
+    pass
+
+# Properties to recieve on upload update
+class UploadUpdate(UploadBase):
+    pass
+
+
+## Database model stored in DB
+# TODO: adjust
+class Upload(UploadBase, table=True):
+    """
+    fields:
+        - id: uuid.UUID
+        - filename: str
+        - author: str
+        - language: str
+        - date: datetime
+        - filepath: Optional[str]
+        - size_mb: Optional[float]
+    """
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    date: datetime = Field(default_factory=datetime.now) # date uploaded
+    # filepath: Optional[str] = Field(default=None) # TODO: add later
+    # size_mb: Optional[float] = Field(default=None) # TODO: add later
+
+## Returning API Schemas
+# Properties to return via API, id is always required
+class UploadPublic(UploadBase):
+    id: uuid.UUID
+    date: Optional[datetime] = None
+    # filepath: Optional[str] = None # TODO: add later
+    # size_mb: Optional[float] = None # TODO: add later
+    
+
+class UploadsPublic(SQLModel):
+    data: list[UploadPublic]
+    count: int
+
 
 
 ##### database.py #####
@@ -210,7 +265,10 @@ async def get_current_user_with_scopes(
 
     # Decode JWT token
     try:
+        # jwt.decode() will check for expiration time "exp" in token.
+        # if expired, will trigger InvalidTokenError
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
@@ -221,7 +279,8 @@ async def get_current_user_with_scopes(
         #     "email": "test@test.com",
         #     "scopes": ["chat", "dashboard"]
         # }
-    except InvalidTokenError:
+    except InvalidTokenError as e:
+        logger.debug(f"Invalid token: {str(e)}")
         raise credentials_exception
     
     # Get user from DB

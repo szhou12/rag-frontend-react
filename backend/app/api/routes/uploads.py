@@ -8,11 +8,11 @@ from app.api.deps import CurrentUser, SessionDep
 from app.models import Upload, UploadCreate, UploadUpdate, UploadPublic, UploadsPublic
 
 
-# prefix: if you defined a route @router.get("/"), the full path becomes /uploads/
-# 	Adds a label in the OpenAPI docs to group these endpoints under a section called "uploads" — helps keep your API documentation clean and organized.
+# prefix: if you defined a route @router.get("/"), the full path becomes /uploader/
+# 	Adds a label in the OpenAPI docs to group these endpoints under a section called "uploader" — helps keep your API documentation clean and organized.
 router = APIRouter(
-    prefix="/uploads",
-    tags=["uploads"],
+    prefix="/uploader",
+    tags=["uploader"],
 )
 
 @router.get("/", response_model=UploadsPublic)

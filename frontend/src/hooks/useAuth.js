@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
+import { jwtDecode } from "jwt-decode"
 
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
@@ -98,6 +99,7 @@ const UsersService = {
         // return null
         try {
             const token = localStorage.getItem("access_token")
+
             const response = await axios.get(
                 `${API_URL}/users/me`,
                 {
@@ -124,7 +126,25 @@ const UsersService = {
  *       Switch to HTTP-only cookies for tokens in production!
  */
 const isLoggedIn = () => {
-    return localStorage.getItem("access_token") !== null
+    const token = localStorage.getItem("access_token")
+    if (!token) return false
+    
+    try {
+        const decodedToken = jwtDecode(token)
+        const currentTime = Date.now() / 1000
+
+        if (decodedToken.exp < currentTime) {
+            // token expired
+            localStorage.removeItem("access_token")
+            return false
+        }
+
+        return true
+    } catch (error) {
+        localStorage.removeItem("access_token");
+        return false
+    }
+        
 }
 
 const getUserRole = async () => {

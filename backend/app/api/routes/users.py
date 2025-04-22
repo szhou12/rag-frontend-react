@@ -4,15 +4,24 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import col, delete, func, select
 
+from app.api.deps import (
+    get_current_user_with_scopes,
+    CurrentUser,
+    SessionDep,
+)
+from app.models import (
+    User,
+)
+
 router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("/users/me", response_model=UserResponse)
-async def read_users_me(current_user: User = Depends(get_current_user_with_scopes)):
+async def read_user_me(current_user: CurrentUser) -> Any:
     """
-    Notice that the dependency get_current_active_user returns a SQLAlchemy ORM object (User)
+    Notice that the dependency CurrentUser returns a DB ORM object (User)
     but this endpoint returns a Pydantic model object (UserResponse)
-    FastAPI automatically handles model conversion and translate database model supported by SQLAlchemy.
+    FastAPI automatically handles model conversion and translate DB model to Pydantic model.
     """
     return current_user
 

@@ -82,6 +82,9 @@ class UpdatePassword(SQLModel):
 # Properties to send to API, id is always required
 class UserPublic(UserBase):
     id: uuid.UUID
+    username: str
+    email: EmailStr
+    role: str
 
 class UsersPublic(SQLModel):
     data: list[UserPublic]

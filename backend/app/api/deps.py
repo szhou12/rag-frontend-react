@@ -96,7 +96,7 @@ async def get_current_user_with_scopes(
 
         # Check if every scope required by an endpoint exists in user's token
         # security_scopes.scopes = scopes required by the endpoint
-        # e.g. def get_admin( user: User = Security(get_current_user_with_scopes, scopes=["dashboard:admin"]) )
+        # e.g. def add_user( user: User = Security(get_current_user_with_scopes, scopes=["dashboard:admin"]) )
         # meaning: this endpoint requires user has "dashboard:admin" scope in token in order to access.
         # token_data.scopes = allowed scope list in user's token
         for scope in security_scopes.scopes:
