@@ -5,7 +5,13 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Upload, UploadCreate, UploadUpdate, UploadPublic, UploadsPublic
+from app.models import (
+    Upload, 
+    UploadCreate, 
+    UploadUpdate, 
+    UploadPublic, 
+    UploadsPublic,
+)
 
 
 # prefix: if you defined a route @router.get("/"), the full path becomes /uploader/
@@ -25,4 +31,5 @@ def read_uploads(
     """
     Retrieve uploads.
     """
+    pass
     

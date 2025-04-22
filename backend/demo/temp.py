@@ -1,13 +1,14 @@
 import uuid
-from typing import Optional, List
+from typing import Optional, List, Annotated
 from datetime import datetime, timedelta, timezone
 import bcrypt
 
+from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException, status, Security
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, SecurityScopes
 import logging
 from pydantic import BaseModel
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, Float, DateTime
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker, Session
@@ -32,6 +33,17 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     role = Column(String)
 
+
+class Upload(Base):
+    __tablename__ = "uploads"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String(255), nullable=False)
+    author = Column(String(255), nullable=False)
+    language = Column(String(5), nullable=False)
+    date = Column(DateTime, default=datetime.now)  # date uploaded
+    # filepath = Column(String, nullable=True)
+    # size_mb = Column(Float, nullable=True)
 
 ##### schemas.py #####
 class Token(BaseModel):
@@ -62,55 +74,16 @@ class UserInDB(UserResponse):
     hashed_password: str
 
 
-# Upload DB model & schema
-# Shared properties
-class UploadBase(SQLModel):
-    filename: str = Field(min_length=1, max_length=255)
-    author: str = Field(min_length=1, max_length=255)
-    language: str = Field(min_length=1, max_length=5)
+class UploadCreate(BaseModel):
+    filename: str
+    author: str
+    language: str
 
-
-## Incoming API Schemas
-# Properties to receive on upload creation from Frontend
-class UploadCreate(UploadBase):
-    pass
-
-# Properties to recieve on upload update
-class UploadUpdate(UploadBase):
-    pass
-
-
-## Database model stored in DB
-# TODO: adjust
-class Upload(UploadBase, table=True):
-    """
-    fields:
-        - id: uuid.UUID
-        - filename: str
-        - author: str
-        - language: str
-        - date: datetime
-        - filepath: Optional[str]
-        - size_mb: Optional[float]
-    """
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    date: datetime = Field(default_factory=datetime.now) # date uploaded
-    # filepath: Optional[str] = Field(default=None) # TODO: add later
-    # size_mb: Optional[float] = Field(default=None) # TODO: add later
-
-## Returning API Schemas
-# Properties to return via API, id is always required
-class UploadPublic(UploadBase):
-    id: uuid.UUID
-    date: Optional[datetime] = None
-    # filepath: Optional[str] = None # TODO: add later
-    # size_mb: Optional[float] = None # TODO: add later
-    
-
-class UploadsPublic(SQLModel):
-    data: list[UploadPublic]
-    count: int
-
+class UploadPublic(BaseModel):
+    filename: str
+    author: str
+    language: str
+    date: datetime
 
 
 ##### database.py #####
@@ -312,3 +285,7 @@ def get_staff_user(user: User = Security(get_current_user_with_scopes, scopes=["
 # Only users with "dashboard:admin" scope can access (admin only)
 def get_admin_user(user: User = Security(get_current_user_with_scopes, scopes=["dashboard:admin"])):
     return user
+
+
+CurrentUser = Annotated[User, Depends(get_current_user_with_scopes)]
+SessionDep = Annotated[Session, Depends(get_db)]

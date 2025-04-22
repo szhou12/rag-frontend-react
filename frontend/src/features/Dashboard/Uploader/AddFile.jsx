@@ -24,6 +24,45 @@ import { handleError } from "@/utils"
 import { languages } from "@/constants/languages"
 import { DataFormLayout } from "@/layouts/Dashboard/DataFormLayout"
 
+// TODO: DELETE when frontend OpenAPI auto-generation is ready!!!
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8001';
+
+const createUpload = async (formData) => {
+    try {
+        // Extract only the metadata fields, excluding the file
+        const { language, filename, author } = formData
+
+        
+        const fileData = {
+            language,
+            filename,
+            author,
+        }
+
+        console.log("file data sent to backend:", fileData)
+
+        const response = await axios.post(
+            `${API_URL}/demo/uploads`,  // upload API endpoint
+            fileData,  // data sent to backend
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                }
+            }
+        );
+
+        console.log('File data saved to DB:', response.data);
+        return response.data;
+
+    } catch (error) {
+        console.error("File creation error:", error);
+        throw error;
+    }
+};
+
 const AddFile = () => {
     const [isOpen, setIsOpen] = useState(false)
 
@@ -51,9 +90,16 @@ const AddFile = () => {
 
     const mutation = useMutation({
         // TODO: probly needs async function
-        mutationFn: (data) => {
+        mutationFn: async (data) => {
             // UsersService.createUser({ requestBody: data })
-            console.log("Add File:", data)
+            console.log("Upload File:", data)
+
+            try {
+                await createUpload(data)
+            } catch (error) {
+                console.error("File creation error:", error);
+                throw error;
+            }
         },
 
         onSuccess: () => {
@@ -67,7 +113,7 @@ const AddFile = () => {
         },
 
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["files"] })
+            queryClient.invalidateQueries({ queryKey: ["uploads"] })
         },
     })
 

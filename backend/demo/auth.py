@@ -48,7 +48,10 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 def register_user(user: UserCreate, db: Session = Depends(get_db)) -> UserResponse:
     db_user = get_user(db, user.email)
     if db_user:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Account already registered")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="Account already registered"
+        )
     hashed_pwd = get_password_hash(user.password)
     db_user = User(
         username=user.username,
