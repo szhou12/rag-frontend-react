@@ -31,14 +31,32 @@ const API_URL = 'http://localhost:8001';
 
 const createUpload = async (formData) => {
     try {
-        // Extract only the metadata fields, excluding the file
-        const { language, filename, author } = formData
+
+        // First, create FormData to handle file upload
+        const fileUploadData = new FormData()
+        fileUploadData.append('file', formData.file)
+
+        // First request: Upload file to temporary storage
+        const uploadResponse = await axios.post(
+            `${API_URL}/demo/uploads/temp`,  // New endpoint for file upload
+            fileUploadData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                }
+            }
+        )
+
+        // Get the file path from response
+        const { filepath } = uploadResponse.data
 
         
         const fileData = {
-            language,
-            filename,
-            author,
+            filename: formData.filename,
+            author: formData.author,
+            language: formData.language,
+            filepath: filepath,
         }
 
         console.log("file data sent to backend:", fileData)

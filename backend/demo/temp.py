@@ -34,16 +34,7 @@ class User(Base):
     role = Column(String)
 
 
-class Upload(Base):
-    __tablename__ = "uploads"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    filename = Column(String(255), nullable=False)
-    author = Column(String(255), nullable=False)
-    language = Column(String(5), nullable=False)
-    date = Column(DateTime, default=datetime.now)  # date uploaded
-    # filepath = Column(String, nullable=True)
-    # size_mb = Column(Float, nullable=True)
+
 
 ##### schemas.py #####
 class Token(BaseModel):
@@ -74,16 +65,35 @@ class UserInDB(UserResponse):
     hashed_password: str
 
 
+###### Upload #####
+class Upload(Base):
+    __tablename__ = "uploads"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String(255), nullable=False)
+    author = Column(String(255), nullable=False)
+    language = Column(String(5), nullable=False)
+    date = Column(DateTime, default=datetime.now)  # date uploaded
+    filepath = Column(String, nullable=True)
+    size_mb = Column(Float, nullable=True)
+    pages = Column(Integer, nullable=True)
+
 class UploadCreate(BaseModel):
     filename: str
     author: str
     language: str
+    filepath: str | None = None
 
 class UploadPublic(BaseModel):
     filename: str
     author: str
     language: str
     date: datetime
+    filepath: str | None = None
+    size_mb: float | None = None
+    pages: int | None = None
+
+
 
 
 ##### database.py #####

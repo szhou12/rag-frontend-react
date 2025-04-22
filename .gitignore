@@ -68,3 +68,6 @@ coverage/
 # Jest
 jest.config.js
 jest.setup.js
+
+
+**/temp_uploads/
