@@ -62,7 +62,7 @@ const createUpload = async (formData) => {
         console.log("file data sent to backend:", fileData)
 
         const response = await axios.post(
-            `${API_URL}/demo/uploads`,  // upload API endpoint
+            `${API_URL}/demo/uploads/`,  // upload API endpoint
             fileData,  // data sent to backend
             {
                 headers: {
@@ -131,7 +131,7 @@ const AddFile = () => {
         },
 
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["uploads"] })
+            queryClient.invalidateQueries({ queryKey: ["files"] })
         },
     })
 

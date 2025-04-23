@@ -94,6 +94,11 @@ class UploadPublic(BaseModel):
     pages: int | None = None
 
 
+class UploadsPublic(BaseModel):
+    data: list[UploadPublic]
+    count: int
+
+
 
 
 ##### database.py #####

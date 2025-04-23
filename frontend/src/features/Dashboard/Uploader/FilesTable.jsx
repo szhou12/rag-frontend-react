@@ -18,6 +18,11 @@ import { usePagination } from "@/hooks/usePagination"
 import { DataTableLayout } from "@/layouts/Dashboard/DataTableLayout"
 
 
+// TODO: DELETE when frontend OpenAPI auto-generation is ready!!!
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8001';
+
 // TODO: DELETE when backend is ready
 // Fake file data
 const MOCK_FILES = Array.from({ length: 16 }, (_, index) => ({
@@ -47,6 +52,20 @@ const MockFilesService = {
     }
 };
 
+export const FilesService = {
+    readFiles: async ({ skip, limit }) => {
+        const response = await axios.get(
+            `${API_URL}/demo/uploads/`,
+            {
+                params: { skip, limit },
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                }
+            }
+        );
+        return response.data;
+    }
+}
 
 const PER_PAGE = 5
 
@@ -55,7 +74,8 @@ function getFilesQueryOptions({ page }) {
     return {
         queryFn: () =>
             // FilesService.readFiles({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
-            MockFilesService.readFiles({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+            // MockFilesService.readFiles({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+            FilesService.readFiles({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
 
         queryKey: ["files", page], // give data table a namespace/key ["files"]
     }
@@ -80,6 +100,7 @@ function FilesTable() {
 
     const columnHeaders = [
         "File Name",
+        "Author(s)",
         "Date Added",
         "Language",
         "Pages",
@@ -119,18 +140,31 @@ function FilesTable() {
                         <Table.Row key={file.id} opacity={isPlaceholderData ? 0.5 : 1}>
                             <Table.Cell truncate maxW="sm">
                                 <Tooltip
-                                    content={file.name}
+                                    content={file.filename}
                                     showArrow
                                     positioning={{ placement: "left-end" }}
                                 >
                                     <Box as="span" isTruncated>
-                                        {file.name}
+                                        {file.filename}
+                                    </Box>
+                                </Tooltip>
+                            </Table.Cell>
+
+                            <Table.Cell truncate maxW="sm">
+                                <Tooltip
+                                    content={file.author}
+                                    showArrow
+                                    positioning={{ placement: "left-end" }}
+                                >
+                                    <Box as="span" isTruncated>
+                                        {file.author}
                                     </Box>
                                 </Tooltip>
                             </Table.Cell>
 
                             <Table.Cell>
-                                {file.date_added}
+                                {/* {file.date} */}
+                                {new Date(file.date).toLocaleDateString()}
                             </Table.Cell>
 
                             <Table.Cell>
@@ -142,7 +176,7 @@ function FilesTable() {
                             </Table.Cell>
 
                             <Table.Cell>
-                                {`${file.size} MB`}
+                                {`${file.size_mb} MB`}
                             </Table.Cell>
 
                             <Table.Cell>

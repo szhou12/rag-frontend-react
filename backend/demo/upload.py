@@ -14,6 +14,7 @@ from .temp import (
     Upload, 
     UploadCreate,
     UploadPublic,
+    UploadsPublic,
     CurrentUser,
     SessionDep,
 )
@@ -21,7 +22,7 @@ from .temp import (
 def calculate_file_size(filepath: str) -> float:
     """Calculate file size in MB"""
     size_bytes = os.path.getsize(filepath)
-    return size_bytes / (1024 * 1024)  # Convert to MB
+    return round(size_bytes / (1024 * 1024), 2)  # Convert to MB
 
 def calculate_pages(filepath: str) -> int:
     """Calculate number of pages in the file"""
@@ -86,3 +87,46 @@ async def upload_file(
         shutil.copyfileobj(file.file, buffer)
 
     return {"filepath": str(filepath)}
+
+@router.get("/", response_model=UploadsPublic)
+async def read_uploads(
+    *, 
+    session: SessionDep, 
+    current_user: User = Security(get_current_user_with_scopes, scopes=["dashboard"]),
+    skip: int = 0,
+    limit: int = 100
+) -> Any:
+    """
+    Retrieve all uploads
+    """
+    uploads = session.query(Upload).offset(skip).limit(limit).all()
+    count = session.query(Upload).count()
+
+    upload_list = [
+        UploadPublic(
+            filename=upload.filename,
+            author=upload.author,
+            language=upload.language,
+            date=upload.date,
+            filepath=upload.filepath,
+            size_mb=upload.size_mb,
+            pages=upload.pages
+        ) for upload in uploads
+    ]
+
+    return UploadsPublic(data=upload_list, count=count)
+
+@router.get("/{id}", response_model=UploadPublic)
+async def read_upload(
+    *,
+    session: SessionDep,
+    current_user: User = Security(get_current_user_with_scopes, scopes=["dashboard"]),
+    id: uuid.UUID
+) -> Any:
+    
+    upload = session.query(Upload).filter(Upload.id == id).first()
+    if not upload:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    return upload
+
+
