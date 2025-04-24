@@ -68,18 +68,46 @@ src/
 
 
 
-/src
-├── main.py
-├── api/
-│   ├── __init__.py
-│   ├── deps.py          # for shared Depends()
-│   ├── main.py
-│   └── routes/          # API routes
-│         ├── login.py
-│         ├── chat.py          # RAG-based chat
-│         ├── users.py         # User management CRUD (admin ONLY)
-│         ├── scraper.py       # Web scraping CRUD
-│         └── uploader.py      # File upload CRUD
+/app
+├── main.py             # FastAPI app entrypoint
+|
+├── api/                # [Controllers]: API routes CRUD operations
+│   ├── routes/      
+│   │   ├── auth.py  
+│   │   ├── users.py
+│   │   └── uploads.py
+│   ├── deps.py         # for shared Depends()
+│   └── main.py         # Include routers & setup
+│
+|
+├── schemas/            # [Views]: Pydantic schemas sent from / returned to API
+│   ├── auth.py
+│   ├── user.py
+│   └── upload.py
+|
+|
+├── crud/               # [Models]: DB CRUD operations - direct interaction with DB
+│   ├── user.py
+│   └── upload.py
+|
+├── models/             # [Models]: SQLModel ORM models (database tables)
+│   ├── user.py
+│   └── upload.py
+│
+|
+├── core/               # Core config, security, utils (app-wide logic)
+│   ├── config.py       # Settings, env management
+│   ├── security.py     # Auth, JWT, password hashing
+│   └── logger.py
+│
+├── services/           # Business logic (RAG)
+│   ├── chat_service.py
+│   └── file_service.py
+│
+└── db/                 # Database session, migrations
+    ├── session.py
+    └── init_db.py
+
 ```
 
 ## Chakra UI V3 Code Snippets

@@ -365,8 +365,7 @@ const useAuth = () => {
     const logout = () => {
         // TODO: replace localStorage
         localStorage.removeItem("access_token")
-        // localStorage.removeItem("expires_at")
-        // localStorage.removeItem("user")
+        queryClient.clear() // clear all data in the global cache
         navigate({ to: "/" })
     }
 

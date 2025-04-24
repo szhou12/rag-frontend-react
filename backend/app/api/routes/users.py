@@ -9,14 +9,17 @@ from app.api.deps import (
     CurrentUser,
     SessionDep,
 )
-from app.models import (
+from app.models.user import (
     User,
+)
+from app.schemas.user import (
+    UserPublic,
 )
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.get("/users/me", response_model=UserResponse)
+@router.get("/users/me", response_model=UserPublic)
 async def read_user_me(current_user: CurrentUser) -> Any:
     """
     Notice that the dependency CurrentUser returns a DB ORM object (User)
@@ -24,6 +27,7 @@ async def read_user_me(current_user: CurrentUser) -> Any:
     FastAPI automatically handles model conversion and translate DB model to Pydantic model.
     """
     return current_user
+
 
 
 

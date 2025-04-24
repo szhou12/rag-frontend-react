@@ -113,7 +113,7 @@ class UploadUpdate(UploadBase):
 # TODO: adjust
 class Upload(UploadBase, table=True):
     """
-    fields:
+    Attributes:
         - id: uuid.UUID
         - filename: str
         - author: str

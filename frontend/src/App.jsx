@@ -14,7 +14,7 @@ const handleApiError = (error) => {
 	// You could add toast notifications here if needed
 }
 
-// Create a query client to handle data received from the backend
+// Create global in-memory cache in user's browser
 const queryClient = new QueryClient({
 	queryCache: new QueryCache({
 		onError: handleApiError,
@@ -25,7 +25,7 @@ const queryClient = new QueryClient({
 })
 
 
-
+// QueryClientProvider allows all React components to access this global cache by useQuery() or useQueryClient()
 function App() {
 	return (
 		<QueryClientProvider client={queryClient}>

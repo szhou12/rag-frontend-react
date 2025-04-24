@@ -58,6 +58,12 @@
 
 8. what does Session from SQLModel do?
 
+9. what does `.model_validate()` do?
+
+10. what does `user_data = user_in.model_dump(exclude_unset=True)` mean? user_in is a pedantic schema.
+
+11. what does `db_user.sqlmodel_update(user_data, update=extra_data)` do?
+
 
 
 ## Review `FastAPI`
@@ -106,6 +112,10 @@
         - Bearer: Token type that user will get after pass. HTTP request's header includes an Authorization header that contains a Bearer token (often JWT). i.e., Header has `Authorization: Bearer <token>`
     - tokenUrl: Frontend POST request sends to this address to generate a Bearer token.
     - Token types introduction: [Token types | Google Cloud](https://cloud.google.com/docs/authentication/token-types)
+
+8. please explain to me what `file: UploadFile = File(...)` actually means in the context of fastAPI in a easy-to-understand way?
+
+
 
 ## Review `React`
 1. What are key characteristics that differentiate a React hook `useAuth` from a utility function `isLoggedIn()`?

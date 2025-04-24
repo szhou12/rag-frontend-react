@@ -38,11 +38,14 @@ def calculate_pages(filepath: str) -> int:
 
 router = APIRouter()
 
-@router.post("/", response_model=UploadPublic)
+@router.post(
+        "/",
+        dependencies=[Security(get_current_user_with_scopes, scopes=["dashboard"])],
+        response_model=UploadPublic)
 def create_upload(
     *, 
     session: SessionDep, # dep injected by FastAPI
-    current_user: User = Security(get_current_user_with_scopes, scopes=["dashboard"]), # dep injected by FastAPI
+    # current_user: User = Security(get_current_user_with_scopes, scopes=["dashboard"]), # dep injected by FastAPI
     upload_in: UploadCreate # actual data sent from frontend
 ) -> Any:
     """
@@ -72,12 +75,14 @@ def create_upload(
 UPLOAD_DIR = Path("temp_uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
-@router.post("/temp")
+@router.post("/temp", dependencies=[Security(get_current_user_with_scopes, scopes=["dashboard"])])
 async def upload_file(
     file: UploadFile = File(...),
-    current_user: User = Security(get_current_user_with_scopes, scopes=["dashboard"])
+    # current_user: User = Security(get_current_user_with_scopes, scopes=["dashboard"])
 ) -> dict:
-    """Handle file upload and store in temporary location"""
+    """
+    Handle file upload and store in temporary location
+    """
     # Create unique filename
     temp_filename = f"{uuid.uuid4()}_{file.filename}"
     filepath = UPLOAD_DIR / temp_filename
@@ -88,11 +93,15 @@ async def upload_file(
 
     return {"filepath": str(filepath)}
 
-@router.get("/", response_model=UploadsPublic)
+@router.get(
+        "/", 
+        dependencies=[Security(get_current_user_with_scopes, scopes=["dashboard"])],
+        response_model=UploadsPublic,
+)
 async def read_uploads(
     *, 
     session: SessionDep, 
-    current_user: User = Security(get_current_user_with_scopes, scopes=["dashboard"]),
+    # current_user: User = Security(get_current_user_with_scopes, scopes=["dashboard"]),
     skip: int = 0,
     limit: int = 100
 ) -> Any:
@@ -116,11 +125,14 @@ async def read_uploads(
 
     return UploadsPublic(data=upload_list, count=count)
 
-@router.get("/{id}", response_model=UploadPublic)
+@router.get("/{id}", 
+            dependencies=[Security(get_current_user_with_scopes, scopes=["dashboard"])],
+            response_model=UploadPublic,
+)
 async def read_upload(
     *,
     session: SessionDep,
-    current_user: User = Security(get_current_user_with_scopes, scopes=["dashboard"]),
+    # current_user: User = Security(get_current_user_with_scopes, scopes=["dashboard"]),
     id: uuid.UUID
 ) -> Any:
     
