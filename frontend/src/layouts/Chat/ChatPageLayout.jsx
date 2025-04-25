@@ -44,16 +44,16 @@ export const ChatPageLayout = () => {
     return (
         <Flex direction="column" h="100vh">
             
-            <ChatNavbar hideFrom="md" /> {/* hides when screen size > md */}
+            <ChatNavbar hideFrom="md" /> {/* mobile only: hides when screen size > md */}
 
             <Flex flex="1" overflow="hidden">
 
-                <ChatSidebar hideBelow="md" /> {/* hides when screen size < md */}
+                <ChatSidebar hideBelow="md" /> {/* desktop only: hides when screen size < md */}
 
                 <Stack 
                     flex="1" // Stack expands to fill the available space
                     alignItems="stretch" // make all Stack's children to fill the width of the container horizontally
-                    height="100vh" // sets the full viewport height
+                    minH="0" // allows Stack to shrink to fit the remaining space, preventing overflow
                     overflow="hidden" // Prevent outer scroll
                 >
                     {!isLoadingUser && user?.role !== "client" && (<ChatHeader href="/dashboard/index" />)}
