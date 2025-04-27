@@ -5,6 +5,7 @@ import { LuLayoutDashboard, LuArrowRight } from "react-icons/lu"
 import useAuth from '@/hooks/useAuth'
 import { Navbar as ChatNavbar } from "@/components/Chat/Navbar"
 import { Sidebar as ChatSidebar } from "@/components/Chat/Sidebar"
+import { Sidebar1 as ChatSidebar1 } from "@/components/Chat/Sidebar1"
 
 const ChatHeader = ({href}) => {
 
@@ -44,11 +45,12 @@ export const ChatPageLayout = () => {
     return (
         <Flex direction="column" h="100vh">
             
-            <ChatNavbar hideFrom="md" /> {/* mobile only: hides when screen size > md */}
+            {/* <ChatNavbar hideFrom="md" /> mobile only: hides when screen size > md */}
 
             <Flex flex="1" overflow="hidden">
 
-                <ChatSidebar hideBelow="md" /> {/* desktop only: hides when screen size < md */}
+                {/* <ChatSidebar hideBelow="md" /> desktop only: hides when screen size < md */}
+                <ChatSidebar1 />
 
                 <Stack 
                     flex="1" // Stack expands to fill the available space

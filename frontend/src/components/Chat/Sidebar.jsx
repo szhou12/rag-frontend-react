@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { 
     Box,
     Stack,
@@ -6,10 +7,12 @@ import {
     StackSeparator,
     Spinner,
     VStack,
+    IconButton,
 } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
 import { useQuery } from "@tanstack/react-query"
 import { BsChatTextFill, BsMicFill, BsPaperclip, BsPinAngleFill } from 'react-icons/bs'
+import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand } from "react-icons/tb"
 import { ChatTab } from './ChatTab'
 import { SearchField } from '../Common/SearchField'
 import { ChatGroupHeader } from './ChatGroupHeader'
@@ -100,34 +103,97 @@ export const Sidebar = (props) => {
         </Stack>
     )
 
+    const [isCollapsed, setIsCollapsed] = useState(false)
+    
+    // useEffect(() => {
+    //     const handleResize = () => {
+    //         if (window.innerWidth < 768) { // md breakpoint
+    //             setIsCollapsed(false)
+    //         }
+    //     }
+        
+    //     window.addEventListener('resize', handleResize)
+    //     return () => window.removeEventListener('resize', handleResize)
+    // }, [])
 
+
+    // return (
+    //     <Box
+    //         // width={{ base: isCollapsed ? "60px" : "280px" }}
+    //         transition="width 0.2s ease-in-out"
+    //         // flexShrink={0}
+    //         position="relative"
+    //         // flex="1"
+    //         minH="0"
+    //     >
+
+    //         <IconButton
+    //             onClick={() => setIsCollapsed(!isCollapsed)}
+    //             position="absolute"
+    //             right="-30px"
+    //             top="50%"
+    //             transform="translateY(-50%)"
+    //             zIndex={1}
+    //             display={{ base: "none", md: "flex" }} // hide on mobile view
+    //         >
+    //             {isCollapsed ? <TbLayoutSidebarLeftExpand /> : <TbLayoutSidebarLeftCollapse />}
+    //         </IconButton>
+
+    //         {/* Sidebar content */}
+    //         <Stack
+    //             display={isCollapsed ? "none" : "flex"}
+    //             flex="1"
+    //             height="100%"
+    //             p={{ base: '4', md: '6' }}
+    //             bg="bg.panel"
+    //             borderRightWidth="1px"
+    //             justifyContent="space-between"
+    //             maxW="xs"
+    //             {...props}
+    //         >
+    //             <Stack flex="1" overflow="hidden">
+    //                 <Box px="5">
+    //                     <Text fontSize="lg" fontWeight="medium">
+    //                         Conversations ({chats?.length})
+    //                     </Text>
+    //                 </Box>
+
+    //                 <Flex px="4">
+    //                     <SearchField />
+    //                 </Flex>
+
+    //                 <ChatList />
+    //             </Stack>
+                
+    //             <SidebarFooter />
+    //         </Stack>
+
+    //     </Box>
+    // )
 
     return (
-        <Stack
-            flex="1"
-            height="100%"
-            p={{ base: '4', md: '6' }}
+        <Flex
+            direction="column"
+            transition="width 0.2s ease-in-out"
+            position="relative"
+            minH="100vh"  // Ensure it spans full height
+            width={{ base: isCollapsed ? "60px" : "280px" }}
             bg="bg.panel"
             borderRightWidth="1px"
-            justifyContent="space-between"
-            maxW="xs"
             {...props}
         >
-            <Stack flex="1" overflow="hidden">
-                <Box px="5">
-                    <Text fontSize="lg" fontWeight="medium">
-                        Conversations ({chats?.length})
-                    </Text>
-                </Box>
+            {/* Collapse Button */}
+            <IconButton
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                alignSelf="flex-end"
+                m="2"
+                display={{ base: "none", md: "flex" }}
+            >
+                {isCollapsed ? <TbLayoutSidebarLeftExpand /> : <TbLayoutSidebarLeftCollapse />}
+            </IconButton>
 
-                <Flex px="4">
-                    <SearchField />
-                </Flex>
-
-                <ChatList />
-            </Stack>
             
-            <SidebarFooter />
-        </Stack>
+
+        </Flex>
     )
 }
