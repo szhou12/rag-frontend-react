@@ -3,17 +3,19 @@ import { UserMenu } from './UserMenu'
 import useAuth from '@/hooks/useAuth'
 import { Avatar } from "@/components/ui/avatar"
 
-export const UserProfile = () => {
+export const UserProfile = ({ isCollapsed = false }) => {
     const { user, logout } = useAuth()
 
-
     const avatarSrc = `https://api.dicebear.com/9.x/thumbs/svg?seed=${user?.email}`
+
+    if (isCollapsed) {
+        return <UserMenu logout={logout} isCollapsed={isCollapsed} />
+    }
 
     return (
         <HStack gap="3" justify="space-between">
             <HStack gap="3">
                 <Avatar src={avatarSrc} />
-
                 <Box>
                     <Text textStyle="sm" fontWeight="medium">
                         {user?.email}
@@ -21,7 +23,7 @@ export const UserProfile = () => {
                 </Box>
             </HStack>
 
-            <UserMenu logout={logout} />
+            <UserMenu logout={logout} isCollapsed={isCollapsed} />
         </HStack>
     )
 }

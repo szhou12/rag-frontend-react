@@ -14,12 +14,47 @@ import { BsChatTextFill } from 'react-icons/bs'
 import { ChatTab } from './ChatTab'
 import { SearchField } from '../Common/SearchField'
 import { ChatGroupHeader } from './ChatGroupHeader'
-import { SidebarFooter } from '../Common/SidebarFooter'
 import { Route } from '@/routes/_chat-layout/chat-session'
-import { ChatService } from './Sidebar'
+import { v4 as uuidv4 } from 'uuid'
+
+const MOCK_CONVERSATIONS = Array.from({ length: 7 }, (_, index) => ({
+    id: uuidv4(),
+    name: `user${index + 1}`,
+    updated_at: new Date(2024, 0, index + 1).toLocaleDateString(),
+    title: `This is conversation ${index + 1}`,
+}));
+
+// TODO: DELETE when backend is ready and Data Delegate Model is implemented
+export const ChatService = {
+    getConversations: () => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve([...MOCK_CONVERSATIONS])
+            }, 1000)
+        })
+    },
+
+    addConversation: (newConversation) => {
+        return new Promise((resolve) => {
+            // Create new conversation object with all required fields
+            const conversation = {
+                id: newConversation.id,
+                name: "You",
+                updated_at: new Date().toLocaleDateString(), // Current date
+                title: newConversation.initialPrompt
+            }
+
+            // Add to start of array
+            MOCK_CONVERSATIONS.unshift(conversation)
+
+            // Return a copy of the updated array
+            resolve([...MOCK_CONVERSATIONS])
+        })
+    }
+}
 
 
-export const SidebarContent = ({ onClose }) => {
+export const SidebarContent = () => {
     const { data: chats, isPending, error } = useQuery({
         queryFn: () => ChatService.getConversations(),
         queryKey: ["userChats"],
@@ -61,32 +96,48 @@ export const SidebarContent = ({ onClose }) => {
         </Stack>
     )
 
-    return (
-        <Stack
-            flex="1"
-            height="100%"
-            p={{ base: '4', md: '6' }}
-            bg="bg.panel"
-            borderRightWidth="1px"
-            justifyContent="space-between"
-            maxW="xs"
-        >
-            <Stack flex="1" overflow="hidden">
-                <Box px="5">
-                    <Text fontSize="lg" fontWeight="medium">
-                        Conversations ({chats?.length})
-                    </Text>
-                </Box>
 
-                <Flex px="4">
-                    <SearchField />
-                </Flex>
+    // return (
+    //     <Stack
+    //         flex="1"
+    //         height="100%"
+    //         p={{ base: '4', md: '6' }}
+    //         bg="bg.panel"
+    //         borderRightWidth="1px"
+    //         justifyContent="space-between"
+    //         maxW="xs"
+    //     >
+    //         <Stack flex="1" overflow="hidden">
+    //             <Box px="5">
+    //                 <Text fontSize="lg" fontWeight="medium">
+    //                     Conversations ({chats?.length})
+    //                 </Text>
+    //             </Box>
 
-                <ChatList />
+    //             <Flex px="4">
+    //                 <SearchField />
+    //             </Flex>
+
+    //             <ChatList />
                 
-                <SidebarFooter />
-            </Stack>
-        </Stack>
+    //             <SidebarFooter />
+    //         </Stack>
+    //     </Stack>
         
+    // )
+
+    return (
+        <Stack flex="1" overflow="hidden" px="5" spacing="4">
+            <Text fontSize="lg" fontWeight="medium">
+                Conversations ({chats?.length})
+            </Text>
+
+            <Flex>
+                <SearchField />
+            </Flex>
+
+            <ChatList />
+            
+        </Stack>
     )
 }

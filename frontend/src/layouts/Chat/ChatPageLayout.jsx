@@ -6,6 +6,9 @@ import useAuth from '@/hooks/useAuth'
 import { Navbar as ChatNavbar } from "@/components/Chat/Navbar"
 import { Sidebar as ChatSidebar } from "@/components/Chat/Sidebar"
 import { Sidebar1 as ChatSidebar1 } from "@/components/Chat/Sidebar1"
+import CollapsibleSidebar from "@/components/Chat/CollapsibleSidebar"
+import { SidebarContent as ChatSidebarContent } from "@/components/Chat/SidebarContent"
+import { SidebarFooter } from "@/components/Common/SidebarFooter"
 
 const ChatHeader = ({href}) => {
 
@@ -45,12 +48,20 @@ export const ChatPageLayout = () => {
     return (
         <Flex direction="column" h="100vh">
             
-            {/* <ChatNavbar hideFrom="md" /> mobile only: hides when screen size > md */}
+            {/* mobile only: hides when screen size > md */}
+            <ChatNavbar hideFrom="md" /> 
 
             <Flex flex="1" overflow="hidden">
 
                 {/* <ChatSidebar hideBelow="md" /> desktop only: hides when screen size < md */}
-                <ChatSidebar1 />
+                {/* <ChatSidebar1 /> */}
+
+                <CollapsibleSidebar
+                    hideBelow="md"
+                >
+                    <ChatSidebarContent />
+                </CollapsibleSidebar>
+                
 
                 <Stack 
                     flex="1" // Stack expands to fill the available space

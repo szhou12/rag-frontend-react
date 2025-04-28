@@ -1,5 +1,6 @@
 import { Box, IconButton } from '@chakra-ui/react'
 import { LuUser, LuLogOut, LuEllipsisVertical } from 'react-icons/lu'
+import { BsPersonBoundingBox } from "react-icons/bs"
 import { Link } from '@tanstack/react-router'
 import {
     MenuRoot,
@@ -9,7 +10,7 @@ import {
     MenuItemText
 } from '@/components/ui/menu'
 
-export const UserMenu = ({ logout }) => {
+export const UserMenu = ({ logout, isCollapsed = false }) => {
 
     const handleLogout = () => {
         logout()
@@ -18,8 +19,12 @@ export const UserMenu = ({ logout }) => {
     return (
         <MenuRoot>
             <MenuTrigger asChild>
-                <IconButton variant="ghost" colorPalette="gray" aria-label="Open User Menu">
-                    <LuEllipsisVertical />
+                <IconButton 
+                    variant="ghost" 
+                    color="black"
+                    aria-label="Open User Menu"
+                >
+                    {isCollapsed ? <BsPersonBoundingBox /> : <LuEllipsisVertical />}
                 </IconButton>
             </MenuTrigger>
 

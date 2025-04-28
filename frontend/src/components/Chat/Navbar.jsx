@@ -13,6 +13,7 @@ import {
 import { LuAlignRight } from 'react-icons/lu'
 import Logo from "/rmi_logo_horitzontal_no_tagline.svg"
 import { Sidebar } from './Sidebar'
+import CollapsibleSidebar from "@/components/Chat/CollapsibleSidebar" 
 
 /**
  * 
