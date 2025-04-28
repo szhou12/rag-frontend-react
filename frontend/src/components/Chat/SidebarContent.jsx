@@ -97,37 +97,8 @@ export const SidebarContent = () => {
     )
 
 
-    // return (
-    //     <Stack
-    //         flex="1"
-    //         height="100%"
-    //         p={{ base: '4', md: '6' }}
-    //         bg="bg.panel"
-    //         borderRightWidth="1px"
-    //         justifyContent="space-between"
-    //         maxW="xs"
-    //     >
-    //         <Stack flex="1" overflow="hidden">
-    //             <Box px="5">
-    //                 <Text fontSize="lg" fontWeight="medium">
-    //                     Conversations ({chats?.length})
-    //                 </Text>
-    //             </Box>
-
-    //             <Flex px="4">
-    //                 <SearchField />
-    //             </Flex>
-
-    //             <ChatList />
-                
-    //             <SidebarFooter />
-    //         </Stack>
-    //     </Stack>
-        
-    // )
-
     return (
-        <Stack flex="1" overflow="hidden" px="5" spacing="4">
+        <Stack flex="1" overflow="hidden" px="4" spacing="4" my={{ base: "2", md: "0" }}>
             <Text fontSize="lg" fontWeight="medium">
                 Conversations ({chats?.length})
             </Text>

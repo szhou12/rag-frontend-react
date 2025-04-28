@@ -1,15 +1,17 @@
 import { Stack, IconButton } from "@chakra-ui/react"
-import { BsLayoutSidebarInset, BsPencilSquare, BsPersonBoundingBox } from "react-icons/bs"
+import { BsLayoutSidebarInset, BsPencilSquare } from "react-icons/bs"
 
 export const SidebarIcons = ({
     isCollapsed,
     onToggleSidebar,
+    ...props
 }) => {
     return (
         <Stack
             direction={isCollapsed ? "column" : "row"}
             p={2}
             justifyContent="space-between"
+            {...props}
         >
             {/* First group - aligned to start */}
             <Stack

@@ -33,8 +33,8 @@ const CollapsibleSidebar = ({
             <SidebarIcons 
                 isCollapsed={sidebarSize === "small"}
                 onToggleSidebar={toggleSidebar}
+                hideBelow="md"
             />
-
 
             {/* Sidebar Content */}
             {sidebarSize === "large" && (

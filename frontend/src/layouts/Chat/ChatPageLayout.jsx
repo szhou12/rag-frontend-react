@@ -53,12 +53,8 @@ export const ChatPageLayout = () => {
 
             <Flex flex="1" overflow="hidden">
 
-                {/* <ChatSidebar hideBelow="md" /> desktop only: hides when screen size < md */}
-                {/* <ChatSidebar1 /> */}
-
-                <CollapsibleSidebar
-                    hideBelow="md"
-                >
+                {/* Desktop Only: hides when screen size < md */}
+                <CollapsibleSidebar hideBelow="md">
                     <ChatSidebarContent />
                 </CollapsibleSidebar>
                 
