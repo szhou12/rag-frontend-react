@@ -1,6 +1,8 @@
 import { Stack, IconButton } from "@chakra-ui/react"
 import { BsLayoutSidebarInset, BsPencilSquare } from "react-icons/bs"
 
+import { Tooltip } from "@/components/ui/tooltip"
+
 export const SidebarIcons = ({
     isCollapsed,
     onToggleSidebar,
@@ -20,13 +22,17 @@ export const SidebarIcons = ({
                 hideBelow="md"
             >
                 {/* Collapse Button */}
-                <IconButton
-                    onClick={onToggleSidebar}
-                    variant="ghost"
-                    color="black"
-                >
-                    <BsLayoutSidebarInset />
-                </IconButton>
+                <Tooltip showArrow content={isCollapsed ? "Open Sidebar" : "Close Sidebar"}>
+                    <IconButton
+                        onClick={onToggleSidebar}
+                        variant="ghost"
+                        color="black"
+                    >
+                        <BsLayoutSidebarInset />
+                    </IconButton>
+                </Tooltip>
+
+                
 
                 {/* Add more start-aligned buttons here */}
 
@@ -38,12 +44,15 @@ export const SidebarIcons = ({
                 spacing={2}
             >
                 {/* New Chat Button */}
-                <IconButton
-                    variant="ghost"
-                    color="black"
-                >
-                    <BsPencilSquare />
-                </IconButton>
+                <Tooltip showArrow content="New Chat">
+                    <IconButton
+                        variant="ghost"
+                        color="black"
+                    >
+                        <BsPencilSquare />
+                    </IconButton>
+                </Tooltip>
+                
 
                 {/* Add more start-aligned buttons here */}
                 

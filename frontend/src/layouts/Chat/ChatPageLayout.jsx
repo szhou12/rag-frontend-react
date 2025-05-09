@@ -5,7 +5,6 @@ import { LuLayoutDashboard, LuArrowRight } from "react-icons/lu"
 import useAuth from '@/hooks/useAuth'
 import { Navbar as ChatNavbar } from "@/components/Chat/Navbar"
 import { Sidebar as ChatSidebar } from "@/components/Chat/Sidebar"
-import { Sidebar1 as ChatSidebar1 } from "@/components/Chat/Sidebar1"
 import CollapsibleSidebar from "@/components/Chat/CollapsibleSidebar"
 import { SidebarContent as ChatSidebarContent } from "@/components/Chat/SidebarContent"
 import { SidebarFooter } from "@/components/Common/SidebarFooter"

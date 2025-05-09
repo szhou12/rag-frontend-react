@@ -2,6 +2,8 @@
 
 ## Installation
 ```bash
+npx @chakra-ui/cli snippet add # create /ui under /components. Remember to add Provider to main.jsx
+
 # npm install @chakra-ui/react@^3.8.0
 npm install @chakra-ui/react@^3.13.0
 npm install @emotion/react

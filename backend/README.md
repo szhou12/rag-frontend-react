@@ -126,6 +126,16 @@
 
 2. Use localStorage to store user data is not a good practice. localStorage should only store access token.
 
+3. Explain `useEffect(() => { ... }, [])`, `useEffect(() => { ... }, [x, y])`, `useEffect(() => { ... })`
+
+4. Explain `useEffect` vs `useLayoutEffect`
+
+5. How would you describe useRef if you were to explain in plain English?
+
+6. I'm assuming useState and useRef are serving similar functionalities? if so, what are use cases to use useState vs useRef?
+
+7. Use visual representation to demonstrate the use of each variables in `const { scrollHeight, clientHeight, scrollTop } = document.documentElement`
+
 
 ## Helpful Links
 - [Example use of Pydantic MySQLDsn](https://github.com/pydantic/pydantic/pull/4990)

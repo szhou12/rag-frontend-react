@@ -7,6 +7,7 @@ import {
 import { RouterProvider } from '@tanstack/react-router'
 import { router } from "@/routes/router"
 
+import { ChatProvider } from '@/components/Chat/mocks/ChatContext'
 
 // MOCK API error handler
 const handleApiError = (error) => {
@@ -29,7 +30,9 @@ const queryClient = new QueryClient({
 function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<RouterProvider router={router} />
+			<ChatProvider>
+				<RouterProvider router={router} />
+			</ChatProvider>
 		</QueryClientProvider>
 	)
 }
