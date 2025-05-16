@@ -136,6 +136,16 @@
 
 7. Use visual representation to demonstrate the use of each variables in `const { scrollHeight, clientHeight, scrollTop } = document.documentElement`
 
+8. How to use the @ symbol as a path alias in your project? Add the following to `vite.config.js`
+    ```javascript
+    // add to defineConfig({...})
+    resolve: {
+        alias: {
+        '@': path.resolve(__dirname, './src')
+        }
+    }
+    ```
+9. 
 
 ## Helpful Links
 - [Example use of Pydantic MySQLDsn](https://github.com/pydantic/pydantic/pull/4990)

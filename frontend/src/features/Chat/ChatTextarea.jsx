@@ -52,6 +52,7 @@ export const ChatTextarea = ({ isNewChat, onNewChat, onSendMessage }) => {
                 px="4" 
                 py="3" 
                 align="flex-start"
+                boxShadow="lg"
             >
                 <Textarea
                     value={message}
