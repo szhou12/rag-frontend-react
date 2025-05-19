@@ -31,5 +31,54 @@ export const ChatService = {
             MOCK_CONVERSATIONS.unshift(conversation)
             resolve([...MOCK_CONVERSATIONS])
         })
+    },
+
+    createChat: async () => {
+        const response = await fetch('http://localhost:8001' + '/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+            return Promise.rejuect({ status: response.status, data })
+        }
+
+        return data
+    },
+
+    sendChatMessage: async (chatId, message) => {
+        const response = await fetch('http://localhost:8001' + `/c/${chatId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+        })
+
+        if (!response.ok) {
+            return Promise.reject({ status: response.status, data: await response.json() })
+        }
+    
+        return response.body
+    },
+
+    // TODO
+    loadChatHistory: async (chatId) => {
+        const response = await fetch('http://localhost:8001' + `/c/${chatId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (!response.ok) {
+            return Promise.reject({ status: response.status, data: await response.json() })
+        }
+
+        return response.body
     }
 }

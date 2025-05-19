@@ -18,6 +18,9 @@ npm install framer-motion
 npm install zod
 npm install uuid
 npm install jwt-decode
+npm install eventsource-parser
+npm install use-immer
+npm install react-markdown
 ```
 ### Notes
 - Chakra UI `3.8.0` can't use `FileUpload`.
@@ -118,6 +121,7 @@ npx @chakra-ui/cli snippet add checkbox
 npx @chakra-ui/cli snippet add select
 npx @chakra-ui/cli snippet add switch
 npx @chakra-ui/cli snippet add avatar
+npx @chakra-ui/cli snippet add prose
 ```
 
 ## TODO After Backend Setup

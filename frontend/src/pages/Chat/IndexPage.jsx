@@ -32,13 +32,6 @@ export default function IndexPage() {
 
     const { showErrorToast } = useCustomToast()
 
-    const Header = () => (
-        <Heading size="4xl" fontWeight="normal">
-            <Span color="colorPalette.fg">Hello, Client</Span> <br />
-            <Span color="fg.muted">How can I help you today?</Span>
-        </Heading>
-    )
-
     const addChatSession = useMutation({
         mutationFn: (data) => ChatService.addConversation(data),
 
@@ -66,12 +59,6 @@ export default function IndexPage() {
     const handlePromptSelect = (promptText) => {
         // Generate new conversation ID
         const newChatId = uuidv4()
-        
-        // Log both for verification
-        console.log("Add a new chat session:", {
-            id: newChatId,
-            initialPrompt: promptText
-        })
 
         addChatSession.mutate({
             id: newChatId,
@@ -162,7 +149,10 @@ export default function IndexPage() {
             >
                 <Container maxW="4xl">
                     <Stack gap="8">
-                        <Header />
+                        <Heading size="4xl" fontWeight="normal">
+                            <Span color="colorPalette.fg">Hello, Client</Span> <br />
+                            <Span color="fg.muted">How can I help you today?</Span>
+                        </Heading>
 
                         <PredefinedPrompts
                             onPromptSelect={handlePromptSelect}

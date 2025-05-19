@@ -2,6 +2,7 @@
 - [Review Backend Development General Concepts](#review-backend-development-general-concepts)
 - [Review `sqlmodel`](#review-sqlmodel)
 - [Review `FastAPI`](#review-fastapi)
+- [Review `React`](#review-react)
 - [Helpful Links](#helpful-links)
 
 
@@ -145,7 +146,7 @@
         }
     }
     ```
-9. 
+9. Explain "closure" in JavaScript: `submitNewMessage` function uses `setMessages` defined outside. When we pass `submitNewMessage` to a component, how can it still access `setMessages`?
 
 ## Helpful Links
 - [Example use of Pydantic MySQLDsn](https://github.com/pydantic/pydantic/pull/4990)
