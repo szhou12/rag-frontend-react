@@ -12,13 +12,20 @@ import Markdown from "react-markdown"
 import { FaUser, FaExclamationCircle } from "react-icons/fa"
 
 import useAutoScroll from "@/hooks/useAutoScroll"
+import useAutoScrollChat from "@/hooks/useAutoScrollChat"
 
 function ChatMessages({ messages, isLoading }) {
-
-    const scrollContentRef = useAutoScroll(isLoading)
+    const scrollContentRef = useAutoScrollChat(isLoading)
 
     return (
-        <Box ref={scrollContentRef} flex="1">
+        // <Box ref={scrollContentRef} flex="1">
+        <Box 
+            ref={scrollContentRef} 
+            flex="1"
+            overflowY="auto"  // Enable vertical scrolling
+            height="100%"     // Take full height of parent
+            position="relative" // For proper scroll positioning
+        >
             <VStack spacing={4} align="stretch">
                 {messages.map(({ role, content, loading, error }, idx) => (
                     <Flex
@@ -45,11 +52,12 @@ function ChatMessages({ messages, isLoading }) {
                                         css={{ "--spinner-track-color": "colors.gray.200" }}
                                     />
                                 ) : role === "assistant" ? (
-                                    <Prose mx="auto">
+                                    <Prose>
                                         <Markdown>{content}</Markdown>
                                     </Prose>
                                     
                                 ) : (
+                                    // user typed-in message
                                     <Text 
                                         // whiteSpace="pre-line"
                                         whiteSpace="pre-wrap"     // Preserve line breaks and wrap text

@@ -9,8 +9,9 @@ import {
 } from '@chakra-ui/react'
 import { useMatchRoute, useNavigate } from '@tanstack/react-router'
 import { useImmer } from 'use-immer'
-
 import { parseSSEStream } from '@/utils'
+
+import { PredefinedPrompts } from '@/features/Chat/PredefinedPrompts'
 import { ChatFooter } from '@/features/Chat/ChatFooter'
 import ChatInput from '@/features/Chat/ChatInput'
 import ChatMessages from '@/features/Chat/ChatMessages'
@@ -22,7 +23,7 @@ import { ChatService } from '@/components/Chat/mocks/chatService'
 // case 1: type in Textarea -> new ID -> enters a new chat session
 // case 2: select a prompt -> new ID -> enters a new chat session
 // case 3: click on a chat tab on sidebar -> load existing ID, load existing messages -> enter the chat session
-function Chatbot() {
+export default function Chatbot() {
     const [messages, setMessages] = useImmer([])
     const [newMessage, setNewMessage] = useState('')
 
@@ -35,7 +36,7 @@ function Chatbot() {
 
     // Get chatId from pending route (will navigate to)
     const params = matchRoute({ 
-        to: '/chat/$chatId',
+        to: '/c/$chatId',
         pending: true
     })
     
@@ -46,7 +47,8 @@ function Chatbot() {
     // load history to messages[]
     useEffect(() => {
         if (urlChatId) {
-            loadChatData(urlChatId)
+            // loadChatData(urlChatId)
+            console.log("A chat session chatId: ", urlChatId)
         }
     }, [urlChatId])
 
@@ -76,16 +78,16 @@ function Chatbot() {
             
             // If no chatId in URL, create new chat
             if (!currentChatId) {
-                const { id } = await api.createChat()
+                const { id } = await ChatService.createChat()
                 currentChatId = id
                 // Update URL with new chatId
                 navigate({ 
-                    to: '/chat/$chatId',
+                    to: '/c/$chatId',
                     params: { chatId: id }
                 })
             }
 
-            const response = await api.sendChatMessage(currentChatId, trimmedMessage)
+            const response = await ChatService.sendChatMessage(currentChatId, trimmedMessage)
             for await (const textChunk of parseSSEStream(response)) {
                 setMessages(draft => {
                     draft[draft.length - 1].content += textChunk
@@ -127,7 +129,7 @@ function Chatbot() {
                             </Heading>
 
                             <PredefinedPrompts
-                                onPromptSelect={handlePromptSelect}
+                                // onPromptSelect={handlePromptSelect}
                             />
 
                         </Stack>
@@ -143,10 +145,10 @@ function Chatbot() {
 
             <Box flex="0" width="100%">
                 
-                <ChatTextarea
+                {/* <ChatTextarea
                     isNewChat={true}
                     onNewChat={handlePromptSelect}
-                />
+                /> */}
 
                 <ChatInput
                     newMessage={newMessage}

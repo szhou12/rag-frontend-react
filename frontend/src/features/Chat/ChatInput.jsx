@@ -6,6 +6,7 @@ import {
     IconButton,
     Textarea,
 } from '@chakra-ui/react'
+import { LuImagePlus, LuMic, LuSendHorizontal } from 'react-icons/lu'
 
 import useAutoSize from "@/hooks/useAutoSize"
 
@@ -44,6 +45,7 @@ function ChatInput({ newMessage, isLoading, setNewMessage, submitNewMessage }) {
                     bg="transparent"
                     resize="none"
                     width="full"
+                    maxH="140px" // max height textarea can grow to
                     placeholder="Ask me anything about clean energy..."
                 />
 

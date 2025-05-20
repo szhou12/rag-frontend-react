@@ -33,37 +33,91 @@ export const ChatService = {
         })
     },
 
-    createChat: async () => {
-        const response = await fetch('http://localhost:8001' + '/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+    // TDOO: configure backend
+    // createChat: async () => {
+    //     const response = await fetch('http://localhost:8001' + '/chat', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
+
+    //     const data = await response.json()
+
+    //     if (!response.ok) {
+    //         return Promise.rejuect({ status: response.status, data })
+    //     }
+
+    //     return data
+    // },
+
+    createChat: () => {
+        return new Promise((resolve) => {
+            // Simulate network delay
+            setTimeout(() => {
+                // Generate a new chat ID
+                const newChatId = uuidv4()
+                
+                // Create a mock response that matches what the backend would return
+                const mockResponse = {
+                    id: newChatId,
+                    messages: [],  // Empty messages array for new chat
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    status: 'active'
+                }
+
+                // Add to our mock conversations list
+                MOCK_CONVERSATIONS.unshift({
+                    id: newChatId,
+                    name: "You",
+                    updated_at: new Date().toLocaleDateString(),
+                    title: "New Chat"
+                })
+
+                resolve(mockResponse)
+            }, 500) // Simulate 500ms network delay
+        })
+    },
+
+
+    // TODO: configure backend
+    // sendChatMessage: async (chatId, message) => {
+    //     const response = await fetch('http://localhost:8001' + `/c/${chatId}`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({ message })
+    //     })
+
+    //     if (!response.ok) {
+    //         return Promise.reject({ status: response.status, data: await response.json() })
+    //     }
+    
+    //     return response.body
+    // },
+    sendChatMessage: (chatId, message) => {
+        // Create a mock response stream
+        const encoder = new TextEncoder()
+        const stream = new ReadableStream({
+            async start(controller) {
+                // Simulate streaming response
+                const response = `The user typed in: ${message}`
+                const chunks = response.split(' ')
+
+                for (let i = 0; i < chunks.length; i++) {
+                    // Add a small delay between chunks to simulate streaming
+                    await new Promise(resolve => setTimeout(resolve, 100))
+                    // Send the chunk as SSE data, add space after each word except the last one
+                    const chunk = chunks[i] + (i < chunks.length - 1 ? ' ' : '')
+                    controller.enqueue(encoder.encode(`data: ${chunk}\n\n`))
+                }
+                controller.close()
             }
         })
 
-        const data = await response.json()
-
-        if (!response.ok) {
-            return Promise.rejuect({ status: response.status, data })
-        }
-
-        return data
-    },
-
-    sendChatMessage: async (chatId, message) => {
-        const response = await fetch('http://localhost:8001' + `/c/${chatId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message })
-        })
-
-        if (!response.ok) {
-            return Promise.reject({ status: response.status, data: await response.json() })
-        }
-    
-        return response.body
+        return stream
     },
 
     // TODO
