@@ -82,7 +82,6 @@ function useAutoScrollChat(active) {
         // initial value setup: enable auto-scroll the first time the component mounts or active becomes true
         isDisabled.current = false
         prevScrollTop.current = scrollContentRef.current.scrollTop
-        console.log('Auto-scroll enabled on mount/active change')
 
         // The effect tracks container scroll events before the browser paints
         scrollContentRef.current.addEventListener('scroll', onScroll)

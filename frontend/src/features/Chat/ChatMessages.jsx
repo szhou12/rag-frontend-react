@@ -14,6 +14,8 @@ import { FaUser, FaExclamationCircle } from "react-icons/fa"
 import useAutoScroll from "@/hooks/useAutoScroll"
 import useAutoScrollChat from "@/hooks/useAutoScrollChat"
 
+import ScrollDebug from "@/features/Chat/ScrollDebug"
+
 function ChatMessages({ messages, isLoading }) {
     const scrollContentRef = useAutoScrollChat(isLoading)
 
@@ -26,6 +28,7 @@ function ChatMessages({ messages, isLoading }) {
             height="100%"     // Take full height of parent
             position="relative" // For proper scroll positioning
         >
+            
             <VStack spacing={4} align="stretch">
                 {messages.map(({ role, content, loading, error }, idx) => (
                     <Flex
@@ -43,6 +46,7 @@ function ChatMessages({ messages, isLoading }) {
                             </Icon>
                         )}
 
+
                         <Box>
                             <Box>
                                 {loading && !content ? (
@@ -52,9 +56,15 @@ function ChatMessages({ messages, isLoading }) {
                                         css={{ "--spinner-track-color": "colors.gray.200" }}
                                     />
                                 ) : role === "assistant" ? (
-                                    <Prose>
-                                        <Markdown>{content}</Markdown>
+                                    <Prose mx="auto">
+                                        <Markdown>
+                                            {content}
+                                        </Markdown>
                                     </Prose>
+                                    // <Text>
+                                    //     <Markdown>{content}</Markdown>
+                                    //     {/* {content} */}
+                                    // </Text>
                                     
                                 ) : (
                                     // user typed-in message
@@ -89,6 +99,7 @@ function ChatMessages({ messages, isLoading }) {
                     </Flex>
                 ))}
             </VStack>
+            <ScrollDebug scrollRef={scrollContentRef} />
         </Box>
     )
 

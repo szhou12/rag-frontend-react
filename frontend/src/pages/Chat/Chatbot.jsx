@@ -16,6 +16,7 @@ import { ChatFooter } from '@/features/Chat/ChatFooter'
 import ChatInput from '@/features/Chat/ChatInput'
 import ChatMessages from '@/features/Chat/ChatMessages'
 import { ChatService } from '@/components/Chat/mocks/chatService'
+import Demo from '@/features/Chat/Demo'
 
 
 // Act as both index page and chat session
@@ -140,6 +141,8 @@ export default function Chatbot() {
                         isLoading={isLoading}
                     />
                 )}
+
+                {/* <Demo /> */}
 
             </Box>
 
