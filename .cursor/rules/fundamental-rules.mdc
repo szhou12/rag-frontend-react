@@ -1,0 +1,34 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Fundamental Project Rules
+
+## Code Modification Rules
+- Do not ever add, update, or delete code in-place unless explicitly asked to. Only suggest new implementations in the chat.
+
+## Project Structure Rules
+- Always follow the established folder structure:
+  - Frontend code must be placed in appropriate directories:
+    - `components/` for shared UI components
+    - `features/` for business logic components
+    - `pages/` for page layouts
+    - `layouts/` for reusable layouts
+  - Backend code must follow the structure under `app/`:
+    - `api/routes/` for API endpoints
+    - `services/` for business logic
+    - `models/` for database models
+    - `schemas/` for Pydantic schemas
+
+## Dependency Rules
+- Always use the specified versions of key dependencies:
+  - Chakra UI v3.13.0 for frontend components
+  - Python 3.13 for backend development
+  - TanStack Router for frontend routing
+  - React Query for data fetching
+
+## Development Workflow Rules
+- Always maintain clear separation between frontend and backend responsibilities:
+  - Frontend: UI/UX and API calls
+  - Backend: Business logic, database operations, and RAG services

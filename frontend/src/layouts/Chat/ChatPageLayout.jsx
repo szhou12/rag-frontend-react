@@ -45,24 +45,27 @@ export const ChatPageLayout = () => {
     const { user, isLoadingUser } = useAuth()
 
     return (
-        <Flex direction="column" h="100vh">
+        <Flex direction="column" h="100vh" position="relative" overflow="auto">
             
             {/* mobile only: hides when screen size > md */}
-            <ChatNavbar hideFrom="md" /> 
+            <ChatNavbar hideFrom="md" position="sticky" top="0" zIndex="sticky"/>
+            
 
-            <Flex flex="1" overflow="hidden">
+            <Flex
+                flex="1" 
+                // overflow="hidden"
+            >
 
                 {/* Desktop Only: hides when screen size < md */}
                 <CollapsibleSidebar hideBelow="md">
                     <ChatSidebarContent />
                 </CollapsibleSidebar>
                 
-
                 <Stack 
                     flex="1" // Stack expands to fill the available space
                     alignItems="stretch" // make all Stack's children to fill the width of the container horizontally
                     minH="0" // allows Stack to shrink to fit the remaining space, preventing overflow
-                    overflow="hidden" // Prevent outer scroll
+                    // overflow="hidden" // Prevent outer scroll
                 >
                     {!isLoadingUser && user?.role !== "client" && (<ChatHeader href="/dashboard/index" />)}
 
@@ -71,13 +74,12 @@ export const ChatPageLayout = () => {
                         flex="1" // Container expands to fill the available space
                         maxW="100%"
                         p="0" // Remove container padding to prevent overflow
-                        overflow="hidden" // Prevent container scroll
+                        // overflow="hidden" // Prevent container scroll
                     >
+                        {/* main content */}
                         <Outlet />
                     </Container>
                 </Stack>
-
-               
 
             </Flex>
             

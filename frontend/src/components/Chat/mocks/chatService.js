@@ -103,10 +103,11 @@ export const ChatService = {
         const stream = new ReadableStream({
             async start(controller) {
                 // Simulate streaming response
-                // const response = message
-                const response = "## Heading\n\nBased on your Chakra package. So [click here](http://chakra-ui.com) to confirm your plan.\n\n- first item\n- second item\n- second item\n- second item\n\n[title](http://chakra-ui.com)"
+                const response = message
+                // const response = "## Heading\n\nBased on your Chakra package. So [click here](http://chakra-ui.com) to confirm your plan.\n\n- first item\n- second item\n- second item\n- second item\n\n[title](http://chakra-ui.com)"
                 // const chunks = response.split('\n\n')
-                const chunks = response.split(/(?<=\n)/)
+                const chunks = response.split(' ')
+                // const chunks = response.split(/(?<=\n)/)
 
                 for (let i = 0; i < chunks.length; i++) {
                     // Add a small delay between chunks to simulate streaming

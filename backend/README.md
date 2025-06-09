@@ -148,5 +148,36 @@
     ```
 9. Explain "closure" in JavaScript: `submitNewMessage` function uses `setMessages` defined outside. When we pass `submitNewMessage` to a component, how can it still access `setMessages`?
 
+10. Define child components outside the parent component's render. Pass static JSX (child components) as props — never inline function components (function defined inside this parent component).
+    - Why: Defining components inside a parent component creates a new identity on every render, causing unexpected behavior.
+    ```javascript
+    🟩 Good:
+    // in Footer.jsx
+    const Footer = () => <Box>Footer</Box>;
+
+    // in Content.jsx, import Footer
+    const ChatPage = () => {
+        return <ThreeLayerLayout bottom={<Footer />} />
+        // or
+        return <ThreeLayerLayout bottom={<Box>Footer</Box>} />
+    }
+    // in this example, ThreeLayerLayout takes direct component <Footer />. Every re-render of ChatPage will only update Footer as needed.
+
+    🟥 Bad:
+    // in Content.jsx, import Footer but wrap it in a function component inside ChatPage
+    const ChatPage = () => {
+        // function component defined in parent component ChatPage
+        const Bottom = () => {
+            return (<Box>Footer</Box>)};
+
+        return <ThreeLayerLayout bottom={<Bottom />} />;
+    };
+    // in this example, every time ChatPage re-renders will trigger Bottom() to be created again, treating Footer as a new component.
+    ```
+11. **"Lifting State Up" principle**: Shared state (e.g. user data invoked by a hook) should be declared in lowest common ancestor component, and then pass down as props to child components. Do not declare this state locally within child components.
+    - single source of truth
+    - easier management
+    - better performance as hook called only once
+
 ## Helpful Links
 - [Example use of Pydantic MySQLDsn](https://github.com/pydantic/pydantic/pull/4990)

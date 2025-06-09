@@ -112,7 +112,8 @@ export default function Chatbot() {
             flex="1"
             height="100%" // Use height 100% to fill parent instead of 100vh
             width="100%" // Ensure full width
-            overflow="hidden" // Prevent overall scrolling so footer fixed at bottom
+            // overflow="hidden" // Prevent overall scrolling so footer fixed at bottom
+            position="relative"
         >
 
             <Box 
@@ -146,7 +147,15 @@ export default function Chatbot() {
 
             </Box>
 
-            <Box flex="0" width="100%">
+            <Box 
+                // flex="0" 
+                // width="100%"
+                position="sticky"
+                bottom="0"
+                flexShrink={0}
+                bg="white"
+                py={4}
+            >
                 
                 {/* <ChatTextarea
                     isNewChat={true}

@@ -13,51 +13,20 @@ import { Link } from '@tanstack/react-router'
 import { useQuery } from "@tanstack/react-query"
 import { BsChatTextFill, BsMicFill, BsPaperclip, BsPinAngleFill } from 'react-icons/bs'
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand } from "react-icons/tb"
+
+import { Route } from '@/routes/_chat-layout/chat-session'
 import { ChatTab } from './ChatTab'
 import { SearchField } from '../Common/SearchField'
 import { ChatGroupHeader } from './ChatGroupHeader'
-import { SidebarFooter } from '../Common/SidebarFooter'
-import { Route } from '@/routes/_chat-layout/chat-session'
-import { v4 as uuidv4 } from 'uuid'
+import { SidebarFooter as SidebarFooterOld } from "@/components/Common/SidebarFooter"
+import { SidebarIcons as SidebarIconsOld } from "./SidebarIcons"
+import { ChatService } from './mocks/chatService'
+import { ThreeLayerLayout } from '@/components/Common/ThreeLayerLayout'
+import { SidebarIcons } from '@/components/Chat/sidebartop/SidebarIcons'
+import { SidebarFooter } from '@/components/Chat/sidebarbottom/SidebarFooter'
+import { SidebarContent } from '@/components/Chat/sidebarcontent/SidebarContent'
 
-const MOCK_CONVERSATIONS = Array.from({ length: 7 }, (_, index) => ({
-    id: uuidv4(),
-    name: `user${index + 1}`,
-    updated_at: new Date(2024, 0, index + 1).toLocaleDateString(),
-    title: `This is conversation ${index + 1}`,
-}));
-
-// TODO: DELETE when backend is ready and Data Delegate Model is implemented
-export const ChatService = {
-    getConversations: () => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve([...MOCK_CONVERSATIONS])
-            }, 1000)
-        })
-    },
-
-    addConversation: (newConversation) => {
-        return new Promise((resolve) => {
-            // Create new conversation object with all required fields
-            const conversation = {
-                id: newConversation.id,
-                name: "You",
-                updated_at: new Date().toLocaleDateString(), // Current date
-                title: newConversation.initialPrompt
-            }
-
-            // Add to start of array
-            MOCK_CONVERSATIONS.unshift(conversation)
-
-            // Return a copy of the updated array
-            resolve([...MOCK_CONVERSATIONS])
-        })
-    }
-}
-
-
-export const Sidebar = (props) => {
+const SidebarChakraPro = (props) => {
 
     const { data: chats, isPending, error } = useQuery({
         queryFn: () => ChatService.getConversations(),
@@ -166,7 +135,7 @@ export const Sidebar = (props) => {
                     <ChatList />
                 </Stack>
                 
-                <SidebarFooter />
+                <SidebarFooterOld />
             </Stack>
 
         </Box>
@@ -197,4 +166,104 @@ export const Sidebar = (props) => {
 
     //     </Flex>
     // )
+}
+
+const CollapsibleSidebar = ({ 
+    initialSize = "large",
+    smallWidth = "60px",
+    largeWidth = "280px",
+    bg = "transparent",
+    children,
+    ...props
+}) => {
+    const [sidebarSize, setSidebarSize] = useState(initialSize)
+
+    const toggleSidebar = () => {
+        setSidebarSize(sidebarSize === "small" ? "large" : "small");
+    }
+
+    return (
+        <Flex
+            direction="column"
+            transition="width 0.1s ease-in-out"
+            width={sidebarSize === "small" ? smallWidth : largeWidth}
+            bg={bg}
+            borderRightWidth="1px"
+            minH="100vh"
+            justify="space-between"
+            {...props}
+        >
+            {/* Desktop View Only */}
+            <SidebarIconsOld 
+                isCollapsed={sidebarSize === "small"}
+                onToggleSidebar={toggleSidebar}
+                hideBelow="md"
+            />
+
+            {/* Sidebar Content */}
+            {sidebarSize === "large" && (
+                <Flex direction="column" flex="1" overflow="hidden">
+                    {children}
+                </Flex>
+            )}
+
+            {/* Footer */}
+            <Flex p={sidebarSize === "small" ? "2" : "4"}>
+                <SidebarFooterOld isCollapsed={sidebarSize === "small"} />
+            </Flex>
+            
+        </Flex>
+    )
+
+}
+
+
+const SidebarThreeLayer = ({user, ...props}) => {
+    const [sidebarSize, setSidebarSize] = useState("large")
+
+
+
+    const toggleSidebar = () => {
+        setSidebarSize(sidebarSize === "small" ? "large" : "small");
+    }
+
+    return (
+        <Stack
+            flex="1"
+            // p={{ base: '4', md: '6' }}
+            bg="transparent"
+            borderRightWidth="1px"
+            justifyContent="space-between"
+            maxW="xs"
+            overflow="hidden"
+            {...props}
+        >
+            <ThreeLayerLayout
+                top={
+                    <SidebarIcons 
+                        user={user}
+                        isCollapsed={sidebarSize === "small"} 
+                        onToggleSidebar={toggleSidebar} 
+                    />
+                }
+                topProps={{bg: 'pink.500'}}
+                main={
+                    <>
+                        {sidebarSize === "large" && <SidebarContent />}
+                    </>
+                }
+                mainProps={{bg: 'blue.500'}}
+                bottom={
+                    <SidebarFooter user={user} isCollapsed={sidebarSize === "small"} />
+                }
+                bottomProps={{bg: 'green.500', borderTopWidth:"1px", p:4}}
+            />
+        </Stack>
+    )
+}
+
+export { 
+    SidebarChakraPro,
+    CollapsibleSidebar,
+    SidebarThreeLayer,
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { 
     Button,
     ButtonGroup,
@@ -8,29 +8,26 @@ import {
     IconButton, 
     Drawer, 
     CloseButton, 
-    Stack,
-    VStack,
     Portal, 
     Image,
-    useBreakpointValue,
-    useDisclosure,
 } from '@chakra-ui/react'
 import { useQuery } from "@tanstack/react-query"
 import { Link } from '@tanstack/react-router'
-import { LuAlignLeft } from 'react-icons/lu'
+import { LuAlignLeft, LuLayoutDashboard } from 'react-icons/lu'
 import { BsPencilSquare, BsSearch } from "react-icons/bs"
+import { Tooltip } from "@/components/ui/tooltip"
 import Logo from "/rmi_logo_horitzontal_no_tagline.svg"
 
-import { Tooltip } from "@/components/ui/tooltip"
-import { Sidebar } from './Sidebar'
-import CollapsibleSidebar from "@/components/Chat/CollapsibleSidebar"
-import { SidebarContent as ChatSidebarContent } from "@/components/Chat/SidebarContent"
-import { SidebarFooter } from "@/components/Common/SidebarFooter"
+// import { Sidebar } from './Sidebar'
+// import CollapsibleSidebar from "@/components/Chat/CollapsibleSidebar"
+// import { SidebarContent as ChatSidebarContent } from "@/components/Chat/SidebarContent"
+// import { SidebarFooter } from "@/components/Common/SidebarFooter"
+// import { ChatTab } from './ChatTab'
+// import { SidebarChatList } from './SidebarChatList'
 
 import { Route } from '@/routes/_chat-layout/chat-session'
-import { ChatTab } from './ChatTab'
-import { SidebarChatList } from './SidebarChatList'
-
+import { SidebarFooter } from '@/components/Chat/sidebarbottom/SidebarFooter'
+import { TabList } from '@/components/Chat/sidebarmain/TabList'
 import { ChatService } from './mocks/chatService'
 
 /**
@@ -39,7 +36,7 @@ import { ChatService } from './mocks/chatService'
  * 
  */
 // props: ContainerProps (import from chakra-ui)
-export const Navbar = (props) => {
+export const Navbar = ({user, ...props}) => {
 
     const [isOpen, setIsOpen] = useState(false)
 
@@ -80,7 +77,7 @@ export const Navbar = (props) => {
 
                                 <Drawer.Header>
                                     <Drawer.Title flex="1">
-                                        Conversations ({chats?.length})
+                                        Conversations
                                     </Drawer.Title>
 
                                     <ButtonGroup>
@@ -95,16 +92,17 @@ export const Navbar = (props) => {
                                 </Drawer.Header>
 
                                 <Drawer.Body>
-                                    <SidebarChatList 
+                                    <TabList 
                                         data={chats}
                                         isPending={isPending}
                                         error={error} 
+                                        w="full"
                                     />
                                 </Drawer.Body>
 
                                 <Drawer.Footer>
                                     <Flex p={4}>
-                                        <SidebarFooter />
+                                        <SidebarFooter user={user} w="full"/>
                                     </Flex>
                                 </Drawer.Footer>
 
@@ -119,17 +117,30 @@ export const Navbar = (props) => {
                 <Image src={Logo} alt="RMI Logo" w="100px" maxW="2xs" />
 
                 {/* right element of Navbar */}
-                <Tooltip showArrow content="New Chat">
-                    <IconButton 
-                        variant="ghost"
-                        aria-label="New Chat"
-                        color="black"
-                    >
-                        <BsPencilSquare />
-                    </IconButton>
-                </Tooltip>
-                
+                <HStack justify="space-between" >
+                    <Tooltip showArrow content="New Chat">
+                        <IconButton 
+                            variant="ghost"
+                            aria-label="New Chat"
+                            color="black"
+                        >
+                            <BsPencilSquare />
+                        </IconButton>
+                    </Tooltip>
 
+                    {user?.role !== "client" && (
+                        <Tooltip showArrow content="Staff Dashboard">
+                            <IconButton 
+                                variant="ghost"
+                                aria-label="Dashboard"
+                                color="black"
+                            >
+                                <LuLayoutDashboard />
+                            </IconButton>
+                        </Tooltip>
+                    )}
+
+                </HStack>
 
             </HStack>
         </Container>
