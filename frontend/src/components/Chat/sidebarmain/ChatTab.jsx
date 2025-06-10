@@ -20,7 +20,7 @@ export const ChatTab = (props) => {
                 color: 'colorPalette.fg',
             }}
             rounded="md"
-            bg="blue.500"
+            bg="bg.panel"
         >
 
             {/* <Stack spacing="0" fontSize="sm" flex="1" width="100%">

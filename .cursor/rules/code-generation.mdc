@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Do not ever add, update, or delete code in-place unless I explicitly ask you to. Only provide your code suggestions in the chat.

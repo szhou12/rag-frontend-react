@@ -14,8 +14,8 @@ import { Route as UploaderImport } from './_dashboard-layout/uploader'
 import { Route as ChatLayoutImport } from './_chat-layout'
 import { Route as NewChatImport } from './_chat-layout/newchat'
 import { Route as ChatSessionImport } from './_chat-layout/chat-session'
-import { Route as ChatImport } from './_chat-layout/chat'
-import { Route as ChatIdImport } from './_chat-layout/chat.$chatId'
+import { Route as ChatHomeImport } from './_chat-layout/chat'
+import { Route as ChatConversationImport } from './_chat-layout/chat.$chatId'
 
 // import { Route as ChatIndexImport } from './_chat-layout/index'
 // import { Route as ChatIdImport } from './_chat-layout/chat-id'
@@ -112,7 +112,7 @@ const chatLayoutRoute = ChatLayoutImport.update({
 //     path: "/chat",
 //     getParentRoute: () => chatLayoutRoute,
 // })
-const newChatRoute = ChatImport.update({
+const newChatRoute = ChatHomeImport.update({
     path: "/chat",
     getParentRoute: () => chatLayoutRoute,
 })
@@ -124,8 +124,8 @@ const newChatRoute = ChatImport.update({
 //     path: "/c/$chatId",
 //     getParentRoute: () => chatLayoutRoute,
 // })
-const chatSessionRoute = ChatIdImport.update({
-    path: "/c/$chatId",
+const chatSessionRoute = ChatConversationImport.update({
+    path: "/chat/$chatId",
     getParentRoute: () => chatLayoutRoute,
 })
 

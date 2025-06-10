@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router"
 import ChatSessionPage from "@/pages/Chat/ChatSessionPage"
-import Chatbot from "@/pages/Chat/Chatbot"
+import ConversationPage from "@/pages/Chat/ConversationPage"
 
 
-export const Route = createFileRoute("/c/$chatId")({
-    component: Chatbot,
+export const Route = createFileRoute("/chat/$chatId")({
+    component: ConversationPage,
 })

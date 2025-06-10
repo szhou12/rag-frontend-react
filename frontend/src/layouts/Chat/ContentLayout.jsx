@@ -3,7 +3,7 @@ import {
     Text
 } from '@chakra-ui/react'
 
-import { ThreeLayerLayout } from '@/components/Common/ThreeLayerLayout'
+import { ThreeLayerLayout } from '@/layouts/Chat/ThreeLayerLayout'
 import { ChatInput } from '@/components/Chat/contentbottom/ChatInput'
 
 export const ContentLayout = ({
@@ -16,7 +16,7 @@ export const ContentLayout = ({
     return (
         <ThreeLayerLayout
             main={children}
-            mainProps={{bg: 'blue.500'}}
+            // mainProps={{bg: 'blue.500'}}
             bottom={
                 <>
                     <ChatInput
@@ -25,14 +25,14 @@ export const ContentLayout = ({
                         submitNewMessage={submitNewMessage}
                         isLoading={isLoading}
                     />
-                    <Center height="7" bg="currentBg">
+                    <Center height="7" bg="bg.panel">
                         <Text textStyle="xs" color="fg.subtle" textAlign="center">
                             Our AI model can make mistakes. Be sure to check important info.
                         </Text>
                     </Center>
                 </>
             }
-            bottomProps={{bg: 'green.500', borderTopWidth:"1px", p: 2}}
+            bottomProps={{borderTopWidth:"1px", p: 2}}
         />
     )
 }

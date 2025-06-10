@@ -21,10 +21,10 @@ import { ChatGroupHeader } from './ChatGroupHeader'
 import { SidebarFooter as SidebarFooterOld } from "@/components/Common/SidebarFooter"
 import { SidebarIcons as SidebarIconsOld } from "./SidebarIcons"
 import { ChatService } from './mocks/chatService'
-import { ThreeLayerLayout } from '@/components/Common/ThreeLayerLayout'
+import { ThreeLayerLayout } from '@/layouts/Chat/ThreeLayerLayout'
 import { SidebarIcons } from '@/components/Chat/sidebartop/SidebarIcons'
 import { SidebarFooter } from '@/components/Chat/sidebarbottom/SidebarFooter'
-import { SidebarContent } from '@/components/Chat/sidebarcontent/SidebarContent'
+import { SidebarContent } from '@/components/Chat/sidebarmain/SidebarContent'
 
 const SidebarChakraPro = (props) => {
 
@@ -231,7 +231,7 @@ const SidebarThreeLayer = ({user, ...props}) => {
         <Stack
             flex="1"
             // p={{ base: '4', md: '6' }}
-            bg="transparent"
+            // bg="red.500"
             borderRightWidth="1px"
             justifyContent="space-between"
             maxW="xs"
@@ -246,17 +246,17 @@ const SidebarThreeLayer = ({user, ...props}) => {
                         onToggleSidebar={toggleSidebar} 
                     />
                 }
-                topProps={{bg: 'pink.500'}}
+                topProps={{bg: 'bg.panel'}}
                 main={
                     <>
                         {sidebarSize === "large" && <SidebarContent />}
                     </>
                 }
-                mainProps={{bg: 'blue.500'}}
+                mainProps={{bg: 'bg.panel'}}
                 bottom={
                     <SidebarFooter user={user} isCollapsed={sidebarSize === "small"} />
                 }
-                bottomProps={{bg: 'green.500', borderTopWidth:"1px", p:4}}
+                bottomProps={{bg: 'bg.panel', borderTopWidth:"1px", p:4}}
             />
         </Stack>
     )

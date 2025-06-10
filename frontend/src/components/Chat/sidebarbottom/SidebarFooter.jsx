@@ -7,7 +7,7 @@ import { UserProfile } from '@/components/Common/UserProfile'
 export const SidebarFooter = ({ user, isCollapsed = false, ...props }) => {
     return (
         <Stack gap="4" separator={<StackSeparator />} {...props}>
-            <Box /> {/* Spacer */}
+            {/* <Box /> */}
             
             {!isCollapsed && (
                 <Stack gap="1">

@@ -8,7 +8,6 @@ import { ChatTab } from './ChatTab'
 
 export const TabList = ({ data, isPending, error, ...props }) => {
 
-    // TODO: change links format
     return (
         <Stack gap="1" w="xs" {...props}>
             {isPending ? (
@@ -24,14 +23,14 @@ export const TabList = ({ data, isPending, error, ...props }) => {
                 <Text px="4" color="red.500">Something went wrong!</Text>
             ) : (
                 data?.map((message) => (
-                    <a key={message.id} href={`/chat/${message.id}`}>
-                        <ChatTab data={message} />
-                    </a>
-                    // <SidebarLink href={`/chat/${message.id}`}>
-                    //     <Text fontWeight="medium" truncate>
-                    //         {message.title}
-                    //     </Text>
-                    // </SidebarLink>
+                    // <a key={message.id} href={`/chat/${message.id}`}>
+                    //     <ChatTab data={message} />
+                    // </a>
+                    <SidebarLink href={`/chat/${message.id}`}>
+                        <Text fontWeight="medium" truncate>
+                            {message.title}
+                        </Text>
+                    </SidebarLink>
                 ))
             )}
         </Stack>

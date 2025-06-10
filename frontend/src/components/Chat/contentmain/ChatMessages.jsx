@@ -115,7 +115,7 @@ export const ChatMessages = ({ messages, isLoading }) => {
                 paddingBottom="10" // decides how much bottom empty space will show
                 height="1px"
                 width="100%"
-                bg="gray.200"
+                // bg="gray.200"
             />
         </Box>
     )

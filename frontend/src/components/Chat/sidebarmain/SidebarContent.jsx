@@ -21,7 +21,7 @@ export const SidebarContent = ({ ...props }) => {
     })
 
     return (
-        <Stack gap="1" bg="red.500" {...props}>
+        <Stack gap="1" bg="bg.panel" {...props}>
             <Text fontSize="md" fontWeight="medium" alignSelf="start">
                 Conversations ({chats?.length})
             </Text>

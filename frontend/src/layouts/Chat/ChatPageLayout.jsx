@@ -3,11 +3,13 @@ import { Outlet, Link } from "@tanstack/react-router"
 import { LuLayoutDashboard, LuArrowRight } from "react-icons/lu"
 
 import useAuth from '@/hooks/useAuth'
-import { Navbar as ChatNavbar } from "@/components/Chat/Navbar"
-import { Sidebar as ChatSidebar } from "@/components/Chat/Sidebar"
-import CollapsibleSidebar from "@/components/Chat/CollapsibleSidebar"
-import { SidebarContent as ChatSidebarContent } from "@/components/Chat/SidebarContent"
-import { SidebarFooter } from "@/components/Common/SidebarFooter"
+import { Navbar } from "@/components/Chat/Navbar"
+// import { Sidebar as ChatSidebar } from "@/components/Chat/Sidebar"
+// import CollapsibleSidebar from "@/components/Chat/CollapsibleSidebar"
+// import { SidebarContent as ChatSidebarContent } from "@/components/Chat/SidebarContent"
+// import { SidebarFooter } from "@/components/Common/SidebarFooter"
+import { SidebarThreeLayer as Sidebar } from "@/components/Chat/Sidebar"
+
 
 const ChatHeader = ({href}) => {
 
@@ -48,7 +50,7 @@ export const ChatPageLayout = () => {
         <Flex direction="column" h="100vh" position="relative" overflow="auto">
             
             {/* mobile only: hides when screen size > md */}
-            <ChatNavbar hideFrom="md" position="sticky" top="0" zIndex="sticky"/>
+            <Navbar user={user} hideFrom="md" position="sticky" top="0" zIndex="sticky"/>
             
 
             <Flex
@@ -57,11 +59,22 @@ export const ChatPageLayout = () => {
             >
 
                 {/* Desktop Only: hides when screen size < md */}
-                <CollapsibleSidebar hideBelow="md">
+                {/* <CollapsibleSidebar hideBelow="md">
                     <ChatSidebarContent />
-                </CollapsibleSidebar>
+                </CollapsibleSidebar> */}
+                <Flex
+                    hideBelow="md" 
+                    maxW="xs" 
+                    position="sticky" 
+                    top="0" 
+                    direction="column"
+                    height="100vh" 
+                    p={1}
+                >
+                    <Sidebar user={user} />
+                </Flex>
                 
-                <Stack 
+                {/* <Stack 
                     flex="1" // Stack expands to fill the available space
                     alignItems="stretch" // make all Stack's children to fill the width of the container horizontally
                     minH="0" // allows Stack to shrink to fit the remaining space, preventing overflow
@@ -76,10 +89,19 @@ export const ChatPageLayout = () => {
                         p="0" // Remove container padding to prevent overflow
                         // overflow="hidden" // Prevent container scroll
                     >
-                        {/* main content */}
                         <Outlet />
                     </Container>
-                </Stack>
+                </Stack> */}
+
+                <Flex 
+                    flex="1"
+                    direction="column"
+                    height="100vh"
+                    p={1}
+                    alignItems="stretch"
+                >
+                    <Outlet />
+                </Flex>
 
             </Flex>
             

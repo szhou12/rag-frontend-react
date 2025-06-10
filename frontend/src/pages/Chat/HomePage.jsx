@@ -1,4 +1,13 @@
 import { useState } from 'react'
+import {
+    Box,
+    Container,
+    Flex,
+    Heading,
+    Span,
+    Stack,
+    Text,
+} from '@chakra-ui/react'
 import { useNavigate } from '@tanstack/react-router'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { v4 as uuidv4 } from 'uuid'
@@ -6,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ContentLayout } from '@/layouts/Chat/ContentLayout'
 import { PredefinedPrompts } from '@/components/Chat/contentmain/PredefinedPrompts'
 import { ChatService } from '@/components/Chat/mocks/chatService'
-import { useCustomToast } from '@/hooks/useCustomToast'
+import useCustomToast from '@/hooks/useCustomToast'
 import { handleError } from '@/utils'
 
 // in case you need to roll back, refer to components/Chat/Content.jsx
@@ -66,7 +75,20 @@ const HomePage = () => {
             submitNewMessage={submitNewMessage}
             isLoading={addChatSession.isPending}
         >
-            <PredefinedPrompts onPromptSelect={handlePromptSelect} />
+
+            <Container maxW="4xl">
+                <Stack gap="8">
+                    <Heading size="4xl" fontWeight="normal">
+                        <Span color="colorPalette.fg">Hello, Client</Span> <br />
+                        <Span color="fg.muted">How can I help you today?</Span>
+                    </Heading>
+
+                    <PredefinedPrompts onPromptSelect={handlePromptSelect} />
+                </Stack>
+            </Container>
+
+            
+
         </ContentLayout>
     )
 
