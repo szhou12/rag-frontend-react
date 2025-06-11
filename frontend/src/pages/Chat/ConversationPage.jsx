@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react'
 import { useMatchRoute, useParams } from '@tanstack/react-router'
 import { useImmer } from 'use-immer'
 import { Box, Center, Text } from '@chakra-ui/react'
+import { useQueryClient } from '@tanstack/react-query'
 
-import { ContentLayout } from '@/layouts/Chat/ContentLayout'
+import { ThreeLayerLayout } from '@/layouts/Chat/ThreeLayerLayout'
 import { ChatMessages } from '@/components/Chat/contentmain/ChatMessages'
 import { ChatInput } from '@/components/Chat/contentbottom/ChatInput'
 import { ChatService } from '@/components/Chat/mocks/chatService'
@@ -30,12 +31,16 @@ const ConversationPage = () => {
 
     const isLoading = messages.length && messages[messages.length - 1].loading
 
+    const queryClient = useQueryClient()
+    const initialPrompt = queryClient.getQueryData(['chat', chatId, 'initialPrompt'])
+
     // Load initial conversation if chatId exists
     useEffect(() => {
         if (chatId) {
             // TODO: Implement loading initial conversation
             // This would fetch the existing conversation history
             console.log('loading conversation for id: ', chatId)
+            console.log('init msg: ', initialPrompt)
         }
     }, [chatId])
 
@@ -70,18 +75,42 @@ const ConversationPage = () => {
     }
 
     return (
-        <ContentLayout
-            newMessage={newMessage}
-            setNewMessage={setNewMessage}
-            submitNewMessage={submitNewMessage}
-            isLoading={isLoading}
-        >
-            <ChatMessages
-                messages={messages}
-                isLoading={isLoading}
-            />
+        // <ContentLayout
+        //     newMessage={newMessage}
+        //     setNewMessage={setNewMessage}
+        //     submitNewMessage={submitNewMessage}
+        //     isLoading={isLoading}
+        // >
+        //     <ChatMessages
+        //         messages={messages}
+        //         isLoading={isLoading}
+        //     />
 
-        </ContentLayout>
+        // </ContentLayout>
+        <ThreeLayerLayout
+            main={
+                <ChatMessages
+                    messages={messages}
+                    isLoading={isLoading}
+                />
+            }
+            bottom={
+                <>
+                    <ChatInput
+                        newMessage={newMessage}
+                        setNewMessage={setNewMessage}
+                        submitNewMessage={submitNewMessage}
+                        isLoading={isLoading}
+                    />
+                    <Center height="7" bg="bg.panel">
+                        <Text textStyle="xs" color="fg.subtle" textAlign="center">
+                            Our AI model can make mistakes. Be sure to check important info.
+                        </Text>
+                    </Center>
+                </>
+            }
+            bottomProps={{borderTopWidth:"1px", p: 2}}
+        />
     )
 }
 
