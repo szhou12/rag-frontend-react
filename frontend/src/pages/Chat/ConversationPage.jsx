@@ -29,6 +29,7 @@ const ConversationPage = () => {
     // Get chatId if we're on the chat.$chatId route, otherwise null
     const chatId = params?.chatId ?? null
 
+
     const isLoading = messages.length && messages[messages.length - 1].loading
 
     const queryClient = useQueryClient()
@@ -36,13 +37,38 @@ const ConversationPage = () => {
 
     // Load initial conversation if chatId exists
     useEffect(() => {
-        if (chatId) {
-            // TODO: Implement loading initial conversation
-            // This would fetch the existing conversation history
-            console.log('loading conversation for id: ', chatId)
-            console.log('init msg: ', initialPrompt)
+        // Only run if we have an initialPrompt and messages is empty
+        if (chatId && initialPrompt && !(messages[0]?.content === initialPrompt)) {
+          const loadInitialConversation = async () => {
+            // Same logic as before:
+            setMessages(draft => [
+              ...draft,
+              {role: 'user', content: initialPrompt},
+              {role: 'assistant', content: '', sources: [], loading: true}
+            ]);
+            setNewMessage('');
+            try {
+              const response = await ChatService.sendChatMessage(chatId, initialPrompt)
+              for await (const textChunk of parseSSEStream(response)) {
+                setMessages(draft => {
+                  draft[draft.length - 1].content += textChunk
+                });
+              }
+              setMessages(draft => {
+                draft[draft.length - 1].loading = false
+              });
+            } catch (error) {
+              handleError(error, showErrorToast)
+              setMessages(draft => {
+                draft[draft.length - 1].loading = false
+                draft[draft.length - 1].error = true
+              });
+            }
+          };
+          loadInitialConversation();
         }
-    }, [chatId])
+      }, [chatId, initialPrompt]);
+      
 
     const submitNewMessage = async () => {
         const trimmedMessage = newMessage.trim()
@@ -75,18 +101,6 @@ const ConversationPage = () => {
     }
 
     return (
-        // <ContentLayout
-        //     newMessage={newMessage}
-        //     setNewMessage={setNewMessage}
-        //     submitNewMessage={submitNewMessage}
-        //     isLoading={isLoading}
-        // >
-        //     <ChatMessages
-        //         messages={messages}
-        //         isLoading={isLoading}
-        //     />
-
-        // </ContentLayout>
         <ThreeLayerLayout
             main={
                 <ChatMessages

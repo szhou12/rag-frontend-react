@@ -23,31 +23,31 @@ import { handleError } from '@/utils'
 
 // in case you need to roll back, refer to components/Chat/Content.jsx
 const HomePage = () => {
-    const [newMessage, setNewMessage] = useState('')
+    const [newMessage, setNewMessage] = useState('') // visual changes in textarea
     const navigate = useNavigate()
     const queryClient = useQueryClient()
     const { showErrorToast } = useCustomToast()
 
     const addChatSession = useMutation({
         mutationFn: (data) => ChatService.addConversation(data),
+        // variables = data passed to mutate()
         onSuccess: (_, variables) => {
 
             queryClient.setQueryData(['chat', variables.id, 'initialPrompt'], variables.initialPrompt)
 
             navigate({
                 to: '/chat/$chatId',
-                params: {
-                    chatId: variables.id,
-                }
+                params: { chatId: variables.id },
+                state: { initialPrompt: variables.initialPrompt },
             })
         },
         onError: (err) => {
             handleError(err, showErrorToast)
         },
-        onSettled: () => {
-            // Always refetch conversations after mutation
-            queryClient.invalidateQueries({ queryKey: ["userChats"] })
-        },
+        // onSettled: () => {
+        //     // Always refetch conversations after mutation
+        //     queryClient.invalidateQueries({ queryKey: ["userChats"] })
+        // },
     })
     
     const handlePromptSelect = (promptText) => {
@@ -60,6 +60,9 @@ const HomePage = () => {
         })
     }
 
+    // HomePage submitting new message does two things by triggering mutate():
+    // 1. nav to ConversationPage
+    // 2. store intial message to cache
     const submitNewMessage = async () => {
         const trimmedMessage = newMessage.trim()
         if (!trimmedMessage) return
@@ -75,27 +78,6 @@ const HomePage = () => {
 
 
     return (
-        // <ContentLayout
-        //     newMessage={newMessage}
-        //     setNewMessage={setNewMessage}
-        //     submitNewMessage={submitNewMessage}
-        //     isLoading={addChatSession.isPending}
-        // >
-
-        //     <Container maxW="4xl">
-        //         <Stack gap="8">
-        //             <Heading size="4xl" fontWeight="normal">
-        //                 <Span color="colorPalette.fg">Hello, Client</Span> <br />
-        //                 <Span color="fg.muted">How can I help you today?</Span>
-        //             </Heading>
-
-        //             <PredefinedPrompts onPromptSelect={handlePromptSelect} />
-        //         </Stack>
-        //     </Container>
-
-            
-
-        // </ContentLayout>
         <ThreeLayerLayout
             main={
                 <Container maxW="4xl">
