@@ -33,6 +33,29 @@ export const ChatService = {
         })
     },
 
+    addChat: async (data) => {
+        // This should POST to your backend API
+        const response = await fetch('/api/conversations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                initialMessage: data.initialPrompt
+            })
+        })
+        
+        if (!response.ok) throw new Error('Failed to create conversation')
+        
+        const result = await response.json()
+        // Backend returns the new chat ID
+        return { id: result.conversationId }
+    },
+
+    getChat: async (chatId) => {
+        const response = await fetch(`/api/conversations/${chatId}`)
+        if (!response.ok) throw new Error('Failed to fetch conversation')
+        return response.json() // Returns messages array
+    },
+
     // TDOO: configure backend
     // createChat: async () => {
     //     const response = await fetch('http://localhost:8001' + '/chat', {

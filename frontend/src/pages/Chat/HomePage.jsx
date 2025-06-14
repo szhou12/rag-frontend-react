@@ -49,6 +49,21 @@ const HomePage = () => {
         //     queryClient.invalidateQueries({ queryKey: ["userChats"] })
         // },
     })
+
+    const addChatSession2 = useMutation({
+        mutationFn: (data) => ChatService.addChat(data),
+        onSuccess: (response) => {
+            // Backend returns the chatId, no need to generate UUID
+            navigate({
+                to: '/chat/$chatId',
+                params: { chatId: response.id }
+                // Remove state and cache logic
+            })
+        },
+        onError: (err) => {
+            handleError(err, showErrorToast)
+        }
+    })
     
     const handlePromptSelect = (promptText) => {
         // Generate new conversation ID
