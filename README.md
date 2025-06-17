@@ -259,3 +259,98 @@ $ npm run dev
 # /backend
 
 ```
+
+
+## Chat Data Structure
+### Backend (MongoDB) Data Structure
+Status = "pending"
+
+Cases covered:
+1. Fresh conversation from HomePage: User just submitted initial message, no AI response yet
+2. Network failure during AI response: AI was generating but connection dropped
+3. Server error during AI generation: Backend crashed while processing AI response
+4. User closed browser mid-generation: User left page while AI was responding
+5. API timeout: AI service took too long to respond
+6. Incomplete AI streaming: Streaming started but didn't complete successfully
+
+Key characteristic: Last message in database has role: 'user' and no corresponding assistant response.
+
+Status = "complete"
+
+Cases covered:
+1. Normal completed conversation: User message → AI response cycle finished successfully
+2. AI response with error: AI failed but we saved an error message as assistant response
+3. User sent multiple messages: All previous exchanges are complete, ready for new input
+4. Conversation loaded from history: All past exchanges are finished
+
+Key characteristic: Last message in database has role: 'assistant' (even if it's an error message)
+```jsx
+{
+    _id: ObjectId,                          // MongoDB auto-generated ID
+    conversationId: string,                 // UUID for frontend reference
+    userId: ObjectId,                       // ID of user who owns this chat. Obtained in backend from JWT token
+    title: string,                          // Chat title (derived from first message)
+    status: 'pending' | 'complete',          // UI state - is conversation being generated
+    createdAt: Date,                        // When conversation was created
+    updatedAt: Date,                        // Last message timestamp
+    messages: [                             // Ordered from old to recent
+        {
+            role: 'user' | 'assistant',     // Who sent the message: user=human, assistant=AI
+            content: string,                // Message text
+            timestamp: Date,                // When message was sent
+            sources: []                     // Document references (empty for user messages)
+        }
+    ]
+}
+```
+### Frontend Data Structure
+```jsx
+// Conversation-level state (if needed)
+const conversation = {
+    id: string,                             // conversationId from backend
+    title: string,
+    createdAt: Date,
+    updatedAt: Date
+}
+
+// Messages array state (main working data)
+const messages = [                          // Ordered from old to recent
+    {
+        role: 'user' | 'assistant',         // Who sent the message
+        content: string,                    // Message text
+        timestamp: Date,                    // When message was sent
+        sources: [],                        // Document references
+        loading: boolean,                   // UI state - is message being generated
+        error: boolean                      // UI state - did generation fail
+    }
+]
+```
+
+Workflow Logic:
+- Scenario 1: Creating New Conversation from HomePage
+    - Frontend (HomePage):
+        1. User types message or selects predefined prompt
+        2. Call API `ChatService.createConversation({ initialMessage })`
+        3. On success, navigate to `/chat/$chatId`
+    - Backend API:
+        1. Extract `userId` from JWT token
+        2. Create conversation document with:
+            - `userId` (from token)
+            - `initialMessage` (user's message)
+            - `status`: 'pending'
+            - Single message with role: 'user'
+        3. Return `{ chatId }`
+    - Frontend (ConversationPage):
+        1. Load conversation by `chatId`
+        2. Check conversation.status === 'pending'
+        3. If pending → automatically send last user message to AI
+        4. Stream AI response and update status: 'complete'
+- Scenario 2: Continuing Existing Conversation (from Sidebar)
+    - Frontend (Sidebar):
+        1. User clicks an existing conversation
+        2. Navigate to `/chat/$chatId`
+    - Frontend (ConversationPage):
+        1. Load conversation by `chatId`
+        2, Check conversation.status === 'complete'
+        3. If complete → just display existing messages
+        4. Wait for user to type new message

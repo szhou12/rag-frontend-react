@@ -38,7 +38,6 @@ const HomePage = () => {
             navigate({
                 to: '/chat/$chatId',
                 params: { chatId: variables.id },
-                state: { initialPrompt: variables.initialPrompt },
             })
         },
         onError: (err) => {
@@ -50,45 +49,31 @@ const HomePage = () => {
         // },
     })
 
-    const addChatSession2 = useMutation({
-        mutationFn: (data) => ChatService.addChat(data),
+    // New mutation for creating conversation with backend-generated ID
+    const createConversation = useMutation({
+        mutationFn: (initialMessage) => ChatService.createConversation({initialMessage}),
         onSuccess: (response) => {
-            // Backend returns the chatId, no need to generate UUID
+            // Backend returns { conversationId }
             navigate({
                 to: '/chat/$chatId',
-                params: { chatId: response.id }
-                // Remove state and cache logic
+                params: { chatId: response.conversationId }
             })
         },
         onError: (err) => {
             handleError(err, showErrorToast)
         }
     })
+
     
     const handlePromptSelect = (promptText) => {
-        // Generate new conversation ID
-        const newChatId = uuidv4()
-
-        addChatSession.mutate({
-            id: newChatId,
-            initialPrompt: promptText
-        })
+        createConversation.mutate(promptText)
     }
 
-    // HomePage submitting new message does two things by triggering mutate():
-    // 1. nav to ConversationPage
-    // 2. store intial message to cache
     const submitNewMessage = async () => {
         const trimmedMessage = newMessage.trim()
         if (!trimmedMessage) return
 
-        // Generate new conversation ID
-        const newChatId = uuidv4()
-
-        addChatSession.mutate({
-            id: newChatId,
-            initialPrompt: trimmedMessage
-        })
+        createConversation.mutate(trimmedMessage)
     }
 
 
@@ -111,7 +96,7 @@ const HomePage = () => {
                         newMessage={newMessage}
                         setNewMessage={setNewMessage}
                         submitNewMessage={submitNewMessage}
-                        isLoading={addChatSession.isPending}
+                        isLoading={createConversation.isPending}
                     />
                     <Center height="7" bg="bg.panel">
                         <Text textStyle="xs" color="fg.subtle" textAlign="center">

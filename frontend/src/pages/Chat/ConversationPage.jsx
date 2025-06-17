@@ -32,42 +32,80 @@ const ConversationPage = () => {
 
     const isLoading = messages.length && messages[messages.length - 1].loading
 
-    const queryClient = useQueryClient()
-    const initialPrompt = queryClient.getQueryData(['chat', chatId, 'initialPrompt'])
+    // const queryClient = useQueryClient()
+    // const initialPrompt = queryClient.getQueryData(['chat', chatId, 'initialPrompt'])
 
     // Load initial conversation if chatId exists
     useEffect(() => {
         // Only run if we have an initialPrompt and messages is empty
-        if (chatId && initialPrompt && !(messages[0]?.content === initialPrompt)) {
-          const loadInitialConversation = async () => {
-            // Same logic as before:
-            setMessages(draft => [
-              ...draft,
-              {role: 'user', content: initialPrompt},
-              {role: 'assistant', content: '', sources: [], loading: true}
-            ]);
-            setNewMessage('');
-            try {
-              const response = await ChatService.sendChatMessage(chatId, initialPrompt)
-              for await (const textChunk of parseSSEStream(response)) {
+        if (chatId) {
+			const loadConversation = async () => {
+				try {
+					// Fetch conversation from database
+					const conversation = await ChatService.getConversation(chatId)
+					// Convert backend messages to frontend format
+					const frontendMessages = conversation.messages.map(message => ({
+						...message,
+						loading: false,
+						error: false
+					}))
+
+					setMessages(frontendMessages)
+
+					// Check if conversation needs AI response
+					if (conversation.status === 'pending') {
+						// Find the last user message that needs a response
+						const lastUserMessage = conversation.messages
+							.filter(msg => msg.role === 'user') // filter for all user messages
+							.pop() // get the last user message
+
+						if (lastUserMessage) {
+							// Add loading assistant message
+							setMessages(draft => [...draft, {
+								role: 'assistant',
+								content: '',
+								sources: [],
+								timestamp: new Date(),
+								loading: true,
+								error: false
+							}])
+	
+							// Get AI response
+							await getAIResponse(lastUserMessage.content)
+						}
+					}
+
+				} catch (error) {
+					handleError(error, showErrorToast)
+				}
+			}
+
+			loadConversation();
+        }
+    }, [chatId]);
+	
+	// Extract AI response logic to reusable function
+    const getAIResponse = async (messageContent) => {
+        try {
+            const response = await ChatService.sendChatMessage(chatId, messageContent)
+            for await (const textChunk of parseSSEStream(response)) {
                 setMessages(draft => {
-                  draft[draft.length - 1].content += textChunk
-                });
-              }
-              setMessages(draft => {
+                    draft[draft.length - 1].content += textChunk
+                })
+            }
+            setMessages(draft => {
                 draft[draft.length - 1].loading = false
-              });
-            } catch (error) {
-              handleError(error, showErrorToast)
-              setMessages(draft => {
+            })
+        } catch (error) {
+            handleError(error, showErrorToast)
+            setMessages(draft => {
                 draft[draft.length - 1].loading = false
                 draft[draft.length - 1].error = true
-              });
-            }
-          };
-          loadInitialConversation();
+            })
         }
-      }, [chatId, initialPrompt]);
+    }
+
+
       
 
     const submitNewMessage = async () => {

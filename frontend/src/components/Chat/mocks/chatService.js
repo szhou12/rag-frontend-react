@@ -2,6 +2,7 @@
 
 import { v4 as uuidv4 } from 'uuid'
 
+// sidebar chat list
 export const MOCK_CONVERSATIONS = Array.from({ length: 7 }, (_, index) => ({
     id: uuidv4(),
     name: `user${index + 1}`,
@@ -159,5 +160,67 @@ export const ChatService = {
         }
 
         return response.body
-    }
+    },
+
+    createConversation: async (data) => {
+        // Mock implementation - replace with real API call when backend is ready
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                // Generate a new conversation ID (backend would do this)
+                const newConversationId = uuidv4()
+                
+                // Create mock conversation document matching our data structure
+                const mockConversation = {
+                    conversationId: newConversationId,
+                    userId: "mock-user-id", // In real implementation, backend gets this from JWT
+                    title: data.initialMessage.substring(0, 50) + (data.initialMessage.length > 50 ? '...' : ''),
+                    status: 'pending', // Conversation needs AI response
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    messages: [
+                        {
+                            role: 'user',
+                            content: data.initialMessage,
+                            timestamp: new Date(),
+                            sources: []
+                        }
+                    ]
+                }
+                
+                // Add to mock conversations list for sidebar
+                MOCK_CONVERSATIONS.unshift({
+                    id: newConversationId,
+                    name: "You",
+                    updated_at: new Date().toLocaleDateString(),
+                    title: mockConversation.title
+                })
+                
+                // Return what the real backend would return
+                resolve({ 
+                    conversationId: newConversationId 
+                })
+            }, 500) // Simulate network delay
+        })
+    },
+
+    // TODO: when backend is ready
+    // createConversation: async (data) => {
+    //     const token = localStorage.getItem('authToken') // or from auth context
+        
+    //     const response = await fetch('/api/conversations', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${token}`
+    //         },
+    //         body: JSON.stringify({
+    //             initialMessage: data.initialMessage
+    //         })
+    //     })
+        
+    //     if (!response.ok) throw new Error('Failed to create conversation')
+        
+    //     const result = await response.json()
+    //     return { conversationId: result.conversationId }
+    // }
 }
