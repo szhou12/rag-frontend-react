@@ -11,6 +11,8 @@ export const MOCK_CONVERSATIONS = Array.from({ length: 7 }, (_, index) => ({
 }))
 
 
+const MOCK_MONGODB = []
+
 export const ChatService = {
     getConversations: () => {
         return new Promise((resolve) => {
@@ -186,6 +188,9 @@ export const ChatService = {
                         }
                     ]
                 }
+
+                // Store in mock mongodb
+                MOCK_MONGODB.push(mockConversation)
                 
                 // Add to mock conversations list for sidebar
                 MOCK_CONVERSATIONS.unshift({
@@ -199,7 +204,7 @@ export const ChatService = {
                 resolve({ 
                     conversationId: newConversationId 
                 })
-            }, 500) // Simulate network delay
+            }, 300) // Simulate network delay
         })
     },
 
@@ -222,5 +227,49 @@ export const ChatService = {
         
     //     const result = await response.json()
     //     return { conversationId: result.conversationId }
+    // }
+
+    getConversation: async (chatId) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+
+                const conversation = MOCK_MONGODB.find(c => c.conversationId === chatId)
+
+                if (!conversation) {
+                    reject(new Error('Conversation not found'))
+                    return
+                }
+
+                
+                // Spread again to obtain a copy to prevent frontend from mutating the original object
+                resolve({
+                    ...conversation,
+                    messages: [...conversation.messages]
+                })
+            }, 300)
+        })
+    },
+
+    // TODO: when backend is ready
+    // getConversation: async (chatId) => {
+    //     const token = localStorage.getItem('authToken') // or from auth context
+        
+    //     const response = await fetch(`/api/conversations/${chatId}`, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${token}`
+    //         }
+    //     })
+        
+    //     if (!response.ok) {
+    //         if (response.status === 404) {
+    //             throw new Error('Conversation not found')
+    //         }
+    //         throw new Error('Failed to fetch conversation')
+    //     }
+        
+    //     const conversation = await response.json()
+    //     return conversation
     // }
 }
