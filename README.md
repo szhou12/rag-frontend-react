@@ -354,3 +354,11 @@ Workflow Logic:
         2, Check conversation.status === 'complete'
         3. If complete → just display existing messages
         4. Wait for user to type new message
+
+### Frontend components
+```
+/pages/Chat: HomePage, ConversationPage
+/routes/_chat_layout: chat, chat.$chatId
+/layouts/Chat: ThreeLayerLayout, ChatPageLayout
+/components/Chat: Sidebar, Navbar, /contentbottom, /contentmain, /sidebarbottom, /sidebarmain, /sidebartop
+```
