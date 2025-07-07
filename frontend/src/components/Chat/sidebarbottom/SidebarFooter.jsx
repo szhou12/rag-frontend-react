@@ -12,16 +12,16 @@ export const SidebarFooter = ({ user, isCollapsed = false, ...props }) => {
             {!isCollapsed && (
                 <Stack gap="1">
                     {user?.role !== "client" && (
-                        <SidebarLink>
+                        <SidebarLink href="/dashboard/index">
                             <LuLayoutDashboard /> Staff Dashboard
                         </SidebarLink>
                     )}
 
-                    <SidebarLink>
+                    <SidebarLink href="/help">
                         <LuCircleHelp /> Help Center
                     </SidebarLink>
 
-                    <SidebarLink>
+                    <SidebarLink href="/settings">
                         <LuSettings /> Settings
                     </SidebarLink>
                 </Stack>

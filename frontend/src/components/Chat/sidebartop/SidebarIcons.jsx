@@ -1,4 +1,5 @@
 import { Stack, IconButton } from "@chakra-ui/react"
+import { Link } from '@tanstack/react-router'
 import { BsLayoutSidebarInset, BsPencilSquare, BsSearch } from "react-icons/bs"
 import { LuLayoutDashboard } from 'react-icons/lu'
 import { Tooltip } from "@/components/ui/tooltip"
@@ -73,7 +74,9 @@ export const SidebarIcons = ({
                             aria-label="Dashboard"
                             color="black"
                         >
-                            <LuLayoutDashboard />
+                            <Link to="/dashboard/index">
+                                <LuLayoutDashboard />
+                            </Link>
                         </IconButton>
                     </Tooltip>
                 )}
