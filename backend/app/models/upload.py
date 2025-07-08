@@ -21,9 +21,9 @@ class Upload(UploadBase, table=True):
         - language: str
         - date: datetime
         - filepath: Optional[str]
-        - size_mb: Optional[float]
+        - size: Optional[float] in MB
     """
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date: datetime = Field(default_factory=datetime.now) # date uploaded
     filepath: Optional[str] = Field(default=None)
-    size_mb: Optional[float] = Field(default=None)
+    size: Optional[float] = Field(default=None)

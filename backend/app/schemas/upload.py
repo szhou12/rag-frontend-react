@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional, List
 from pydantic import EmailStr
 from sqlmodel import SQLModel, Field, Relationship
+from fastapi import UploadFile, File
 
 from app.models.upload import UploadBase
 
@@ -14,7 +15,7 @@ from app.models.upload import UploadBase
 
 # Properties to receive on AddFile
 class UploadCreate(UploadBase):
-    pass
+    file: UploadFile = File(...) # actual file content sent from frontend
 
 # Properties to recieve on EditFile
 class UploadUpdate(UploadBase):
