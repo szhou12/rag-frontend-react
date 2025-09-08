@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from demo import auth
 from demo import user
 from demo import upload
+from demo import rag_response
 
 app = FastAPI(debug=True)
 
@@ -24,6 +25,7 @@ app.add_middleware(
 app.include_router(user.router) # Adds all user-related endpoints (e.g., /users/me, /users/{id})
 app.include_router(auth.router, prefix="/auth") # Adds all auth endpoints under /auth prefix. e.g. /login will be accessible at /auth/login
 app.include_router(upload.router, prefix="/demo/uploads") # Adds all upload endpoints under /uploads prefix. e.g. /uploads will be accessible at /uploads
+app.include_router(rag_response.router, prefix="/rag") # Adds RAG endpoints under /rag prefix
 
 
 if __name__ == "__main__":
