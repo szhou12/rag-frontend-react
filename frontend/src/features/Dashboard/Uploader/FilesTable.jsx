@@ -137,6 +137,7 @@ function FilesTable() {
 
                 <Table.Body>
                     {files?.map((file) => (
+                        // file.id = unique id assigned when uploading the file
                         <Table.Row key={file.id} opacity={isPlaceholderData ? 0.5 : 1}>
                             <Table.Cell truncate maxW="sm">
                                 <Tooltip
