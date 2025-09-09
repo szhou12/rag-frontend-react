@@ -53,7 +53,8 @@ class BilingualRetriever(BaseRetriever):
         # Combine both sets of documents into a single list
         combined_docs = english_docs + chinese_docs
 
-        return _dedup_docs(combined_docs)
+        # return self._dedup_docs(combined_docs)
+        return combined_docs
 
     async def _aget_relevant_documents(
         self, query: str, *, run_manager: CallbackManagerForRetrieverRun
@@ -78,4 +79,5 @@ class BilingualRetriever(BaseRetriever):
         # Combine both sets of documents into a single list
         combined_docs = english_docs + chinese_docs
 
-        return _dedup_docs(combined_docs)
+        # return self._dedup_docs(combined_docs)
+        return combined_docs

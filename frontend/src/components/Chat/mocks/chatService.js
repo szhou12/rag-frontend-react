@@ -123,30 +123,98 @@ export const ChatService = {
     
     //     return response.body
     // },
-    sendChatMessage: (chatId, message) => {
-        // Create a mock response stream
-        const encoder = new TextEncoder()
-        const stream = new ReadableStream({
-            async start(controller) {
-                // Simulate streaming response
-                // const response = message
-                const response = "## Heading\n\nBased on your Chakra package. So [click here](http://chakra-ui.com) to confirm your plan.\n\n- first item\n- second item\n"
-                // const chunks = response.split('\n\n')
-                const chunks = response.split(/(?<=\n)/)
 
-                for (let i = 0; i < chunks.length; i++) {
-                    // Add a small delay between chunks to simulate streaming
-                    await new Promise(resolve => setTimeout(resolve, 100))
-                    // Send the chunk as SSE data, add space after each word except the last one
-                    const chunk = chunks[i] + (i < chunks.length - 1 ? ' ' : '')
-                    controller.enqueue(encoder.encode(`data: ${chunk}\n\n`))
-                }
-                controller.close()
+    // SIMULATED RESPONSE
+    // sendChatMessage: (chatId, message) => {
+    //     // Create a mock response stream
+    //     const encoder = new TextEncoder()
+    //     const stream = new ReadableStream({
+    //         async start(controller) {
+    //             // Simulate streaming response
+    //             // const response = message
+    //             const response = "## Heading\n\nBased on your Chakra package. So [click here](http://chakra-ui.com) to confirm your plan.\n\n- first item\n- second item\n"
+    //             // const chunks = response.split('\n\n')
+    //             const chunks = response.split(/(?<=\n)/)
+
+    //             for (let i = 0; i < chunks.length; i++) {
+    //                 // Add a small delay between chunks to simulate streaming
+    //                 await new Promise(resolve => setTimeout(resolve, 100))
+    //                 // Send the chunk as SSE data, add space after each word except the last one
+    //                 const chunk = chunks[i] + (i < chunks.length - 1 ? ' ' : '')
+    //                 controller.enqueue(encoder.encode(`data: ${chunk}\n\n`))
+    //             }
+    //             controller.close()
+    //         }
+    //     })
+
+    //     return stream
+    // },
+
+    sendChatMessage: async (chatId, message) => {
+        try {
+            const response = await fetch('http://localhost:8001/rag/answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    input: message,
+                    chat_history: []
+                })
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        })
-
-        return stream
+    
+            const data = await response.json();
+            
+            // Use data.answer (not data.response)
+            const answer = data.answer; // ✅ This is the correct field name
+            
+            // Convert response to stream format to maintain compatibility with your frontend
+            const encoder = new TextEncoder();
+            return new ReadableStream({
+                start(controller) {
+                    // Check if answer exists and is a string
+                    if (!answer || typeof answer !== 'string') {
+                        controller.enqueue(encoder.encode(`data: Error: Invalid response format\n\n`));
+                        controller.close();
+                        return;
+                    }
+                    
+                    // Simulate streaming by sending the answer progressively
+                    const words = answer.split(' '); // This is where the error was happening
+                    let index = 0;
+                    
+                    const sendNextWord = () => {
+                        if (index < words.length) {
+                            const word = words[index] + (index < words.length - 1 ? ' ' : '');
+                            controller.enqueue(encoder.encode(`data: ${word}\n\n`));
+                            index++;
+                            setTimeout(sendNextWord, 50);
+                        } else {
+                            controller.close();
+                        }
+                    };
+                    
+                    sendNextWord();
+                }
+            });
+            
+        } catch (error) {
+            console.error('Error calling RAG endpoint:', error);
+            const encoder = new TextEncoder();
+            return new ReadableStream({
+                start(controller) {
+                    controller.enqueue(encoder.encode(`data: Error: ${error.message}\n\n`));
+                    controller.close();
+                }
+            });
+        }
     },
+
+
 
     // TODO
     loadChatHistory: async (chatId) => {

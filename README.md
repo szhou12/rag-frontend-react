@@ -25,6 +25,19 @@ npm install react-markdown
 ### Notes
 - Chakra UI `3.8.0` can't use `FileUpload`.
 
+## New Clone from Remote
+### Add `.env` in root directory
+### `/backend`
+1. create a new virtual environment: `uv venv --python 3.13`
+2. activate the virtual environment: `source .venv/bin/activate`
+3. re-install dependencies: `uv sync`
+4. run the server: `uv run main.py`
+
+### `/frontend`
+1. re-install dependencies: `npm install`
+2. run the development server: `npm run dev`
+
+
 ## React Folder Naming & Structure
 ```
 src/
@@ -362,3 +375,4 @@ Workflow Logic:
 /layouts/Chat: ThreeLayerLayout, ChatPageLayout
 /components/Chat: Sidebar, Navbar, /contentbottom, /contentmain, /sidebarbottom, /sidebarmain, /sidebartop
 ```
+

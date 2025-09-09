@@ -3,7 +3,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file="../../.env",  # Go up two levels to reach root .env
+        env_file="../.env",  # Go up one level to reach root .env
+        # env_file="/Users/shuyuzhou/Developer/GitHub/rag-frontend-react/.env",  # Absolute path for testing
         env_ignore_empty=True,
         extra="ignore",
     )
