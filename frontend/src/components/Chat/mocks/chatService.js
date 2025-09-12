@@ -184,7 +184,7 @@ export const ChatService = {
                     }
                     
                     // Simulate streaming by sending the answer progressively
-                    const words = answer.split(' '); // This is where the error was happening
+                    const words = answer.split(' ');
                     let index = 0;
                     
                     const sendNextWord = () => {
