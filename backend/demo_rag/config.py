@@ -3,11 +3,25 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file="../.env",  # Go up one level to reach root .env
+        env_file="../.env",  # Go up two levels to reach root .env
         # env_file="/Users/shuyuzhou/Developer/GitHub/rag-frontend-react/.env",  # Absolute path for testing
         env_ignore_empty=True,
         extra="ignore",
     )
+
+    mysql_user: str = Field(..., env="MYSQL_USER")
+    mysql_pass: str = Field(..., env="MYSQL_PASS") 
+    mysql_host: str = Field(..., env="MYSQL_HOST")
+    mysql_name: str = Field(..., env="MYSQL_NAME")
+    # Optional fields with defaults
+    mysql_port: int = Field(3306, env="MYSQL_PORT")
+    
+    @property
+    def mysql_uri(self) -> str:
+        return f"mysql+pymysql://{self.mysql_user}:{self.mysql_pass}@{self.mysql_host}:{self.mysql_port}/{self.mysql_name}"
+
+    # S3
+    s3_bucket_name: str = Field(..., env="S3_BUCKET_NAME")
 
     # Embeddings
     embed_en_model: str = Field("BAAI/bge-small-en-v1.5", env="EMBED_EN_MODEL") # first look at .env for EMBED_EN_MODEL. if not found, use the default value defined here

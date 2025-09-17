@@ -2,14 +2,16 @@ from __future__ import annotations
 from typing import Dict, Any, Optional, List
 
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
+
 from ..protocol import EmbeddingClient
+from ..profile import EmbedProfile
 from ..registry import register
 from ..util import ThreadSafeWrapper
 
 @register("hf")
 def build_huggingface_embeddings(
+    *
     model_name: str,
-    *,
     model_kwargs: Optional[Dict[str, Any]] = None,
     encode_kwargs: Optional[Dict[str, Any]] = None,
     threadsafe: bool = False,
@@ -29,7 +31,7 @@ def build_huggingface_embeddings(
         Passed to HuggingFaceEmbeddings(encode_kwargs=...). Common keys:
         - "normalize_embeddings": bool  (True for cosine similarity)
         - "batch_size": int
-    threadsafe : bool, default True
+    threadsafe : bool, default False
         If True, wraps the client with ThreadSafeWrapper to serialize embed_* calls.
 
     Returns
@@ -52,21 +54,37 @@ def build_huggingface_embeddings(
     )
     return ThreadSafeWrapper(client) if threadsafe else client
 
+@register_settings_adapter("hf")
+def huggingface_adapter(settings, profile: EmbedProfile) -> Dict[str, Any]:
+    """
+    Merge profile.params with sensible defaults (from settings when present).
+    Anything in profile.params takes precedence.
+    """
+    p = dict(profile.params)
+    # Defaults if missing
+    p.setdefault("model_kwargs", {}).setdefault("device", getattr(settings, "embed_device", "cpu"))
+    p.setdefault("encode_kwargs", {}).setdefault("normalize_embeddings", getattr(settings, "embed_normalize", True))
+    p.setdefault("threadsafe", getattr(settings, "embed_threadsafe_wrapper", False))
+
+    if "model_name" not in p:
+        raise ValueError("model_name is required for provider='hf'.")
+    return p
+
 # ---------------------- FUTURE EXTENSIONS (examples) ----------------------
 ## Note:
-## 1. add each in a new py file
-## 2. make sure to implement a concrete Embedding class following protocol if it doesn't directly import from LangChain
-# @register("http")
-# def build_http_embeddings(endpoint: str, *, timeout_s: float = 30.0) -> EmbeddingClient:
-#     """Build a simple HTTP client against a TEI-like service."""
-#     ...
-
+## 1. add new extension in a new py file e.g. models/openai.py
+## 2. make sure to additionally implement a concrete Embedding class following protocol if it doesn't directly import from LangChain
+## Example:
 # @register("openai")
-# def build_openai_embeddings(model: str, *, api_key: str) -> EmbeddingClient:
-#     """Build an OpenAI embeddings client."""
-#     ...
+# def build_openai(*, model: str, api_key: str) -> EmbeddingClient:
+#     return OpenAIEmbeddings(model=model, api_key=api_key)
 
-# @register("bedrock")
-# def build_bedrock_embeddings(model: str, *, region: str, profile: str | None = None) -> EmbeddingClient:
-#     """Build an AWS Bedrock embeddings client."""
-#     ...
+# @register_settings_adapter("openai")
+# def openai_adapter(settings, profile: EmbedProfile) -> Dict[str, Any]:
+#     p = dict(profile.params)
+#     p.setdefault("model", "text-embedding-3-large")
+#     # Prefer pulling secrets from settings, not JSON
+#     p.setdefault("api_key", getattr(settings, "openai_api_key", None))
+#     if not p["api_key"]:
+#         raise ValueError("OPENAI_API_KEY is required for provider='openai'.")
+#     return p

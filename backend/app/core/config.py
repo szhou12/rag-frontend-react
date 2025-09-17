@@ -46,11 +46,31 @@ def parse_cors(v: Any) -> list[str] | str:
         return v
     raise ValueError(v)
 
+
+class EmbedProfileEntry(BaseModel):
+    key: str
+    provider: str
+    language: str
+
+    # allow provider-specific extras inline; collect as `params`
+    model_config = {"extra": "allow"}
+    params: Dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def _collect_extras(self):
+        extras = {k: v for k, v in self.__dict__.items()
+                  if k not in {"key", "provider", "language", "params"}}
+        if extras:
+            self.params.update(extras)
+            for k in extras:
+                delattr(self, k)
+        return self
+
 class Settings(BaseSettings):
 
     # Configuration Metadata
     model_config = SettingsConfigDict(
-        env_file="../.env", # Path to .env file - go one level up from where you run uvicorn
+        env_file="../../.env", # Path to .env file - go one level up from where you run uvicorn
         env_ignore_empty=True, # Ignore empty environment variables
         extra="ignore", # Ignore extra keys that are not explicitly declared
     )
@@ -114,6 +134,10 @@ class Settings(BaseSettings):
     
     # TODO
     # Email Server Configuration
+
+    # Embedder Configuration
+    embed_profiles: List[EmbedProfileEntry] = Field(default_factory=list)
+
 
 # Initialization Load all configurations
 settings = Settings()

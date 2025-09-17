@@ -3,9 +3,9 @@ provider.py
 -----------
 Thread-safe, per-key singleton provider for embedders.
 
-- One process-wide instance per "key" (e.g., "en", "zh", "code", "legal").
-- Lazily constructs an embedder via the registry builder.
-- Lets you (re)configure the embedder for a key without changing call-sites.
+- configure(key, provider, **kwargs): build and store a singleton
+- get(key): retrieve the singleton
+- reconfigure(key, ...): hot-swap the instance (keeps same reference if you use a proxy)
 
 Typical usage
 -------------
@@ -57,7 +57,7 @@ class EmbedderProvider:
         Parameters
         ----------
         key : str
-            Logical key for this embedder (e.g., "en").
+            Identifier for this embedder (e.g., "en").
         provider : str
             Registry provider key (e.g., "hf", "http", "openai").
         builder_kwargs : dict
