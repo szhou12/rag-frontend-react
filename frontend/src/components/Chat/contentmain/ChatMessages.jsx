@@ -65,16 +65,34 @@ export const ChatMessages = ({ messages, isLoading }) => {
                                         css={{ "--spinner-track-color": "colors.gray.200" }}
                                     />
                                 ) : role === "assistant" ? (
-                                    <Prose mx="auto" textAlign="left">
+                                    // <Prose mx="auto">
+                                    //     <Markdown>
+                                    //         {content}
+                                    //     </Markdown>
+                                    // </Prose>
+
+                                    // <Text>
+                                    //     {content}
+                                    // </Text>
+
+                                    // <Markdown>
+                                    //     {content}
+                                    // </Markdown>
+
+                                    <>
+                                        {/* Debug: Show raw content */}
+                                        <details style={{ marginBottom: '10px', fontSize: '12px', color: 'gray' }}>
+                                            <summary>Debug: Raw Content</summary>
+                                            <pre style={{ whiteSpace: 'pre-wrap', background: '#f5f5f5', padding: '10px' }}>
+                                                {JSON.stringify(content)}
+                                            </pre>
+                                        </details>
+
                                         <Markdown>
                                             {content}
                                         </Markdown>
-                                    </Prose>
-                                    // <Text>
-                                    //     {/* <Markdown>{content}</Markdown> */}
-                                    //     {content}
-                                    // </Text>
-                                    
+                                    </>
+
                                 ) : (
                                     // user typed-in message
                                     <Text 

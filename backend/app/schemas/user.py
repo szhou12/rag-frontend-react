@@ -10,8 +10,23 @@ from app.models.user import UserBase
 # API -----> #
 ##############
 # Properties to receive from API on AddUser
+class UserRegister(SQLModel):
+    """
+    UserRegister designed for frontend input validation
+    Takes in values from frontend registration form
+    i.e., Client inputs email, plain password, username at endpoint /register; role is set to "client" by default.
+    """
+    email: EmailStr = Field(max_length=255)
+    password: str = Field(min_length=8, max_length=40)
+    role: str = Field(default="client")
+    username: str | None = Field(default=None, max_length=255)
+
+
 class UserCreate(UserBase):
     """
+    UserRegister designed for internal user creation logic
+    Convert UserRegister to UserCreate for internal processing
+
     Attributes:
     - email (from UserBase)
     - role (from UserBase)
@@ -21,12 +36,6 @@ class UserCreate(UserBase):
     Note: all fields are required to provide from frontend
     """
     password: str = Field(min_length=8, max_length=40)
-
-class UserRegister(SQLModel):
-    email: EmailStr = Field(max_length=255)
-    password: str = Field(min_length=8, max_length=40)
-    role: str = Field(default="client")
-    username: str | None = Field(default=None, max_length=255)
 
 
 # Properties to receive from API on EditUser, all are optional
@@ -53,9 +62,6 @@ class UserUpdateMe(SQLModel):
 # Properties to return to API, id is always required
 class UserPublic(UserBase):
     id: uuid.UUID
-    username: str
-    email: EmailStr
-    role: str
 
 class UsersPublic(SQLModel):
     data: list[UserPublic]

@@ -7,11 +7,11 @@ from app.schemas.user import UserCreate, UserUpdate
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
     """
-    Create a new user in the database.
+    Add a new user in the database.
 
     Args:
         session: Database session
-        user_create: Pydantic schema including plain password
+        user_create: Pydantic schema UserCreate with plain password
 
     Returns:
         User: The newly created User ORM object in DB

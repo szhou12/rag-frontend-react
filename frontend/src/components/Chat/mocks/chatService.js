@@ -168,9 +168,17 @@ export const ChatService = {
             }
     
             const data = await response.json();
-            
             // Use data.answer (not data.response)
-            const answer = data.answer; // ✅ This is the correct field name
+            let answer = data.answer; // ✅ This is the correct field name
+
+            // --- sanitize AI meta tags & keep only markdown content
+            answer = answer
+                .replace(/<thinking>[\s\S]*?<\/thinking>/g, '') // drop private thoughts
+                .replace(/<\/?answer>/g, '')                    // remove <answer> tags
+                .trim();
+
+            // 🔧 ADD DEBUGGING HERE
+            console.log('Raw answer with escape chars:', JSON.stringify(answer));
             
             // Convert response to stream format to maintain compatibility with your frontend
             const encoder = new TextEncoder();
@@ -184,23 +192,61 @@ export const ChatService = {
                     }
                     
                     // Simulate streaming by sending the answer progressively
-                    const words = answer.split(' ');
+                    // const words = answer.split(' ');
+                    // let index = 0;
+                    // const sendNextWord = () => {
+                    //     if (index < words.length) {
+                    //         const word = words[index] + (index < words.length - 1 ? ' ' : '');
+                    //         controller.enqueue(encoder.encode(`data: ${word}\n\n`));
+                    //         index++;
+                    //         setTimeout(sendNextWord, 50);
+                    //     } else {
+                    //         controller.close();
+                    //     }
+                    // };
+                    // sendNextWord();
+                    const chunks = answer.split(/(\s+)/); // This preserves whitespace AND newlines
                     let index = 0;
                     
-                    const sendNextWord = () => {
-                        if (index < words.length) {
-                            const word = words[index] + (index < words.length - 1 ? ' ' : '');
-                            controller.enqueue(encoder.encode(`data: ${word}\n\n`));
+                    console.log('Chunks sample:', chunks.slice(0, 10));
+                    
+                    const sendNextChunk = () => {
+                        if (index < chunks.length) {
+                            const chunk = chunks[index];
+                            controller.enqueue(encoder.encode(`data: ${chunk}\n\n`));
                             index++;
-                            setTimeout(sendNextWord, 50);
+                            setTimeout(sendNextChunk, 30); // Faster streaming
                         } else {
+                            console.log('Stream completed. Total chunks sent:', chunks.length);
                             controller.close();
                         }
                     };
                     
-                    sendNextWord();
+                    sendNextChunk();
+
                 }
             });
+
+            // Split by double newlines to preserve paragraphs/lists/headers blocks
+            // const chunks = answer.split(/\n{2,}/);
+
+            // return new ReadableStream({
+            //     start(controller) {
+            //         let i = 0;
+            //         const pushNext = () => {
+            //             if (i >= chunks.length) {
+            //                 controller.enqueue(encoder.encode('event: done\ndata: [END]\n\n'));
+            //                 controller.close();
+            //                 return;
+            //             }
+            //             // Send SSE-style lines so the client can parse easily
+            //             controller.enqueue(encoder.encode(`event: chunk\ndata: ${chunks[i]}\n\n`));
+            //             i += 1;
+            //             setTimeout(pushNext, 80); // pacing to simulate streaming
+            //         };
+            //         pushNext();
+            //     }
+            // });
             
         } catch (error) {
             console.error('Error calling RAG endpoint:', error);
