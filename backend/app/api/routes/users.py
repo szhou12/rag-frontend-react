@@ -29,7 +29,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 async def read_user_me(current_user: CurrentUser) -> Any:
     """
     Notice that the dependency CurrentUser returns a DB ORM object (User)
-    but this endpoint returns a Pydantic model object (UserResponse)
+    but this endpoint returns a Pydantic model object (UserPublic)
     FastAPI automatically handles model conversion and translate DB model to Pydantic model.
     """
     return current_user
@@ -41,11 +41,11 @@ def register_user(user_in: UserRegister, db_session: Session = SessionDep) -> Us
     Register a new user.
 
     Args:
-        user_in: UserRegister (email, plain password, username, role) whose values passed in from frontend
+        user_in: UserRegister (email, plain password, username, role) whose values given by frontend
         db_session: MySQL DB session
 
     Returns:
-        UserPublic: UserPublic schema
+        UserPublic: id, username, email, role
     """
     # check if user with this email already registered
     db_user = get_user_by_email(session=db_session, email=user_in.email)

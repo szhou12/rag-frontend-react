@@ -71,12 +71,12 @@ def get_user_by_email(*, session: Session, email: str) -> User | None:
 
 def authenticate(*, session: Session, email: str, password: str) -> User | None:
     """
-    Authenticate a user by email and password.
+    Authenticate a user: first fetch User ORM object from DB by email, then verify if input password matches the hashed password stored in DB.
 
     Args:
         session: Database session
-        email: Email address of the user
-        password: Plain text password of the user
+        email: Email address from frontend form_data
+        password: Plain text password from frontend form_data
 
     Returns:
         User | None: The User ORM object in DB if authenticated, otherwise None
