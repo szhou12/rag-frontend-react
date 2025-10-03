@@ -86,7 +86,7 @@ const fetchUserProfile = async (token) => {
 
 // TODO: openapi auto-generate: UsersService, LoginService
 
-// TODO: DELETE when backend is ready!!!
+// TODO: DELETE when backend is ready!!! Let OpenAPI auto-generate UsersService
 const UsersService = {
     readUserMe: async () => {
         // return the user from localStorage if it exists

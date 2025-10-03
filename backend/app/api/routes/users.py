@@ -36,13 +36,17 @@ async def read_user_me(current_user: CurrentUser) -> Any:
 
 
 @router.post("/register", response_model=UserPublic)
-def register_user(user_in: UserRegister, db_session: Session = SessionDep) -> UserPublic:
+def register_user(user_in: UserRegister, db_session: Session = SessionDep) -> Any:
     """
     Register a new user.
 
     Args:
         user_in: UserRegister (email, plain password, username, role) whose values given by frontend
         db_session: MySQL DB session
+
+    Python type hint: -> Any. Because crud.user.create_user returns User ORM object in DB, not UserPublic
+
+    response_model=UserPublic: Let FastAPI know this route is suppose to return UserPublic to client, thus automatically converts Any to UserPublic object.
 
     Returns:
         UserPublic: id, username, email, role

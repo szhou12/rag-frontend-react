@@ -2,7 +2,7 @@ from collections.abc import Generator
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, SecurityScopes
+from fastapi.security import OAuth2PasswordBearer, SecurityScopes, Security
 import jwt
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
@@ -92,6 +92,7 @@ async def get_current_user_with_scopes(
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
         )
+        # Convert JWT token decoded dict to TokenPayload object {sub=email, scopes=role scopes}
         token_data = TokenPayload(**payload)
 
         # Check if every scope required by an endpoint exists in user's token
@@ -116,4 +117,21 @@ async def get_current_user_with_scopes(
     
     return user
 
+# Any authenticated user can access (no specific scope required) 
+def get_client_user(user: User = Depends(get_current_user_with_scopes)):
+    return user
+
+# Only users with "dashboard" scope can access (staff and admin)
+def get_staff_user(user: User = Security(get_current_user_with_scopes, scopes=["dashboard"])):
+    return user
+
+# Only users with "dashboard:admin" scope can access (admin only)
+def get_admin_user(user: User = Security(get_current_user_with_scopes, scopes=["dashboard:admin"])):
+    return user
+
+
 CurrentUser = Annotated[User, Depends(get_current_user_with_scopes)]
+
+ClientUser = Annotated[User, Depends(get_client_user)]
+StaffUser = Annotated[User, Depends(get_staff_user)]
+AdminUser = Annotated[User, Depends(get_admin_user)]

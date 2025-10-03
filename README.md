@@ -376,3 +376,23 @@ Workflow Logic:
 /components/Chat: Sidebar, Navbar, /contentbottom, /contentmain, /sidebarbottom, /sidebarmain, /sidebartop
 ```
 
+### Login Token Mapping Flow
+```
+User Login
+    ↓
+user.email = "john@example.com"
+    ↓
+jwt_data_payload = {"sub": "john@example.com", "scopes": ["chat", "dashboard"]}
+    ↓
+JWT Token Created: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+    ↓
+Token sent to client, stored (localStorage/cookie)
+    ↓
+Client sends token in Authorization header
+    ↓
+Server decodes JWT: payload = {"sub": "john@example.com", "scopes": ["chat", "dashboard"], "exp": 1234567890}
+    ↓
+TokenPayload(**payload) creates:
+    - token_data.sub = "john@example.com"
+    - token_data.scopes = ["chat", "dashboard"]
+```
