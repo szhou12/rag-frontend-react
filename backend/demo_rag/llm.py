@@ -1,5 +1,6 @@
 from langchain_aws import ChatBedrock
-from .config import settings
+# from .config import settings
+from app.core.config import settings
 
 def build_llm():
     # Prefer IAM role on EC2/ECS/EKS. Keys are optional fallbacks.

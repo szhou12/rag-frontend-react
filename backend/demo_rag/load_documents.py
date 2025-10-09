@@ -5,7 +5,8 @@ import concurrent.futures
 from typing import Callable, List, Dict
 from langchain_core.documents import Document
 
-from .config import settings
+# from .config import 
+from app.core.config import settings
 
 # Step 2: load by s3_key
 

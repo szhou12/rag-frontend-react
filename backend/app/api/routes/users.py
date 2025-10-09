@@ -1,7 +1,7 @@
 import uuid
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import col, delete, func, select
 
 from app.api.deps import (
@@ -24,20 +24,21 @@ from app.crud.user import (
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-
-@router.get("/users/me", response_model=UserPublic)
+@router.get("/me", response_model=UserPublic)
 async def read_user_me(current_user: CurrentUser) -> Any:
     """
+    Frontend reaches through endpoint /users/me
     Notice that the dependency CurrentUser returns a DB ORM object (User)
     but this endpoint returns a Pydantic model object (UserPublic)
     FastAPI automatically handles model conversion and translate DB model to Pydantic model.
     """
     return current_user
 
-
+# front reaches through endpoint /users/register
 @router.post("/register", response_model=UserPublic)
-def register_user(user_in: UserRegister, db_session: Session = SessionDep) -> Any:
+def register_user(user_in: UserRegister, db_session: SessionDep) -> Any:
     """
+    Frontend reaches through endpoint /users/register
     Register a new user.
 
     Args:

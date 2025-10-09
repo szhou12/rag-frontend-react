@@ -2,7 +2,8 @@ from datetime import datetime
 from typing import Optional, List
 from sqlmodel import SQLModel, Field, Session, select, create_engine, update
 
-from .config import settings
+# from .config import settings
+from app.core.config import settings
 
 class Upload(SQLModel, table=True):
     id: str = Field(primary_key=True)

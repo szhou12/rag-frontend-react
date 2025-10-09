@@ -1,17 +1,21 @@
 from collections.abc import Generator
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, SecurityScopes, Security
+from fastapi import Depends, FastAPI, HTTPException, Security, status
+from fastapi.security import (
+    OAuth2PasswordBearer,
+    SecurityScopes,
+)
 import jwt
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from app.core import security
 from app.core.config import settings
 from app.core.db import engine
-from app.models import TokenPayload, User
+from app.models.user import User
+from app.schemas.auth import TokenPayload
 
 
 def get_db() -> Generator[Session, None, None]:
@@ -90,7 +94,7 @@ async def get_current_user_with_scopes(
     try:
         # Decode and validate JWT token
         payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
+            token, settings.SECRET_KEY, algorithms=[security.JWT_ALGORITHM]
         )
         # Convert JWT token decoded dict to TokenPayload object {sub=email, scopes=role scopes}
         token_data = TokenPayload(**payload)
@@ -110,8 +114,8 @@ async def get_current_user_with_scopes(
     except (InvalidTokenError, ValidationError):
         raise credentials_exception
     
-    # Get user from DB
-    user = session.get(User, token_data.sub)
+    # Get user from DB by email (token_data.sub contains email)
+    user = session.exec(select(User).where(User.email == token_data.sub)).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     

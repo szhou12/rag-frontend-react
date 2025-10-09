@@ -38,7 +38,10 @@ const loginUser = async (credentials) => {
         // POST request goes to backend/demo/auth.py
         // TODO: change to /login/token for formal endpoint
         const response = await axios.post(
-            `${API_URL}/auth/token`,
+            // demo endpoint
+            // `${API_URL}/auth/token`,
+            // formal endpoint
+            `${API_URL}/api/v1/login/token`,
             params,
             {
                 headers: {
@@ -57,7 +60,11 @@ const loginUser = async (credentials) => {
 
 const registerUser = async (userData) => {
     try {
-        const response = await axios.post(`${API_URL}/auth/register`, userData);
+        // demo endpoint: user data saved in local DB
+        // const response = await axios.post(`${API_URL}/auth/register`, userData);
+
+        // formal endpoint: user data saved in AWS lightsail MySQL DB
+        const response = await axios.post(`${API_URL}/api/v1/users/register`, userData);
 
         console.log('Registration data saved to DB:', response.data);
 
@@ -70,7 +77,12 @@ const registerUser = async (userData) => {
 const fetchUserProfile = async (token) => {
     try {
         const response = await axios.get(
-            `${API_URL}/users/me`,
+            // demo endpoint
+            // `${API_URL}/users/me`,
+            
+            // formal endpoint
+            `${API_URL}/api/v1/users/me`,
+
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -101,7 +113,12 @@ const UsersService = {
             const token = localStorage.getItem("access_token")
 
             const response = await axios.get(
-                `${API_URL}/users/me`,
+                // demo endpoint
+                // `${API_URL}/users/me`,
+
+                // formal endpoint
+                `${API_URL}/api/v1/users/me`,
+
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

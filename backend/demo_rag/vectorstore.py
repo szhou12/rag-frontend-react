@@ -1,6 +1,7 @@
 import chromadb
 from langchain_chroma import Chroma
-from .config import settings
+# from .config import settings
+from app.core.config import settings
 
 def build_chroma_client():
     # In production, front Chroma with a private network / SG and health checks

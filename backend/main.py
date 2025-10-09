@@ -5,7 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from demo import auth
 from demo import user
 from demo import upload
-from demo import rag_response
+from demo import rag_response  # Temporarily disabled - requires additional .env vars
+from app.api.main import api_router
+from app.core.config import settings
+from app.core.db import create_db_and_tables
 
 app = FastAPI(debug=True)
 
@@ -25,8 +28,21 @@ app.add_middleware(
 app.include_router(user.router) # Adds all user-related endpoints (e.g., /users/me, /users/{id})
 app.include_router(auth.router, prefix="/auth") # Adds all auth endpoints under /auth prefix. e.g. /login will be accessible at /auth/login
 app.include_router(upload.router, prefix="/demo/uploads") # Adds all upload endpoints under /uploads prefix. e.g. /uploads will be accessible at /uploads
-app.include_router(rag_response.router, prefix="/rag") # Adds RAG endpoints under /rag prefix
+app.include_router(rag_response.router, prefix="/rag") # Temporarily disabled - requires additional .env vars
 
+# Create database tables on startup
+create_db_and_tables()
+
+# Create admin user if it doesn't exist
+from sqlmodel import Session
+from app.core.db import engine, init_db
+
+with Session(engine) as session:
+    init_db(session)
+
+# Formal API endpoints
+#   /api/v1/users/me
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 if __name__ == "__main__":
     # uvicorn.run(app, host="0.0.0.0", port=8000)

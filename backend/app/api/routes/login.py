@@ -8,7 +8,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app import crud
 from app.core import security
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Token
+from app.schemas.auth import Token
 from app.core.config import settings
 
 

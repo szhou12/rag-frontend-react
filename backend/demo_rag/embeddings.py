@@ -1,5 +1,7 @@
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
-from .config import settings
+# from .config import settings
+from app.core.config import settings
+
 
 def build_embedder_en():
     return HuggingFaceEmbeddings(

@@ -396,3 +396,9 @@ TokenPayload(**payload) creates:
     - token_data.sub = "john@example.com"
     - token_data.scopes = ["chat", "dashboard"]
 ```
+
+## Access MySQL DB from Terminal
+```bash
+mysql -h <HOSTNAME> -P 3306 -u <USERNAME> -p
+```
+It will prompt you for the password.

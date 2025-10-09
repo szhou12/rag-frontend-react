@@ -8,8 +8,8 @@ from fastapi import APIRouter, HTTPException, UploadFile
 from sqlmodel import func, select
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models import (
-    Upload, 
+from app.models.upload import Upload
+from app.schemas.upload import (
     UploadCreate, 
     UploadUpdate, 
     UploadPublic, 
