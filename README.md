@@ -402,3 +402,67 @@ TokenPayload(**payload) creates:
 mysql -h <HOSTNAME> -P 3306 -u <USERNAME> -p
 ```
 It will prompt you for the password.
+
+
+## Python Env Setup
+Set up Python Interpreter specific to this project.
+### Use project's default Python in uv virtual env
+1. To set up bottom-right corner of Cursor: 
+    1. Terminal: activate uv virtual env
+    2. `which python` -> get path to Python Interpreter in uv virtual env
+    3. Command Palette: `Cmd+Shift+P` -> `Python: Select Interpreter` -> `Enter Interpreter Path` -> copy & paste the path
+2. Turn on Pylance and hover tooltips
+    1. Open `settings.json` in `.vscode/` or Open Command Palette -> `Preferences: Open Workspace Settings (JSON)`
+    2. Copy & paste the following:
+    ```json
+    {
+        "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python", // use project's default Python in uv virtual env
+        "python.languageServer": "Pylance" // Pylance allows hover tooltips
+    }
+    ```
+
+## Alembic
+[Alembic | YouTube Tutorial](https://www.youtube.com/watch?v=zTSmvUVbk8M)
+
+```bash
+# install alembic
+uv add alembic
+
+# at a proper directory, start the migration
+# NOTE: /backend/ or /backend/app/
+alembic init <migration_env_name>
+```
+1. Modify `alembic.ini`
+    1. set up correct path to `/<migration_env_name>/`: `script_location`
+    2. modify DB URL: `sqlalchemy.url` or remove it if set up in `env.py`
+
+2. Modify `script.py.mako`. Make sure to have the following imports:
+```
+from alembic import op
+import sqlalchemy as sa
+import sqlmodel.sql.sqltypes
+```
+
+3. Modify `env.py`: 
+    1. import ORM models defined (annotated with `table=True`)
+    2. `target_metadata = SQLModel.metadata`: get all registered DB tables (annotated with `table=True`)
+    3. set `sqlalchemy.url`: give the URL address that connects to the DB
+
+4. Generate migration
+```bash
+alembic revision --autogenerate -m "init models"
+```
+This will generate a python file under `alembic/versions/` the name ending as `_init_models.py`. It contains `upgrade` and `downgrade` functions that specify the changes made in the current version.
+
+In any case if you want to revert this command and before you apply the migration, you can simply delete this python file, make changes, and re-run the command.
+
+5. Apply migration
+```bash
+alembic upgrade head
+```
+This will apply the migration to the DB. `head` means the most recent version.
+
+In DB, there will be a new table `alembic_version`. You can check the DB version by running: `SELECT * FROM alembic_version;`. It will show the current version number.
+
+You can check the table update by running: `SHOW CREATE TABLE upload;`.
+

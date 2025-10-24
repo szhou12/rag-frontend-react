@@ -1,4 +1,7 @@
-# Models package
-from .user import User, UserBase
+from sqlmodel import SQLModel
 
-__all__ = ["User", "UserBase"]
+# Import all model files so they register with metadata
+from .user import User
+from .upload import Upload
+
+__all__ = ["SQLModel", "User", "Upload"]
