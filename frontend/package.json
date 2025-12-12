@@ -16,6 +16,7 @@
     "@tanstack/react-query-devtools": "^5.67.1",
     "@tanstack/react-router": "^1.112.0",
     "axios": "^1.8.1",
+    "chakra-dayzed-datepicker": "^3.0.0",
     "eventsource-parser": "^3.0.2",
     "framer-motion": "^12.4.10",
     "jwt-decode": "^4.0.0",

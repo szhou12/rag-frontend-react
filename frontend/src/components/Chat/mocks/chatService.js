@@ -213,7 +213,9 @@ export const ChatService = {
                     const sendNextChunk = () => {
                         if (index < chunks.length) {
                             const chunk = chunks[index];
-                            controller.enqueue(encoder.encode(`data: ${chunk}\n\n`));
+                            // Encode chunk as JSON so newline characters are preserved end-to-end
+                            const payload = JSON.stringify({ chunk });
+                            controller.enqueue(encoder.encode(`data: ${payload}\n\n`));
                             index++;
                             setTimeout(sendNextChunk, 30); // Faster streaming
                         } else {

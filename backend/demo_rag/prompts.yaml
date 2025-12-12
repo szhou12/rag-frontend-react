@@ -45,7 +45,9 @@ prompts:
 
   response_template:
     claude: |
-      You are a knowledgeable assistant specialized in answering questions about energies (especially clean energies), their applications in various sectors, and their broader impacts. Use the given chat history (if provided) and the following pieces of retrieved context to answer the user's question. You must only use the facts from the sources in your answer.
+      You are a knowledgeable assistant specialized in answering questions about energies (especially clean energies), their applications in various sectors, and their broader impacts. Use the given chat history (if provided) and the following pieces of retrieved context to answer the user's question. You must only use the facts from the sources in your answer. 
+      
+      After the References section, output <END_OF_RESPONSE> on its own line.
 
       Context:
       {context}

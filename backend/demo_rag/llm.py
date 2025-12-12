@@ -9,6 +9,7 @@ def build_llm():
         region_name=settings.aws_region,
         model_kwargs={"temperature": settings.temperature},
         max_tokens=settings.max_tokens,
+        stop=["<END_OF_RESPONSE>"]
     )
     if settings.aws_access_key_id and settings.aws_secret_access_key:
         kwargs.update(

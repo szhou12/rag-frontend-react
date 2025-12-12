@@ -126,6 +126,24 @@ export async function* parseSSEStream(stream) {
     while (true) {
         const {done, value} = await sseReader.read();
         if (done) break;
-        yield value.data;
+
+        if (!value) continue;
+        let payload = value.data;
+
+        // Server sends JSON-wrapped chunks so newline characters survive SSE transport
+        if (typeof payload === 'string') {
+            try {
+                const parsed = JSON.parse(payload);
+                if (parsed && typeof parsed === 'object' && 'chunk' in parsed) {
+                    payload = parsed.chunk;
+                }
+            } catch (err) {
+                // Non-JSON payloads fall back to raw string
+            }
+        }
+
+        if (payload !== undefined && payload !== null) {
+            yield payload;
+        }
     }
 }

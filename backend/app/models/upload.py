@@ -22,6 +22,7 @@ class UploadBase(SQLModel):
     filename: str = Field(max_length=255)
     author: str = Field(max_length=255)
     language: str = Field(max_length=10)
+    publication_date: Optional[datetime] = None
 
 class Upload(UploadBase, table=True):
     __tablename__ = "upload"  # ensure exact name if needed

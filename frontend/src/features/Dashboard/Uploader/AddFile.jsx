@@ -5,7 +5,6 @@ import {
     Box,
     createListCollection,
     FileUpload,
-    HStack,
     Icon,
     Input,
     Portal,
@@ -17,6 +16,7 @@ import {
 import { useState } from "react"
 import { FaPlus } from "react-icons/fa"
 import { LuUpload } from "react-icons/lu"
+import { SingleDatepicker } from "chakra-dayzed-datepicker"
 
 import useCustomToast from "@/hooks/useCustomToast"
 import { Field } from "@/components/ui/field"
@@ -57,6 +57,7 @@ const createUpload = async (formData) => {
             author: formData.author,
             language: formData.language,
             filepath: filepath,
+            version_date: formData.versionDate?.toISOString(), // adjust key to match backend expectations
         }
 
         console.log("file data sent to backend:", fileData)
@@ -81,6 +82,31 @@ const createUpload = async (formData) => {
     }
 };
 
+// helper function: auto-fill date if user only partially enters a version date
+// case 1: if only enters year, auto-fill to be year-01-01
+// case 2: if enters year-month, auto-fill to be year-month-01
+const coerceDateFromInput = (rawInput) => {
+    const value = rawInput.trim()
+    if (!value) return null
+  
+    // Year only -> Jan 1
+    if (/^\d{4}$/.test(value)) {
+      return new Date(Number(value), 0, 1)
+    }
+  
+    // Year-month -> day 1 (accepts "-" or "/")
+    const ymMatch = value.match(/^(\d{4})[-/](\d{2})$/)
+    if (ymMatch) {
+      const [, y, m] = ymMatch
+      return new Date(Number(y), Number(m) - 1, 1)
+    }
+  
+    // Full date fallback (expects YYYY-MM-DD or a valid Date string)
+    const parsed = new Date(value)
+    return Number.isNaN(parsed.getTime()) ? null : parsed
+}
+  
+
 const AddFile = () => {
     const [isOpen, setIsOpen] = useState(false)
 
@@ -102,6 +128,7 @@ const AddFile = () => {
             language: "",
             filename: "",
             author: "",
+            versionDate: new Date(),
         }
     })
 
@@ -300,6 +327,54 @@ const AddFile = () => {
                             boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
                         }}
                     />
+                </Field>
+
+                <Field
+                    required
+                    invalid={!!errors.versionDate}
+                    errorText={errors.versionDate?.message}
+                    label="Version date"
+                >
+                    <Controller
+                        control={control}
+                        name="versionDate"
+                        rules={{ required: "Version date is required" }}
+                        render={({ field }) => (
+                            <SingleDatepicker
+                                name={field.name}
+                                date={field.value}
+                                onDateChange={field.onChange}
+                                onBlur={field.onBlur}
+                                triggerVariant="input" // allows typing to jump across years quickly
+                                configs={{
+                                    dateFormat: "yyyy-MM-dd",
+                                }}
+                                propsConfigs={{
+                                    inputProps: {
+                                        placeholder: "YYYY-MM-DD",
+                                        _focusVisible: {
+                                            borderColor: "ui.main",
+                                            boxShadow: "0 0 0 1px var(--chakra-colors-ui-main)",
+                                        },
+                                        // onKeyDown: (e) => {
+                                        //     if (e.key !== "Enter") return
+                                        //     const nextDate = coerceDateFromInput(e.currentTarget.value)
+                                        //     if (nextDate) field.onChange(nextDate)
+                                        // },
+                                        // onBlur: (e) => {
+                                        //     const nextDate = coerceDateFromInput(e.currentTarget.value)
+                                        //     if (nextDate) field.onChange(nextDate)
+                                        // },
+                                    },
+                                    triggerIconBtnProps: {
+                                        "aria-label": "Open date picker",
+                                    },
+                                }}
+                            />
+                        )}
+                    />
+
+
                 </Field>
 
                 {/* <HStack gap={4} w="full">

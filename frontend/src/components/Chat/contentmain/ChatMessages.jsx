@@ -88,9 +88,13 @@ export const ChatMessages = ({ messages, isLoading }) => {
                                             </pre>
                                         </details>
 
-                                        <Markdown>
+                                        {/* <Markdown>
                                             {content}
-                                        </Markdown>
+                                        </Markdown> */}
+
+                                        <Prose mx="auto">
+                                            <Markdown>{content}</Markdown>
+                                        </Prose>
                                     </>
 
                                 ) : (
