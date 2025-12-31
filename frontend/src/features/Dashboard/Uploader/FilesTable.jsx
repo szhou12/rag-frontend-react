@@ -55,7 +55,8 @@ const API_URL = 'http://localhost:8001';
 export const FilesService = {
     readFiles: async ({ skip, limit }) => {
         const response = await axios.get(
-            `${API_URL}/demo/uploads/`,
+            // `${API_URL}/demo/uploads/`,
+            `${API_URL}/api/v1/uploader/`,
             {
                 params: { skip, limit },
                 headers: {
@@ -101,7 +102,7 @@ function FilesTable() {
     const columnHeaders = [
         "File Name",
         "Author(s)",
-        "Date Added",
+        "Publish By",
         "Language",
         "Pages",
         "Size",
@@ -165,7 +166,7 @@ function FilesTable() {
 
                             <Table.Cell>
                                 {/* {file.date} */}
-                                {new Date(file.date).toLocaleDateString()}
+                                {new Date(file.publication_date).toLocaleDateString()}
                             </Table.Cell>
 
                             <Table.Cell>
@@ -177,7 +178,7 @@ function FilesTable() {
                             </Table.Cell>
 
                             <Table.Cell>
-                                {`${file.size_mb} MB`}
+                                {`${file.size} MB`}
                             </Table.Cell>
 
                             <Table.Cell>

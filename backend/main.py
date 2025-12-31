@@ -25,6 +25,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# Access path: backend/demo/
+# NOTE: DELETE when backend/app/api/routes are fully implemented 
 app.include_router(user.router) # Adds all user-related endpoints (e.g., /users/me, /users/{id})
 app.include_router(auth.router, prefix="/auth") # Adds all auth endpoints under /auth prefix. e.g. /login will be accessible at /auth/login
 app.include_router(upload.router, prefix="/demo/uploads") # Adds all upload endpoints under /uploads prefix. e.g. /uploads will be accessible at /uploads

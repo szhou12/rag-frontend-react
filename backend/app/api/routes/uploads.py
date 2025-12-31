@@ -4,7 +4,7 @@ from typing import Any
 from pathlib import Path
 import aiofiles
 
-from fastapi import APIRouter, HTTPException, UploadFile
+from fastapi import APIRouter, HTTPException, Security, UploadFile
 from sqlmodel import func, select
 
 from app.api.deps import CurrentUser, SessionDep
@@ -24,7 +24,10 @@ router = APIRouter(
     tags=["uploader"],
 )
 
-@router.get("/", response_model=UploadsPublic)
+@router.get(
+        "/", 
+        response_model=UploadsPublic,
+)
 def read_uploads(
     session: SessionDep,
     current_user: CurrentUser,

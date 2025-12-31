@@ -34,4 +34,5 @@ class Upload(UploadBase, table=True):
     pages: int
     status: int
     s3_key: str = Field(max_length=512)
+    legacy_id: str | None = Field(default=None)
 

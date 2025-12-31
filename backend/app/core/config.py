@@ -71,6 +71,7 @@ class EmbedProfileEntry(BaseModel):
 class Settings(BaseSettings):
 
     # Configuration Metadata
+    # model_config loads values from .env and assigns them to the corresponding attributes
     model_config = SettingsConfigDict(
         env_file="../.env", # Path to .env file - one level up from /backend
         env_ignore_empty=True, # Ignore empty environment variables
@@ -103,7 +104,7 @@ class Settings(BaseSettings):
             self.FRONTEND_HOST
         ]
     
-    # MySQL Database Configuration: load values from .env
+    # MySQL Database Configuration: load values from .env by model_config
     MYSQL_USER: str
     MYSQL_PASSWORD: str
     MYSQL_HOST: str

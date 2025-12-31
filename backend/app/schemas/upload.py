@@ -24,18 +24,23 @@ class UploadUpdate(UploadBase):
     language: str | None = Field(default=None, max_length=5)
 
 
-
-
 ##############
 # API <----- #
 ##############
 # Properties to return via API, id is always required
 class UploadPublic(UploadBase):
     id: uuid.UUID
-    filepath: Optional[str] = None
-    size_mb: Optional[float] = None
-    date: Optional[datetime] = None
+    s3_key: str  # full S3 object key
+    size: float
+    date_added: datetime
+    source_filename: str
+    file_type: str
+    status: int
+    legacy_id: str | None = None
+
 
 class UploadsPublic(SQLModel):
-    data: list[UploadPublic]
+    data: list[UploadPublic] = []
     count: int
+    success: bool = True
+    error: Optional[str] = None

@@ -483,14 +483,14 @@ In terminal, cd to where `alembic.ini` is located. In this project, it is under 
 ```bash
 cd /path/to/rag-frontend-react/backend
 (backend) $ alembic revision --autogenerate -m "add publication_date to upload table"
-# This creates a new file: backend/alembic/versions/<revision>_add_publication_date_date_to_upload.py
+# This creates a new file: /alembic/versions/<revision>_add_publication_date_date_to_upload.py
 ```
 3. Edit this new version
     1. open the new file: `<revision>_add_publication_date_to_upload.py`
     2. clarify current `Upload` table situation: 
         - the table already has data/rows
         - auto-generated code will FAIL because MySQL cannot add a `NOT NULL` column without a default when rows already exist
-    3. clariy my column adding rule: for now, make publication_date column nullable so existing rows can have NULL values. If later we want to make publication_date required, manually fill empty data entries and then create a new migration version to reset column constraint.
+    3. clariy my column adding rule: for now, make `publication_date` column nullable so existing rows can have NULL values. If later we want to make `publication_date` required, create a new migration version to manually fill in dates and then reset the column constraint.
     4. edit `upload()`:
     ```python
     def upgrade() -> None:
@@ -500,11 +500,12 @@ cd /path/to/rag-frontend-react/backend
         # ### end Alembic commands ###
     ```
 4. Apply to cloud MySQL
-Still from backend/:
-```bash
-(backend) $ alembic upgrade head
-```
-This will make the MySQL on cloud switch to the new version
+    Still from backend/:
+    ```bash
+    (backend) $ alembic upgrade head
+    ```
+    This will make the MySQL on cloud switch to the new version
+
 5. Verification
     1. In terminal, access MySQL console on cloud
     2. Verify DB points to the correct alembic_version:
@@ -516,8 +517,10 @@ This will make the MySQL on cloud switch to the new version
     | upload                  |
     | user                    |
     +-------------------------+
-
-    mysql> select * from alembic_version;
+    ```
+    
+    ```sql
+    SELECT * FROM alembic_version;
     ```
     3. Verify new column exists:
     ```sql
