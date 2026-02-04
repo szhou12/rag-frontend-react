@@ -114,7 +114,7 @@ async def save_file(upload_file: UploadFile) -> str:
     
     # Generate unique filename to prevent conflicts
     file_extension = Path(upload_file.filename).suffix
-    unique_filename = f"{uuid.uuid4()}{file_extension}"
+    unique_filename = f"{uuid.uuid4().hex}{file_extension}"
     file_path = temp_dir / unique_filename
 
     try:

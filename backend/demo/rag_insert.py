@@ -9,12 +9,12 @@ from demo_rag.embed_docs import add_documents
 from demo_rag.embeddings import build_embedder_en, build_embedder_zh
 from demo_rag.vectorstore import build_vectorstores
 
+# NOTE Terminal: backend$ uv run demo/rag_insert.py
 
-# processed_ids_en = ['7cc8818d-a792-402e-93f4-9a2c7bc4f6dd', 
-#                     '8cb1b1f7-aa03-49b9-aea7-ff452f018b2b']
 
 emb_en = build_embedder_en()
 emb_zh = build_embedder_zh()
+# vstores = build_vectorstores(emb_en, emb_zh, reset=True)
 vstores = build_vectorstores(emb_en, emb_zh)
 
 # lang="en"
@@ -38,17 +38,19 @@ vstores = build_vectorstores(emb_en, emb_zh)
 langs = ["en", "zh"]
 for lang in langs:
     processed_ids = []
-    files = get_file_metadata(language=lang)
+    files = get_file_metadata(language=lang) # each file has UUID
     for f in files:
-        if f.get("id") in processed_ids:
+        file_id = f.get("id")
+        if file_id in processed_ids:
             continue
+        f["id"] = str(file_id)
         documents = load_document(f)
         chunks = process_text(documents)
-        add_documents(vstores[lang], chunks)
-        processed_ids.append(f.get("id"))
+        add_documents(vstores[lang], chunks) # only takes str ID
+        processed_ids.append(file_id)
     
-    increment_status_by_ids(processed_ids)
+    increment_status_by_ids(processed_ids) # only takes UUID
 
     print(check_status(lang))
 
-
+# TODO: remove all docs in collections and re-embed

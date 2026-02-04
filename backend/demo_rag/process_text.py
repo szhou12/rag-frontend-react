@@ -1,4 +1,5 @@
 import re
+import unicodedata
 import uuid
 from collections import defaultdict
 from typing import List, Dict
@@ -9,11 +10,29 @@ from langchain_text_splitters import (
 )
 
 def clean_text(text: str) -> str:
-    """Clean text content"""
-    text = text.replace('\ufeff', '')  # remove BOM
-    text = re.sub(r'\n{2,}', '\n\n', text)  # collapse 2+ newlines
-    text = re.sub(r'[^\S\n]+', ' ', text)  # collapse spaces/tabs (keep \n)
+    """
+    Clean PDF-extracted text for RAG ingestion.
+    Safe, loss-minimizing normalization.
+    """
+
+    # 1. Unicode normalize: make visually identical characters equivalent in unicode level
+    # e.g. 凉 (U+F979)  vs  涼 (U+6DBC) -> convert them to the same unicode
+    text = unicodedata.normalize("NFC", text)
+    # 2. Remove BOM
+    text = text.replace("\ufeff", "")
+    # 3. Fix hyphenation across line breaks: inter-\nnational → international
+    text = re.sub(r"(\w)-\n(\w)", r"\1\2", text)
+    # 4. Normalize line endings
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    # 5. Collapse excessive newlines (keep paragraph breaks)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    # 6. Collapse horizontal whitespace (keep newlines)
+    text = re.sub(r"[^\S\n]+", " ", text)
+    # 7. Trim spaces around newlines
+    text = re.sub(r" *\n *", "\n", text)
+
     return text.strip()
+
 
 def clean_page_content(docs: List[Document]) -> None:
     """Clean page content of all documents"""

@@ -1,5 +1,8 @@
+from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -10,7 +13,7 @@ class Settings(BaseSettings):
     )
 
     mysql_user: str = Field(..., env="MYSQL_USER")
-    mysql_pass: str = Field(..., env="MYSQL_PASS") 
+    mysql_password: str = Field(..., env="MYSQL_PASSWORD")
     mysql_host: str = Field(..., env="MYSQL_HOST")
     mysql_name: str = Field(..., env="MYSQL_NAME")
     # Optional fields with defaults
@@ -18,7 +21,7 @@ class Settings(BaseSettings):
     
     @property
     def mysql_uri(self) -> str:
-        return f"mysql+pymysql://{self.mysql_user}:{self.mysql_pass}@{self.mysql_host}:{self.mysql_port}/{self.mysql_name}"
+        return f"mysql+pymysql://{self.mysql_user}:{self.mysql_password}@{self.mysql_host}:{self.mysql_port}/{self.mysql_name}"
 
     # S3
     s3_bucket_name: str = Field(..., env="S3_BUCKET_NAME")

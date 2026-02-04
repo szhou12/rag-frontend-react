@@ -7,8 +7,20 @@ def build_chroma_client():
     # In production, front Chroma with a private network / SG and health checks
     return chromadb.HttpClient(host=settings.chroma_host, port=settings.chroma_port)
 
-def build_vectorstores(embed_en, embed_zh):
+def build_vectorstores(embed_en, embed_zh, reset=False):
     client = build_chroma_client()
+
+    if reset:
+        # drop existing collections (ignore if missing)
+        try:
+            client.delete_collection(settings.chroma_collection_en)
+        except Exception:
+            pass
+        try:
+            client.delete_collection(settings.chroma_collection_zh)
+        except Exception:
+            pass
+
     vs_en = Chroma(
         client=client,
         collection_name=settings.chroma_collection_en,

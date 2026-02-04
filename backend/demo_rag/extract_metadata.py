@@ -1,22 +1,22 @@
 from datetime import datetime
 from typing import Optional, List
 from sqlmodel import SQLModel, Field, Session, select, create_engine, update
+from app.models.upload import Upload
+from .config import settings # use config from demo_rag/config.py
+# from app.core.config import settings # use config from app/core/config.py
 
-# from .config import settings
-from app.core.config import settings
-
-class Upload(SQLModel, table=True):
-    id: str = Field(primary_key=True)
-    filename: str
-    author: str
-    language: str
-    date_added: datetime = Field(default_factory=lambda: datetime.now())
-    size: int  # in bytes
-    file_type: str
-    source_filename: str
-    pages: int
-    status: int
-    s3_key: str
+# class Upload(SQLModel, table=True):
+#     id: str = Field(primary_key=True)
+#     filename: str
+#     author: str
+#     language: str
+#     date_added: datetime = Field(default_factory=lambda: datetime.now())
+#     size: int  # in bytes
+#     file_type: str
+#     source_filename: str
+#     pages: int
+#     status: int
+#     s3_key: str
 
 # Step 1: Get metadata from MySQL
 

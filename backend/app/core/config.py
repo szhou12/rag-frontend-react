@@ -1,3 +1,4 @@
+from pathlib import Path 
 import secrets
 import warnings
 from typing import Annotated, Any, Dict, Literal
@@ -68,12 +69,15 @@ class EmbedProfileEntry(BaseModel):
                 delattr(self, k)
         return self
 
+# builds absolute path starting from where this config.py is located and then go 3 levels up, which is root
+REPO_ROOT = Path(__file__).resolve().parents[3]  # back 3 levels up to .../rag-frontend-react
 class Settings(BaseSettings):
 
     # Configuration Metadata
     # model_config loads values from .env and assigns them to the corresponding attributes
     model_config = SettingsConfigDict(
-        env_file="../.env", # Path to .env file - one level up from /backend
+        # env_file="../.env", # Path to .env file - one level up from /backend
+        env_file=str(REPO_ROOT / ".env"),
         env_ignore_empty=True, # Ignore empty environment variables
         extra="ignore", # Ignore extra keys that are not explicitly declared
     )
@@ -178,4 +182,5 @@ class Settings(BaseSettings):
 # Initialization Load all configurations
 settings = Settings()
 
-
+# NOTE: to print out if env values are loaded here
+# in terminal, at backend/ and type: python -c "from app.core.config import settings; print(settings.model_dump())"

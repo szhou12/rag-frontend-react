@@ -535,3 +535,10 @@ cd /path/to/rag-frontend-react/backend
     | someid05-2a23-4028-b58a-1dd4e1b0 | NULL             | 2025-11-19 08:12:18 |
     +----------------------------------+------------------+---------------------+
     ```
+
+## Chroma
+### AWS Deployment
+1. [Offcial Guidance & Template Download](https://docs.trychroma.com/guides/deploy/aws)
+    - `infra/cloudformation/chroma.json` uses the template file without change.
+2. [YouTube - Deploy a PRIVATE Chroma Vector DB to AWS | Step by step](https://www.youtube.com/watch?v=4ApW6ZwqW20)
+    - only need to watch the parts: "deploy the template on AWS" and "connect to the new EC2 instance"
